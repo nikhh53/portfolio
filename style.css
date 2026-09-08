@@ -157,14 +157,14 @@ body.intro-active .navbar {
 .hero-content {
     position: relative;
 
-    max-width: 1300px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 0 3rem;
 
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1.15fr 0.85fr;
     align-items: center;
-    gap: 6rem;
+    gap: 4rem;
 
     z-index: 100;
 }
@@ -221,7 +221,7 @@ body.intro-active .navbar {
 }
 
 .hero-description {
-    max-width: 650px;
+    max-width: 700px;
     margin-bottom: 1.4rem;
 
     color: #aeb8b6;
@@ -982,11 +982,21 @@ footer {
 
     .hero-image {
         display: flex;
-        justify-content: center;
+        justify-content: flex-end;
+        align-items: center;
     }
 
     .hero-image img {
-        max-width: 340px;
+        width: 100%;
+        max-width: 470px;
+
+        border: 8px solid #161616;
+        border-radius: 26px;
+
+        box-shadow:
+            0 25px 60px rgba(0, 245, 212, 0.3);
+
+        transition: transform 0.5s ease;
     }
 
     .skills-container {
