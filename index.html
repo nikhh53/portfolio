@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Portfolio von Niklas Bakowsky – angehender Fachinformatiker für Anwendungsentwicklung auf der Suche nach einem Umschulungspraktikum in Hamburg."
+    >
+
+    <title>Niklas Bakowsky | Anwendungsentwickler</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    >
+
+    <style>
+        @import url(
+            'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap'
+        );
+    </style>
+</head>
+
+<body class="intro-active">
+
+    <!-- Partikel-Hintergrund -->
+    <canvas id="particles"></canvas>
+
+    <!-- Hauptnavigation -->
+    <nav
+        class="navbar"
+        aria-label="Hauptnavigation"
+    >
+        <div class="nav-container">
+
+            <div class="logo">
+                Niklas Bakowsky
+            </div>
+
+            <div class="nav-links">
+                <a
+                    href="#about"
+                    data-target="about"
+                >
+                    Über mich
+                </a>
+
+                <a
+                    href="#skills"
+                    data-target="skills"
+                >
+                    Skills
+                </a>
+
+                <a
+                    href="#projects"
+                    data-target="projects"
+                >
+                    Projekte
+                </a>
+
+                <a
+                    href="#contact"
+                    data-target="contact"
+                >
+                    Kontakt
+                </a>
+            </div>
+
+        </div>
+    </nav>
+
+    <!-- Startseite -->
+    <header
+        class="hero active-panel"
+        id="hero"
+        data-panel="hero"
+    >
+        <div class="hero-content">
+
+            <div class="hero-text">
+
+                <p class="eyebrow">
+                    Portfolio · Anwendungsentwicklung
+                </p>
+
+                <h1>
+                    Hallo, ich bin
+                    <span class="highlight">
+                        Niklas Bakowsky
+                    </span>
+                </h1>
+
+                <h2 id="typing-subtitle">
+                    Anwendungsentwickler in der Umschulung
+                </h2>
+
+                <p class="hero-description">
+                    Ich entwickle praxisnahe Projekte mit Python und erweitere kontinuierlich
+                    meine Kenntnisse in Webentwicklung und Datenbanken.
+                    Aktuell suche ich einen Praktikumsbetrieb in Hamburg, bei dem ich dazulernen und im Team mitentwickeln kann.
+                </p>
+
+                <div class="hero-meta">
+
+                    <span>
+                        <i class="fas fa-location-dot"></i>
+                        Hamburg
+                    </span>
+
+                    <span>
+                        <i class="fas fa-briefcase"></i>
+                        6 Monate
+                    </span>
+
+                    <span>
+                        <i class="fas fa-calendar"></i>
+                        07.06.2027 - 31.01.2028
+                    </span>
+
+                </div>
+
+                <div class="hero-buttons">
+
+                    <button
+                        type="button"
+                        class="btn primary start-button"
+                        data-target="about"
+                    >
+                        Portfolio ansehen
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btn secondary"
+                        data-target="contact"
+                    >
+                        Kontakt
+                    </button>
+
+                </div>
+
+            </div>
+
+            <div class="hero-image">
+                <img
+                    src="büro.jpeg"
+                    alt="Niklas Bakowsky"
+                >
+            </div>
+
+        </div>
+    </header>
+
+    <main id="portfolio-content">
+
+        <!-- Vertikale Navigation -->
+        <div
+            class="progress"
+            aria-label="Bereichsnavigation"
+        >
+            <button
+                type="button"
+                class="progress-step active"
+                data-target="about"
+                data-label="Über mich"
+                aria-label="Über mich öffnen"
+            >
+                01
+            </button>
+
+            <span
+                class="progress-line"
+                aria-hidden="true"
+            ></span>
+
+            <button
+                type="button"
+                class="progress-step"
+                data-target="skills"
+                data-label="Skills"
+                aria-label="Skills öffnen"
+            >
+                02
+            </button>
+
+            <span
+                class="progress-line"
+                aria-hidden="true"
+            ></span>
+
+            <button
+                type="button"
+                class="progress-step"
+                data-target="projects"
+                data-label="Projekte"
+                aria-label="Projekte öffnen"
+            >
+                03
+            </button>
+
+            <span
+                class="progress-line"
+                aria-hidden="true"
+            ></span>
+
+            <button
+                type="button"
+                class="progress-step"
+                data-target="contact"
+                data-label="Kontakt"
+                aria-label="Kontakt öffnen"
+            >
+                04
+            </button>
+        </div>
+
+        <!-- Über mich -->
+        <section
+            id="about"
+            class="section portfolio-panel"
+            data-panel="about"
+        >
+            <p class="section-kicker">
+                01 · Über mich
+            </p>
+
+            <h2 id="about-title">
+                Entwicklung mit Praxisbezug
+            </h2>
+
+            <div class="about-content">
+
+                <p>
+                    Ich absolviere aktuell eine Umschulung zum
+                    Fachinformatiker für Anwendungsentwicklung.
+                    Besonders motiviert mich, aus einer Idee eine
+                    funktionierende und verständliche Anwendung
+                    zu entwickeln.
+                </p>
+
+                <p>
+                    In meinen Projekten beschäftige ich mich mit
+                    Benutzeroberflächen, Rollen- und Rechteverwaltung,
+                    APIs, Datenverarbeitung und sauberer Programmlogik.
+                    Für mein Praktikum möchte ich diese Grundlagen in
+                    einem echten Entwicklungsteam vertiefen.
+                </p>
+
+            </div>
+
+            <div class="internship-card">
+
+                <div>
+                    <span>Gesucht</span>
+                    <strong>Umschulungspraktikum</strong>
+                </div>
+
+                <div>
+                    <span>Dauer</span>
+                    <strong>6 Monate</strong>
+                </div>
+
+                <div>
+                    <span>Region</span>
+                    <strong>
+                        Hamburg - bevorzugt West
+                    </strong>
+                </div>
+
+                <div>
+                    <span>Zeitraum</span>
+                    <strong>
+                        07.06.2027 - 31.01.2028
+                    </strong>
+                </div>
+
+            </div>
+
+            <div class="section-navigation">
+
+                <button
+                    type="button"
+                    class="btn secondary"
+                    data-target="hero"
+                >
+                    <i class="fas fa-arrow-left"></i>
+                    Start
+                </button>
+
+                <button
+                    type="button"
+                    class="btn primary"
+                    data-target="skills"
+                >
+                    Meine Skills
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+
+            </div>
+        </section>
+
+        <!-- Skills -->
+        <section
+            id="skills"
+            class="section portfolio-panel"
+            data-panel="skills"
+        >
+            <p class="section-kicker">
+                02 · Kenntnisse
+            </p>
+
+            <h2>
+                Technologien, mit denen ich arbeite
+            </h2>
+
+            <p class="section-intro">
+                Diese Übersicht basiert auf meiner bisherigen Praxiserfahrung und den Projekten, die ich umgesetzt habe.
+            </p>
+
+            <div class="skills-container">
+
+                <div class="skill-card">
+                    <i class="fab fa-js"></i>
+
+                    <h3>JavaScript</h3>
+
+                    <p>
+                        Interaktionen, DOM-Manipulation und
+                        dynamische Benutzeroberflächen.
+                    </p>
+                </div>
+
+                <div class="skill-card">
+                    <i class="fas fa-database"></i>
+
+                    <h3>SQL</h3>
+
+                    <p>
+                        Tabellenmodelle, Abfragen und
+                        strukturierte Datenhaltung.
+                    </p>
+                </div>
+
+                <div class="skill-card">
+                    <i class="fas fa-code"></i>
+
+                    <h3>Lua</h3>
+
+                    <p>
+                        Grundlagen der Skriptentwicklung,
+                        Funktionen, Tabellen und Logik.
+                    </p>
+                </div>
+
+                <div class="skill-card">
+                    <i class="fab fa-html5"></i>
+
+                    <h3>HTML / CSS</h3>
+
+                    <p>
+                        Responsive Layouts, semantischer Aufbau
+                        und moderne Oberflächen.
+                    </p>
+                </div>
+
+                <div class="skill-card">
+                    <i class="fab fa-python"></i>
+
+                    <h3>Python</h3>
+
+                    <p>
+                        Objektorientierung, APIs,
+                        Datenverarbeitung und Desktop-GUIs.
+                    </p>
+                </div>
+
+                <div class="skill-card">
+                    <i class="fas fa-code-branch"></i>
+
+                    <h3>Git</h3>
+
+                    <p>
+                        Versionsverwaltung, nachvollziehbare
+                        Änderungen und Projektstruktur.
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="section-navigation">
+
+                <button
+                    type="button"
+                    class="btn secondary"
+                    data-target="about"
+                >
+                    <i class="fas fa-arrow-left"></i>
+                    Zurück
+                </button>
+
+                <button
+                    type="button"
+                    class="btn primary"
+                    data-target="projects"
+                >
+                    Projekte ansehen
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+
+            </div>
+        </section>
+
+            <!-- Projekte -->
+            <section
+                id="projects"
+                class="section portfolio-panel"
+                data-panel="projects"
+            >
+                <p class="section-kicker">
+                    03 · Projekte
+                </p>
+
+                <h2>
+                    Aus Lernen wird Anwendung
+                </h2>
+
+                <p class="section-intro">
+                    Projekte, deren Aufbau und Entscheidungen
+                    ich im Gespräch nachvollziehbar erklären kann.
+                </p>
+
+                <div class="projects-grid">
+
+                    <!-- Ticketsystem -->
+                    <a
+                        class="project-card featured project-card-link"
+                        href="https://github.com/nikhh53/python-ticket-system"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="GitHub-Repository des Ticketsystems öffnen"
+                    >
+                        <div class="project-topline">
+                            <span class="status finished">
+                                Praxisprojekt
+                            </span>
+
+                            <span class="project-number">
+                                01
+                                <i class="fab fa-github"></i>
+                            </span>
+                        </div>
+
+                        <h3>Ticketsystem</h3>
+
+                        <p>
+                            Desktop-Anwendung zur Erfassung und
+                            Verwaltung verschiedener Ticketarten
+                            mit Statusverwaltung, Kommentaren
+                            und grafischer Oberfläche.
+                        </p>
+
+                        <ul>
+                            <li>Bug-, Feature- und Support-Tickets</li>
+                            <li>Statusverwaltung und Kommentare</li>
+                            <li>Speicherung der Daten als JSON</li>
+                        </ul>
+
+                        <div class="tech-list">
+                            <span>Python</span>
+                            <span>Tkinter</span>
+                            <span>JSON</span>
+                            <span>OOP</span>
+                        </div>
+
+                        <span class="repository-link">
+                            Repository ansehen
+                            <i class="fas fa-arrow-up-right-from-square"></i>
+                        </span>
+                    </a>
+
+                    <!-- Pokémon Minigame -->
+                    <a
+                        class="project-card project-card-link"
+                        href="https://github.com/nikhh53/pokemon-minigame"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="GitHub-Repository des Pokémon Minigames öffnen"
+                    >
+                        <div class="project-topline">
+                            <span class="status finished">
+                                Praxisprojekt
+                            </span>
+
+                            <span class="project-number">
+                                02
+                                <i class="fab fa-github"></i>
+                            </span>
+                        </div>
+
+                        <h3>Pokémon Minigame</h3>
+
+                        <p>
+                            Python-Projekt mit einer spielbaren
+                            Konsolenversion und einer grafischen
+                            Benutzeroberfläche auf Basis von Tkinter.
+                        </p>
+
+                        <ul>
+                            <li>Konsolen- und GUI-Version</li>
+                            <li>Pokémon-Daten aus einer CSV-Datei</li>
+                            <li>Objektorientierter Programmaufbau</li>
+                        </ul>
+
+                        <div class="tech-list">
+                            <span>Python</span>
+                            <span>Tkinter</span>
+                            <span>CSV</span>
+                            <span>OOP</span>
+                        </div>
+
+                        <span class="repository-link">
+                            Repository ansehen
+                            <i class="fas fa-arrow-up-right-from-square"></i>
+                        </span>
+                    </a>
+
+                    <!-- Geplantes Projekt -->
+                    <article class="project-card muted">
+
+                        <div class="project-topline">
+                            <span class="status planned">
+                                In Planung
+                            </span>
+
+                            <span>03</span>
+                        </div>
+
+                        <h3>API-Dashboard</h3>
+
+                        <p>
+                            Mein nächstes Projekt soll externe
+                            Daten abrufen, sinnvoll filtern und
+                            in einer übersichtlichen Oberfläche
+                            darstellen.
+                        </p>
+
+                        <ul>
+                            <li>REST-API-Anbindung</li>
+                            <li>Filter und Suchfunktion</li>
+                            <li>Persistente Favoriten</li>
+                        </ul>
+
+                        <div class="tech-list">
+                            <span>API</span>
+                            <span>Python</span>
+                            <span>SQL</span>
+                        </div>
+
+                    </article>
+
+                </div>
+
+                <div class="section-navigation">
+
+                    <button
+                        type="button"
+                        class="btn secondary"
+                        data-target="skills"
+                    >
+                        <i class="fas fa-arrow-left"></i>
+                        Zurück
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btn primary"
+                        data-target="contact"
+                    >
+                        Kontakt
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+
+                </div>
+            </section>
+        <!-- Kontakt -->
+        <section
+            id="contact"
+            class="section portfolio-panel"
+            data-panel="contact"
+        >
+            <p class="section-kicker">
+                04 · Kontakt
+            </p>
+
+            <h2>
+                Lassen Sie uns kennenlernen
+            </h2>
+
+            <p class="contact-copy">
+                Sie bieten ein Praktikum in der
+                Anwendungsentwicklung an oder möchten mehr
+                über meine Projekte erfahren? Ich freue mich
+                über Ihre Nachricht.
+            </p>
+
+            <div class="contact-options">
+
+                <a
+                    class="contact-option"
+                    href="mailto:nikhh53@gmail.com"
+                >
+                    <i class="fas fa-envelope"></i>
+
+                    <span>
+                        <small>E-Mail</small>
+                        NikHH53@gmail.com
+                    </span>
+                </a>
+
+                <a
+                    class="contact-option"
+                    href="https://github.com/nikhh53"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    <i class="fab fa-github"></i>
+
+                    <span>
+                        <small>GitHub</small>
+                        github.com/nikhh53
+                    </span>
+                </a>
+
+                <a
+                    class="contact-option"
+                    href="lebenslauf.pdf"
+                    download
+                >
+                    <i class="fas fa-file-arrow-down"></i>
+
+                    <span>
+                        <small>Unterlagen</small>
+                        Lebenslauf anzeigen
+                    </span>
+                </a>
+
+            </div>
+
+            <div class="section-navigation">
+
+                <button
+                    type="button"
+                    class="btn secondary"
+                    data-target="projects"
+                >
+                    <i class="fas fa-arrow-left"></i>
+                    Zurück
+                </button>
+
+                <button
+                    type="button"
+                    class="btn secondary"
+                    data-target="hero"
+                >
+                    <i class="fas fa-rotate-left"></i>
+                    Neu starten
+                </button>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>
+            &copy; 2026 Niklas Bakowsky ·
+            Portfolio für Praktikumsbewerbungen
+        </p>
+    </footer>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
