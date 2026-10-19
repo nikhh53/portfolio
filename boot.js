@@ -1,7 +1,8 @@
 /*
  * Boot-Screen im Terminal-Stil
  * Läuft vor dem Portfolio und fragt danach den Modus ab:
- * easy_mode() zeigt das Portfolio normal, hard_mode() startet die Rätsel.
+ * easy_mode() zeigt das Portfolio normal, hard_mode() startet die Rätsel
+ * aus hardmode.js.
  * Das Overlay wird per JavaScript erzeugt, damit die Seite ohne
  * JavaScript ganz normal sichtbar bleibt.
  */
@@ -215,14 +216,18 @@ function closeBootScreen() {
     window.setTimeout(() => bootScreen.remove(), 700);
 }
 
-function startEasyMode() {
+function chooseEasyMode() {
     printLine([['Starte easy_mode() ...', 'success']]);
     window.setTimeout(closeBootScreen, bootInstant ? 0 : 450);
 }
 
-function startHardMode() {
-    printLine([['[warn] ', 'tag-warn'], ['hard_mode() wird gerade noch programmiert. Versuch es bald wieder.']]);
-    printLine([['Bis dahin: easy_mode()', 'muted']]);
+function chooseHardMode() {
+    printLine([['Starte hard_mode() ... Das Portfolio ist verschlüsselt. Viel Erfolg!', 'success']]);
+
+    window.setTimeout(() => {
+        closeBootScreen();
+        document.dispatchEvent(new CustomEvent('portfolio:hard-mode'));
+    }, bootInstant ? 0 : 900);
 }
 
 // Eingaben wie in einer Python-Konsole auswerten
@@ -240,12 +245,12 @@ function runCommand(rawInput) {
     }
 
     if (command === 'easy_mode()' || command === 'exit()' || command === 'quit()') {
-        startEasyMode();
+        chooseEasyMode();
         return;
     }
 
     if (command === 'hard_mode()') {
-        startHardMode();
+        chooseHardMode();
         return;
     }
 
