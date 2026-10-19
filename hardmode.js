@@ -1,15 +1,23 @@
 /*
- * hard_mode(): Das Portfolio ist "verschlüsselt" und wird Rätsel für
- * Rätsel freigeschaltet. Jedes Rätsel ist ein Lückencode, dessen Lücken
- * per Drag-and-drop (oder Antippen) mit Bausteinen gefüllt werden.
- * Die Rätsel stehen in hardmode-puzzles.js. Gestartet wird der Modus
- * vom Boot-Screen über das Event "portfolio:hard-mode".
+ * hard_mode(): Das Portfolio ist "verschlüsselt" und baut sich beim
+ * Lösen der Rätsel Stück für Stück im Hintergrund auf. Jedes Rätsel ist
+ * ein Lückencode, dessen Lücken per Drag-and-drop (oder Antippen) mit
+ * Bausteinen gefüllt werden. Jeder Baustein wird sofort geprüft.
+ * Rätsel: hardmode-puzzles.js, Effekte: hardmode-effects.js.
+ * Gestartet wird der Modus vom Boot-Screen über das Event
+ * "portfolio:hard-mode".
  */
 const HARD_PANEL_ORDER = ['hero', 'about', 'skills', 'projects', 'contact'];
 const HINT_AFTER_ATTEMPTS = 2;
-const NEXT_PUZZLE_DELAY = 900;
-const WRONG_MARK_DURATION = 700;
+const NEXT_PUZZLE_DELAY = 1200;
+const WRONG_MARK_DURATION = 600;
+const REVEAL_STAGGER = 180;
 const DRAG_THRESHOLD = 5;
+
+const TOTAL_SLOTS = HARD_MODE_PUZZLES.reduce((sum, puzzle) => sum + puzzle.solution.length, 0);
+
+// Pro Rätsel die Lücken, die schon richtig gefüllt sind
+const placedSlots = new Map(HARD_MODE_PUZZLES.map(puzzle => [puzzle, new Set()]));
 
 const hardState = {
     active: false,
@@ -55,21 +63,43 @@ function escapeHtml(text) {
 
 /* Sperren und Freischalten */
 
-function setLocked(puzzle, locked) {
-    puzzle.reveals.forEach(selector => {
-        document.querySelectorAll(selector).forEach(element => {
-            element.classList.toggle('hm-locked', locked);
-            element.classList.toggle('hm-unlocking', !locked);
+function revealElements(puzzle) {
+    return puzzle.reveals.flatMap(selector => [...document.querySelectorAll(selector)]);
+}
 
-            if (locked) {
-                element.setAttribute('aria-hidden', 'true');
-                element.setAttribute('inert', '');
-            } else {
-                element.removeAttribute('aria-hidden');
-                element.removeAttribute('inert');
-            }
+function lockElement(element) {
+    element.classList.add('hm-locked');
+    element.setAttribute('aria-hidden', 'true');
+    element.setAttribute('inert', '');
+}
+
+function unlockElement(element, animate) {
+    if (!element.classList.contains('hm-locked')) {
+        return;
+    }
+
+    element.classList.remove('hm-locked');
+    element.removeAttribute('aria-hidden');
+    element.removeAttribute('inert');
+
+    if (animate) {
+        element.classList.add('hm-decoding');
+        decodeText(element);
+        window.setTimeout(() => element.classList.remove('hm-decoding'), DECODE_DURATION);
+    }
+}
+
+// Der Anteil richtiger Lücken bestimmt, wie viel vom Bereich schon sichtbar ist
+function revealProgress(puzzle, correctCount) {
+    const elements = revealElements(puzzle);
+    const visible = Math.ceil((elements.length * correctCount) / puzzle.solution.length);
+
+    elements
+        .slice(0, visible)
+        .filter(element => element.classList.contains('hm-locked'))
+        .forEach((element, index) => {
+            window.setTimeout(() => unlockElement(element, true), index * REVEAL_STAGGER);
         });
-    });
 }
 
 function updateNavigationLocks() {
@@ -109,11 +139,11 @@ function createConsole() {
 }
 
 function updateProgressBar() {
-    const total = HARD_MODE_PUZZLES.length;
-    const solved = hardState.solved.size;
+    const correctSlots = [...placedSlots.values()].reduce((sum, placed) => sum + placed.size, 0);
+    const percent = Math.round((correctSlots / TOTAL_SLOTS) * 100);
 
-    hardConsole.querySelector('.hm-progress').textContent = `${solved}/${total} gelöst`;
-    hardConsole.querySelector('.hm-bar span').style.width = `${(solved / total) * 100}%`;
+    hardConsole.querySelector('.hm-progress').textContent = `build ${percent}%`;
+    hardConsole.querySelector('.hm-bar span').style.width = `${percent}%`;
 }
 
 function renderConsole() {
@@ -184,12 +214,11 @@ function renderPuzzle(body, puzzle) {
         .join('');
 
     body.innerHTML = `
-        <p class="hm-kicker">Aufgabe ${number} · ${puzzle.title}</p>
+        <p class="hm-kicker">Aufgabe ${number}/${HARD_MODE_PUZZLES.length} · ${puzzle.title}</p>
         <p class="hm-task">${escapeHtml(puzzle.task)}</p>
         <pre class="hm-code">${code}</pre>
-        <p class="hm-muted">Ziehe die Bausteine in die Lücken oder tippe erst Baustein, dann Lücke.</p>
+        <p class="hm-muted">Ziehe die Bausteine in die Lücken oder tippe erst Baustein, dann Lücke. Jeder richtige Baustein baut das Portfolio weiter auf.</p>
         <div class="hm-pool">${tokens}</div>
-        <button type="button" class="hm-button primary hm-run" disabled>Ausführen ▶</button>
         <div class="hm-feedback" aria-live="polite"></div>
         <button type="button" class="hm-hint-button" hidden>Hinweis anzeigen</button>
         <p class="hm-hint" hidden></p>
@@ -211,8 +240,9 @@ function renderPuzzle(body, puzzle) {
 function setupDragAndDrop(body, puzzle) {
     const pool = body.querySelector('.hm-pool');
     const slots = [...body.querySelectorAll('.hm-slot')];
-    const runButton = body.querySelector('.hm-run');
+    const placed = placedSlots.get(puzzle);
     let selectedChip = null;
+    let busy = false;
 
     function selectChip(chip) {
         body.querySelectorAll('.hm-chip.selected').forEach(other => other.classList.remove('selected'));
@@ -227,22 +257,57 @@ function setupDragAndDrop(body, puzzle) {
         pool.insertBefore(chip, next || null);
     }
 
+    // Jeder Baustein wird sofort geprüft
     function placeChip(chip, slot) {
-        const previous = slot.querySelector('.hm-chip');
+        selectChip(null);
 
-        if (previous && previous !== chip) {
-            returnToPool(previous);
+        if (busy || slot.classList.contains('correct')) {
+            return;
         }
 
+        const slotIndex = Number(slot.dataset.slot);
         slot.append(chip);
-        selectChip(null);
-        updateState();
+
+        if (chip.textContent === puzzle.solution[slotIndex]) {
+            markCorrect(chip, slot);
+            placed.add(slotIndex);
+            updateProgressBar();
+            revealProgress(puzzle, placed.size);
+
+            const feedback = body.querySelector('.hm-feedback');
+            feedback.className = 'hm-feedback hm-success';
+            feedback.textContent = `✓ ${placed.size}/${slots.length} kompiliert`;
+
+            if (placed.size === slots.length) {
+                busy = true;
+                solvePuzzle(puzzle, body);
+            }
+            return;
+        }
+
+        busy = true;
+        slot.classList.add('wrong');
+        failPuzzle(`SyntaxError: ${chip.textContent} passt hier nicht.`);
+
+        window.setTimeout(() => {
+            slot.classList.remove('wrong');
+            returnToPool(chip);
+            busy = false;
+        }, WRONG_MARK_DURATION);
     }
 
-    function updateState() {
-        slots.forEach(slot => slot.classList.toggle('filled', slot.querySelector('.hm-chip') !== null));
-        runButton.disabled = slots.some(slot => !slot.querySelector('.hm-chip'));
+    function markCorrect(chip, slot) {
+        chip.disabled = true;
+        slot.classList.add('correct');
     }
+
+    // Nach einem Bereichswechsel bereits gelöste Lücken wiederherstellen
+    placed.forEach(slotIndex => {
+        const slot = slots.find(item => Number(item.dataset.slot) === slotIndex);
+        const chip = [...pool.children].find(item => item.textContent === puzzle.solution[slotIndex]);
+        slot.append(chip);
+        markCorrect(chip, slot);
+    });
 
     function slotAt(x, y) {
         const element = document.elementFromPoint(x, y);
@@ -251,7 +316,7 @@ function setupDragAndDrop(body, puzzle) {
 
     body.querySelectorAll('.hm-chip').forEach(chip => {
         chip.addEventListener('pointerdown', event => {
-            if (event.button !== 0 || runButton.dataset.done) {
+            if (event.button !== 0 || chip.disabled || busy) {
                 return;
             }
 
@@ -293,28 +358,17 @@ function setupDragAndDrop(body, puzzle) {
 
                 // Ohne Bewegung zählt es als Antippen
                 if (!ghost) {
-                    if (chip.parentElement.classList.contains('hm-slot')) {
-                        returnToPool(chip);
-                        updateState();
-                    } else {
-                        selectChip(selectedChip === chip ? null : chip);
-                    }
+                    selectChip(selectedChip === chip ? null : chip);
                     return;
                 }
 
                 ghost.remove();
                 chip.classList.remove('dragging');
 
-                const target = upEvent.type === 'pointerup'
-                    ? document.elementFromPoint(upEvent.clientX, upEvent.clientY)
-                    : null;
-                const slot = target ? target.closest('.hm-slot') : null;
+                const slot = upEvent.type === 'pointerup' ? slotAt(upEvent.clientX, upEvent.clientY) : null;
 
                 if (slot) {
                     placeChip(chip, slot);
-                } else if (target && pool.contains(target) && chip.parentElement.classList.contains('hm-slot')) {
-                    returnToPool(chip);
-                    updateState();
                 }
             }
 
@@ -323,18 +377,10 @@ function setupDragAndDrop(body, puzzle) {
             window.addEventListener('pointercancel', onUp);
         });
 
-        // Tastatur: Enter/Leertaste wählt aus bzw. legt zurück
+        // Tastatur: Enter/Leertaste wählt den Baustein aus
         chip.addEventListener('keydown', event => {
-            if (event.key !== 'Enter' && event.key !== ' ') {
-                return;
-            }
-
-            event.preventDefault();
-
-            if (chip.parentElement.classList.contains('hm-slot')) {
-                returnToPool(chip);
-                updateState();
-            } else {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
                 selectChip(chip);
             }
         });
@@ -347,44 +393,14 @@ function setupDragAndDrop(body, puzzle) {
             }
         }
 
-        slot.addEventListener('click', event => {
-            if (!event.target.closest('.hm-chip')) {
-                fillWithSelected();
-            }
-        });
+        slot.addEventListener('click', fillWithSelected);
 
         slot.addEventListener('keydown', event => {
-            if (event.target === slot && (event.key === 'Enter' || event.key === ' ')) {
+            if (event.key === 'Enter' || event.key === ' ') {
                 event.preventDefault();
                 fillWithSelected();
             }
         });
-    });
-
-    runButton.addEventListener('click', () => {
-        const wrongSlots = slots.filter(slot =>
-            slot.querySelector('.hm-chip').textContent !== puzzle.solution[Number(slot.dataset.slot)]
-        );
-
-        if (wrongSlots.length === 0) {
-            runButton.dataset.done = 'true';
-            slots.forEach(slot => slot.classList.add('correct'));
-            solvePuzzle(puzzle);
-            return;
-        }
-
-        wrongSlots.forEach(slot => slot.classList.add('wrong'));
-        runButton.disabled = true;
-
-        window.setTimeout(() => {
-            wrongSlots.forEach(slot => {
-                slot.classList.remove('wrong');
-                returnToPool(slot.querySelector('.hm-chip'));
-            });
-            updateState();
-        }, WRONG_MARK_DURATION);
-
-        failPuzzle(`AssertionError: ${wrongSlots.length} von ${slots.length} Lücken falsch.`);
     });
 }
 
@@ -402,6 +418,10 @@ function failPuzzle(message) {
     void hardConsole.offsetWidth;
     hardConsole.classList.add('shake');
 
+    document.body.classList.remove('hm-glitch');
+    void document.body.offsetWidth;
+    document.body.classList.add('hm-glitch');
+
     const hint = hardConsole.querySelector('.hm-hint');
 
     if (hardState.attempts >= HINT_AFTER_ATTEMPTS && hint.hidden) {
@@ -409,36 +429,52 @@ function failPuzzle(message) {
     }
 }
 
-function solvePuzzle(puzzle) {
+async function solvePuzzle(puzzle, body) {
     hardState.solved.add(puzzle);
     hardState.attempts = 0;
 
-    const feedback = hardConsole.querySelector('.hm-feedback');
-    feedback.className = 'hm-feedback hm-success';
-    feedback.textContent = '✓ Test bestanden. Entschlüssle ...';
-
-    hardConsole.querySelectorAll('.hm-body button').forEach(button => {
-        button.disabled = true;
+    body.querySelectorAll('.hm-pool, .hm-hint-button, .hm-hint, .hm-muted').forEach(element => {
+        element.hidden = true;
     });
 
-    setLocked(puzzle, false);
-    updateProgressBar();
-    window.setTimeout(renderConsole, NEXT_PUZZLE_DELAY);
+    await typeOutput(body.querySelector('.hm-feedback').parentElement, puzzle.output);
+
+    if (!hardState.active) {
+        return;
+    }
+
+    revealElements(puzzle).forEach(element => unlockElement(element, true));
+    updateNavigationLocks();
+
+    window.setTimeout(() => {
+        if (hardState.solved.size === HARD_MODE_PUZZLES.length) {
+            showSuccessBanner(finishStats());
+        }
+
+        renderConsole();
+    }, NEXT_PUZZLE_DELAY);
 }
 
-function renderFinish(body) {
+function finishStats() {
     const seconds = Math.round((Date.now() - hardState.startedAt) / 1000);
     const time = `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
 
+    return [
+        `zeit         = "${time} min"`,
+        `fehlversuche = ${hardState.wrongTotal}`,
+        `hinweise     = ${hardState.hintsUsed}`
+    ];
+}
+
+function renderFinish(body) {
     body.innerHTML = `
         <p class="hm-success hm-finish-title">✓ Portfolio vollständig entschlüsselt</p>
-        <pre class="hm-code">zeit         = "${time} min"
-fehlversuche = ${hardState.wrongTotal}
-hinweise     = ${hardState.hintsUsed}</pre>
+        <pre class="hm-code"></pre>
         <p class="hm-task">Danke fürs Durchspielen! Wenn Sie mehr sehen möchten: Ich freue mich über Ihre Nachricht.</p>
         <button type="button" class="hm-button primary hm-close">Konsole schließen</button>
     `;
 
+    body.querySelector('.hm-code').textContent = finishStats().join('\n');
     body.querySelector('.hm-close').addEventListener('click', stopHardMode);
 }
 
@@ -447,13 +483,14 @@ hinweise     = ${hardState.hintsUsed}</pre>
 function startHardMode() {
     hardState.active = true;
     hardState.solved.clear();
+    placedSlots.forEach(placed => placed.clear());
     hardState.attempts = 0;
     hardState.wrongTotal = 0;
     hardState.hintsUsed = 0;
     hardState.startedAt = Date.now();
 
     document.body.classList.add('hard-mode');
-    HARD_MODE_PUZZLES.forEach(puzzle => setLocked(puzzle, true));
+    HARD_MODE_PUZZLES.forEach(puzzle => revealElements(puzzle).forEach(lockElement));
 
     createConsole();
     showPanel('hero');
@@ -462,7 +499,7 @@ function startHardMode() {
 
 function stopHardMode() {
     hardState.active = false;
-    HARD_MODE_PUZZLES.forEach(puzzle => setLocked(puzzle, false));
+    HARD_MODE_PUZZLES.forEach(puzzle => revealElements(puzzle).forEach(element => unlockElement(element, false)));
     document.body.classList.remove('hard-mode');
     updateNavigationLocks();
 
