@@ -118,6 +118,23 @@ body.boot-active {
     color: #00e5cc;
 }
 
+.boot-line.warn {
+    color: #d29922;
+}
+
+/* Easter Egg "matrix" aus shell.js */
+.matrix-rain {
+    position: fixed;
+    inset: 0;
+    z-index: 7000;
+    pointer-events: none;
+    transition: opacity 0.6s ease;
+}
+
+.matrix-rain.closing {
+    opacity: 0;
+}
+
 .tag-ok {
     color: #3fb950;
 }
