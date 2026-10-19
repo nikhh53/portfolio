@@ -70,14 +70,14 @@ welcomeScreen.querySelector('.welcome-kicker').textContent = visitorCompany
 document.body.prepend(welcomeScreen);
 document.body.classList.add('welcome-active');
 
-function closeWelcome(then) {
+/*
+ * Beim Ausblenden darf das Portfolio nicht kurz durchblitzen: Wer einen
+ * der Modi wählt, bekommt den Boot-Screen sofort darunter aufgebaut.
+ */
+function closeWelcome() {
     welcomeScreen.classList.add('closing');
     document.body.classList.remove('welcome-active');
-
-    window.setTimeout(() => {
-        welcomeScreen.remove();
-        then();
-    }, WELCOME_FADE);
+    window.setTimeout(() => welcomeScreen.remove(), WELCOME_FADE);
 }
 
 welcomeScreen.addEventListener('click', event => {
@@ -89,11 +89,9 @@ welcomeScreen.addEventListener('click', event => {
 
     const mode = choice.dataset.mode;
 
-    closeWelcome(() => {
-        if (mode === 'portfolio') {
-            return;
-        }
-
+    if (mode !== 'portfolio') {
         startBootScreen(mode);
-    });
+    }
+
+    closeWelcome();
 });
