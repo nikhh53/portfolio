@@ -1,12 +1,15 @@
 /*
  * hard_mode(): Das Portfolio ist "verschlüsselt" und wird Rätsel für
- * Rätsel freigeschaltet. Die Rätsel stehen in hardmode-puzzles.js.
- * Gestartet wird der Modus vom Boot-Screen über das Event
- * "portfolio:hard-mode".
+ * Rätsel freigeschaltet. Jedes Rätsel ist ein Lückencode, dessen Lücken
+ * per Drag-and-drop (oder Antippen) mit Bausteinen gefüllt werden.
+ * Die Rätsel stehen in hardmode-puzzles.js. Gestartet wird der Modus
+ * vom Boot-Screen über das Event "portfolio:hard-mode".
  */
 const HARD_PANEL_ORDER = ['hero', 'about', 'skills', 'projects', 'contact'];
 const HINT_AFTER_ATTEMPTS = 2;
 const NEXT_PUZZLE_DELAY = 900;
+const WRONG_MARK_DURATION = 700;
+const DRAG_THRESHOLD = 5;
 
 const hardState = {
     active: false,
@@ -44,10 +47,6 @@ function nextPanel(panel) {
     return HARD_PANEL_ORDER[HARD_PANEL_ORDER.indexOf(panel) + 1];
 }
 
-function normalizeAnswer(value) {
-    return value.replace(/\s+/g, '').replace(/"/g, "'").toLowerCase();
-}
-
 function escapeHtml(text) {
     const element = document.createElement('span');
     element.textContent = text;
@@ -78,104 +77,6 @@ function updateNavigationLocks() {
         const locked = hardState.active && !isPanelReachable(button.dataset.target);
         button.classList.toggle('hm-nav-locked', locked);
     });
-}
-
-/* Mini-SQL für die Projekte-Rätsel */
-
-const SQL_CONDITION =
-    /^(\w+)\s*(=|!=|<>|>=|<=|>|<|like)\s*(?:'([^']*)'|"([^"]*)"|(-?\d+))$/i;
-
-function sqlCompare(cellValue, operator, expected) {
-    const left = typeof cellValue === 'string' ? cellValue.toLowerCase() : cellValue;
-    const right = typeof expected === 'string' ? expected.toLowerCase() : expected;
-
-    switch (operator.toLowerCase()) {
-        case '=': return left == right;
-        case '!=':
-        case '<>': return left != right;
-        case '>': return left > right;
-        case '<': return left < right;
-        case '>=': return left >= right;
-        case '<=': return left <= right;
-        case 'like': {
-            const pattern = String(right)
-                .replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-                .replace(/%/g, '.*')
-                .replace(/_/g, '.');
-            return new RegExp(`^${pattern}$`).test(String(left));
-        }
-        default: return false;
-    }
-}
-
-// Unterstützt SELECT ... FROM projekte [WHERE a AND b OR c] [LIMIT n]
-function runSql(query) {
-    const match = query.trim().replace(/;\s*$/, '').match(
-        /^select\s+(.+?)\s+from\s+(\w+)(?:\s+where\s+(.+?))?(?:\s+limit\s+(\d+))?$/i
-    );
-
-    if (!match) {
-        throw new Error('ERROR 1064: Syntaxfehler. Aufbau: SELECT spalten FROM tabelle WHERE bedingung;');
-    }
-
-    const [, columnList, tableName, whereClause, limit] = match;
-
-    if (tableName.toLowerCase() !== SQL_TABLE.name) {
-        throw new Error(`ERROR 1146: Table '${tableName}' doesn't exist`);
-    }
-
-    const columns = columnList.trim() === '*'
-        ? SQL_TABLE.columns
-        : columnList.split(',').map(column => column.trim().toLowerCase());
-
-    columns.forEach(column => {
-        if (!SQL_TABLE.columns.includes(column)) {
-            throw new Error(`ERROR 1054: Unknown column '${column}'`);
-        }
-    });
-
-    // OR-Gruppen aus AND-Bedingungen
-    const orGroups = whereClause
-        ? whereClause.split(/\s+or\s+/i).map(group =>
-            group.split(/\s+and\s+/i).map(condition => {
-                const parts = condition.trim().match(SQL_CONDITION);
-
-                if (!parts || !SQL_TABLE.columns.includes(parts[1].toLowerCase())) {
-                    throw new Error(`ERROR 1064: Unklare Bedingung '${condition.trim()}'`);
-                }
-
-                const value = parts[5] !== undefined ? Number(parts[5]) : (parts[3] ?? parts[4]);
-                return { column: parts[1].toLowerCase(), operator: parts[2], value };
-            })
-        )
-        : [];
-
-    let rows = SQL_TABLE.rows.filter(row =>
-        orGroups.length === 0 ||
-        orGroups.some(group =>
-            group.every(({ column, operator, value }) => sqlCompare(row[column], operator, value))
-        )
-    );
-
-    if (limit !== undefined) {
-        rows = rows.slice(0, Number(limit));
-    }
-
-    return { columns, rows, where: whereClause || '' };
-}
-
-function renderSqlResult(result) {
-    if (result.rows.length === 0) {
-        return '<p class="hm-muted">Empty set (0 Zeilen)</p>';
-    }
-
-    const head = result.columns.map(column => `<th>${column}</th>`).join('');
-    const body = result.rows
-        .map(row => `<tr>${result.columns.map(column => `<td>${escapeHtml(String(row[column]))}</td>`).join('')}</tr>`)
-        .join('');
-
-    return `<table class="hm-sql-result"><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>
-        <p class="hm-muted">${result.rows.length} Zeile(n)</p>`;
 }
 
 /* Konsole (rechts bzw. unten) */
@@ -244,10 +145,9 @@ function renderConsole() {
     const puzzle = puzzlesOf(panel).find(item => !hardState.solved.has(item));
 
     if (!puzzle) {
-        const next = nextPanel(panel);
         body.innerHTML = `
             <p class="hm-success">✓ Abschnitt entschlüsselt.</p>
-            <button type="button" class="hm-button primary" data-go="${next}">Weiter zum nächsten Abschnitt</button>
+            <button type="button" class="hm-button primary" data-go="${nextPanel(panel)}">Weiter zum nächsten Abschnitt</button>
         `;
         bindGoButtons(body);
         return;
@@ -266,29 +166,36 @@ function bindGoButtons(container) {
     });
 }
 
+/* Lückencode-Rätsel */
+
 function renderPuzzle(body, puzzle) {
     const number = HARD_MODE_PUZZLES.indexOf(puzzle) + 1;
-    const code = puzzle.code ? `<pre class="hm-code">${escapeHtml(puzzle.code)}</pre>` : '';
+
+    // [[n]] im Code wird zur Lücke n
+    const code = puzzle.code
+        .split(/\[\[(\d+)\]\]/)
+        .map((part, index) => index % 2 === 1
+            ? `<span class="hm-slot" data-slot="${part}" role="button" tabindex="0" aria-label="Lücke ${Number(part) + 1}"></span>`
+            : escapeHtml(part))
+        .join('');
+
+    const tokens = puzzle.tokens
+        .map((token, index) => `<button type="button" class="hm-chip" data-token="${index}">${escapeHtml(token)}</button>`)
+        .join('');
 
     body.innerHTML = `
         <p class="hm-kicker">Aufgabe ${number} · ${puzzle.title}</p>
         <p class="hm-task">${escapeHtml(puzzle.task)}</p>
-        ${code}
-        <div class="hm-interaction"></div>
+        <pre class="hm-code">${code}</pre>
+        <p class="hm-muted">Ziehe die Bausteine in die Lücken oder tippe erst Baustein, dann Lücke.</p>
+        <div class="hm-pool">${tokens}</div>
+        <button type="button" class="hm-button primary hm-run" disabled>Ausführen ▶</button>
         <div class="hm-feedback" aria-live="polite"></div>
         <button type="button" class="hm-hint-button" hidden>Hinweis anzeigen</button>
         <p class="hm-hint" hidden></p>
     `;
 
-    const interaction = body.querySelector('.hm-interaction');
-    const renderers = {
-        text: renderTextPuzzle,
-        choice: renderChoicePuzzle,
-        connect: renderConnectPuzzle,
-        sql: renderSqlPuzzle
-    };
-
-    renderers[puzzle.type](interaction, puzzle);
+    setupDragAndDrop(body, puzzle);
 
     const hintButton = body.querySelector('.hm-hint-button');
     hintButton.hidden = hardState.attempts < HINT_AFTER_ATTEMPTS;
@@ -299,221 +206,195 @@ function renderPuzzle(body, puzzle) {
         hint.textContent = `# Hinweis: ${puzzle.hint}`;
         hint.hidden = false;
     });
-
-    // Auf dem Handy nicht automatisch die Tastatur öffnen
-    const firstInput = interaction.querySelector('input, textarea');
-
-    if (firstInput && window.matchMedia('(pointer: fine)').matches) {
-        firstInput.focus({ preventScroll: true });
-    }
 }
 
-function renderTextPuzzle(container, puzzle) {
-    container.innerHTML = `
-        <form class="hm-form">
-            <span class="hm-prompt">&gt;</span>
-            <input class="hm-input" type="text" autocomplete="off" autocapitalize="off"
-                spellcheck="false" aria-label="Antwort">
-            <button type="submit" class="hm-button primary">Ausführen</button>
-        </form>
-    `;
+function setupDragAndDrop(body, puzzle) {
+    const pool = body.querySelector('.hm-pool');
+    const slots = [...body.querySelectorAll('.hm-slot')];
+    const runButton = body.querySelector('.hm-run');
+    let selectedChip = null;
 
-    const input = container.querySelector('input');
-    input.value = puzzle.prefill || '';
-    input.placeholder = puzzle.placeholder || '';
-
-    container.querySelector('form').addEventListener('submit', event => {
-        event.preventDefault();
-        const answer = normalizeAnswer(input.value);
-        const correct = puzzle.pattern
-            ? puzzle.pattern.test(answer)
-            : puzzle.answers.includes(answer);
-
-        if (correct) {
-            solvePuzzle(puzzle);
-        } else {
-            failPuzzle(answer === '' ? 'SyntaxError: Eingabe ist leer' : 'AssertionError: Das stimmt noch nicht.');
-        }
-    });
-}
-
-function renderChoicePuzzle(container, puzzle) {
-    container.innerHTML = `<div class="hm-choices">${puzzle.options
-        .map((option, index) => `<button type="button" class="hm-choice" data-index="${index}">${escapeHtml(option)}</button>`)
-        .join('')}</div>`;
-
-    container.querySelectorAll('.hm-choice').forEach(button => {
-        button.addEventListener('click', () => {
-            if (Number(button.dataset.index) === puzzle.correct) {
-                button.classList.add('correct');
-                solvePuzzle(puzzle);
-            } else {
-                button.classList.add('wrong');
-                button.disabled = true;
-                failPuzzle(`AssertionError: ${button.textContent} liegt im Netz.`);
-            }
-        });
-    });
-}
-
-function renderConnectPuzzle(container, puzzle) {
-    const right = puzzle.rightOrder.map(index => ({ index, label: puzzle.pairs[index][1] }));
-
-    container.innerHTML = `
-        <div class="hm-connect">
-            <svg class="hm-lines" aria-hidden="true"></svg>
-            <div class="hm-column">${puzzle.pairs
-                .map(([label], index) => `<button type="button" class="hm-node left" data-index="${index}">${label}</button>`)
-                .join('')}</div>
-            <div class="hm-column">${right
-                .map(({ index, label }) => `<button type="button" class="hm-node right" data-index="${index}">${escapeHtml(label)}</button>`)
-                .join('')}</div>
-        </div>
-        <button type="button" class="hm-button primary hm-check" disabled>Verbindungen prüfen</button>
-    `;
-
-    const links = new Map();
-    const svg = container.querySelector('.hm-lines');
-    const checkButton = container.querySelector('.hm-check');
-    let selectedLeft = null;
-
-    function drawLines() {
-        if (!container.isConnected) {
-            window.removeEventListener('resize', drawLines);
-            return;
-        }
-
-        const box = container.querySelector('.hm-connect').getBoundingClientRect();
-        svg.innerHTML = '';
-
-        links.forEach((rightIndex, leftIndex) => {
-            const from = container.querySelector(`.left[data-index="${leftIndex}"]`).getBoundingClientRect();
-            const to = container.querySelector(`.right[data-index="${rightIndex}"]`).getBoundingClientRect();
-            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-
-            line.setAttribute('x1', from.right - box.left);
-            line.setAttribute('y1', from.top + from.height / 2 - box.top);
-            line.setAttribute('x2', to.left - box.left);
-            line.setAttribute('y2', to.top + to.height / 2 - box.top);
-            svg.append(line);
-        });
-
-        container.querySelectorAll('.hm-node').forEach(node => {
-            const index = Number(node.dataset.index);
-            const linked = node.classList.contains('left')
-                ? links.has(index)
-                : [...links.values()].includes(index);
-            node.classList.toggle('linked', linked);
-        });
-
-        checkButton.disabled = links.size < puzzle.pairs.length;
+    function selectChip(chip) {
+        body.querySelectorAll('.hm-chip.selected').forEach(other => other.classList.remove('selected'));
+        selectedChip = chip;
+        chip?.classList.add('selected');
     }
 
-    container.querySelectorAll('.hm-node.left').forEach(node => {
-        node.addEventListener('click', () => {
-            container.querySelectorAll('.hm-node.left').forEach(other => other.classList.remove('selected'));
-            selectedLeft = Number(node.dataset.index);
-            node.classList.add('selected');
-        });
-    });
+    // Zurück in den Vorrat, in der ursprünglichen Reihenfolge
+    function returnToPool(chip) {
+        const index = Number(chip.dataset.token);
+        const next = [...pool.children].find(other => Number(other.dataset.token) > index);
+        pool.insertBefore(chip, next || null);
+    }
 
-    container.querySelectorAll('.hm-node.right').forEach(node => {
-        node.addEventListener('click', () => {
-            if (selectedLeft === null) {
+    function placeChip(chip, slot) {
+        const previous = slot.querySelector('.hm-chip');
+
+        if (previous && previous !== chip) {
+            returnToPool(previous);
+        }
+
+        slot.append(chip);
+        selectChip(null);
+        updateState();
+    }
+
+    function updateState() {
+        slots.forEach(slot => slot.classList.toggle('filled', slot.querySelector('.hm-chip') !== null));
+        runButton.disabled = slots.some(slot => !slot.querySelector('.hm-chip'));
+    }
+
+    function slotAt(x, y) {
+        const element = document.elementFromPoint(x, y);
+        return element ? element.closest('.hm-slot') : null;
+    }
+
+    body.querySelectorAll('.hm-chip').forEach(chip => {
+        chip.addEventListener('pointerdown', event => {
+            if (event.button !== 0 || runButton.dataset.done) {
                 return;
             }
 
-            const rightIndex = Number(node.dataset.index);
+            const start = { x: event.clientX, y: event.clientY };
+            let ghost = null;
+            let hoveredSlot = null;
 
-            // Eine rechte Seite kann nur mit einer linken verbunden sein
-            links.forEach((value, key) => {
-                if (value === rightIndex) {
-                    links.delete(key);
+            function onMove(moveEvent) {
+                if (!ghost) {
+                    const distance = Math.hypot(moveEvent.clientX - start.x, moveEvent.clientY - start.y);
+
+                    if (distance < DRAG_THRESHOLD) {
+                        return;
+                    }
+
+                    ghost = chip.cloneNode(true);
+                    ghost.classList.add('hm-ghost');
+                    document.body.append(ghost);
+                    chip.classList.add('dragging');
                 }
-            });
 
-            links.set(selectedLeft, rightIndex);
-            container.querySelector('.hm-node.left.selected').classList.remove('selected');
-            selectedLeft = null;
-            drawLines();
+                ghost.style.left = `${moveEvent.clientX}px`;
+                ghost.style.top = `${moveEvent.clientY}px`;
+
+                const slot = slotAt(moveEvent.clientX, moveEvent.clientY);
+
+                if (slot !== hoveredSlot) {
+                    hoveredSlot?.classList.remove('hover');
+                    slot?.classList.add('hover');
+                    hoveredSlot = slot;
+                }
+            }
+
+            function onUp(upEvent) {
+                window.removeEventListener('pointermove', onMove);
+                window.removeEventListener('pointerup', onUp);
+                window.removeEventListener('pointercancel', onUp);
+                hoveredSlot?.classList.remove('hover');
+
+                // Ohne Bewegung zählt es als Antippen
+                if (!ghost) {
+                    if (chip.parentElement.classList.contains('hm-slot')) {
+                        returnToPool(chip);
+                        updateState();
+                    } else {
+                        selectChip(selectedChip === chip ? null : chip);
+                    }
+                    return;
+                }
+
+                ghost.remove();
+                chip.classList.remove('dragging');
+
+                const target = upEvent.type === 'pointerup'
+                    ? document.elementFromPoint(upEvent.clientX, upEvent.clientY)
+                    : null;
+                const slot = target ? target.closest('.hm-slot') : null;
+
+                if (slot) {
+                    placeChip(chip, slot);
+                } else if (target && pool.contains(target) && chip.parentElement.classList.contains('hm-slot')) {
+                    returnToPool(chip);
+                    updateState();
+                }
+            }
+
+            window.addEventListener('pointermove', onMove);
+            window.addEventListener('pointerup', onUp);
+            window.addEventListener('pointercancel', onUp);
+        });
+
+        // Tastatur: Enter/Leertaste wählt aus bzw. legt zurück
+        chip.addEventListener('keydown', event => {
+            if (event.key !== 'Enter' && event.key !== ' ') {
+                return;
+            }
+
+            event.preventDefault();
+
+            if (chip.parentElement.classList.contains('hm-slot')) {
+                returnToPool(chip);
+                updateState();
+            } else {
+                selectChip(chip);
+            }
         });
     });
 
-    checkButton.addEventListener('click', () => {
-        const wrong = [...links].filter(([left, rightIndex]) => left !== rightIndex);
-
-        if (wrong.length === 0) {
-            svg.classList.add('correct');
-            solvePuzzle(puzzle);
-            return;
+    slots.forEach(slot => {
+        function fillWithSelected() {
+            if (selectedChip) {
+                placeChip(selectedChip, slot);
+            }
         }
 
-        wrong.forEach(([left]) => links.delete(left));
-        drawLines();
-        failPuzzle(`ConnectionError: ${wrong.length} Verbindung(en) falsch, die habe ich getrennt.`);
+        slot.addEventListener('click', event => {
+            if (!event.target.closest('.hm-chip')) {
+                fillWithSelected();
+            }
+        });
+
+        slot.addEventListener('keydown', event => {
+            if (event.target === slot && (event.key === 'Enter' || event.key === ' ')) {
+                event.preventDefault();
+                fillWithSelected();
+            }
+        });
     });
 
-    window.addEventListener('resize', drawLines);
-}
+    runButton.addEventListener('click', () => {
+        const wrongSlots = slots.filter(slot =>
+            slot.querySelector('.hm-chip').textContent !== puzzle.solution[Number(slot.dataset.slot)]
+        );
 
-function renderSqlPuzzle(container, puzzle) {
-    const header = SQL_TABLE.columns.join(' | ');
-
-    container.innerHTML = `
-        <p class="hm-muted">Tabelle <strong>${SQL_TABLE.name}</strong>: ${header}</p>
-        <form class="hm-form hm-sql-form">
-            <span class="hm-prompt">sql&gt;</span>
-            <input class="hm-input" type="text" autocomplete="off" autocapitalize="off"
-                spellcheck="false" placeholder="SELECT * FROM projekte WHERE ..." aria-label="SQL-Abfrage">
-            <button type="submit" class="hm-button primary">Ausführen</button>
-        </form>
-        <div class="hm-sql-output"></div>
-    `;
-
-    const input = container.querySelector('input');
-    const output = container.querySelector('.hm-sql-output');
-
-    container.querySelector('form').addEventListener('submit', event => {
-        event.preventDefault();
-
-        let result;
-
-        try {
-            result = runSql(input.value);
-        } catch (error) {
-            output.innerHTML = '';
-            failPuzzle(error.message);
-            return;
-        }
-
-        output.innerHTML = renderSqlResult(result);
-
-        if (puzzle.forbidden && puzzle.forbidden.test(result.where.toLowerCase())) {
-            failPuzzle('Fast: Die Aufgabe sagt, ohne die id. Versuch es über den Namen.');
-            return;
-        }
-
-        const ids = result.rows.map(row => row.id).sort().join(',');
-
-        if (ids === puzzle.targetIds.join(',')) {
+        if (wrongSlots.length === 0) {
+            runButton.dataset.done = 'true';
+            slots.forEach(slot => slot.classList.add('correct'));
             solvePuzzle(puzzle);
-        } else {
-            failPuzzle('AssertionError: Die Abfrage liefert nicht genau das gesuchte Projekt.');
+            return;
         }
+
+        wrongSlots.forEach(slot => slot.classList.add('wrong'));
+        runButton.disabled = true;
+
+        window.setTimeout(() => {
+            wrongSlots.forEach(slot => {
+                slot.classList.remove('wrong');
+                returnToPool(slot.querySelector('.hm-chip'));
+            });
+            updateState();
+        }, WRONG_MARK_DURATION);
+
+        failPuzzle(`AssertionError: ${wrongSlots.length} von ${slots.length} Lücken falsch.`);
     });
 }
 
 /* Ergebnis eines Versuchs */
 
-function feedbackElement() {
-    return hardConsole.querySelector('.hm-feedback');
-}
-
 function failPuzzle(message) {
     hardState.attempts++;
     hardState.wrongTotal++;
 
-    const feedback = feedbackElement();
+    const feedback = hardConsole.querySelector('.hm-feedback');
     feedback.className = 'hm-feedback hm-error';
     feedback.textContent = message;
 
@@ -521,13 +402,10 @@ function failPuzzle(message) {
     void hardConsole.offsetWidth;
     hardConsole.classList.add('shake');
 
-    if (hardState.attempts >= HINT_AFTER_ATTEMPTS) {
-        const hintButton = hardConsole.querySelector('.hm-hint-button');
-        const hint = hardConsole.querySelector('.hm-hint');
+    const hint = hardConsole.querySelector('.hm-hint');
 
-        if (hintButton && hint.hidden) {
-            hintButton.hidden = false;
-        }
+    if (hardState.attempts >= HINT_AFTER_ATTEMPTS && hint.hidden) {
+        hardConsole.querySelector('.hm-hint-button').hidden = false;
     }
 }
 
@@ -535,12 +413,12 @@ function solvePuzzle(puzzle) {
     hardState.solved.add(puzzle);
     hardState.attempts = 0;
 
-    const feedback = feedbackElement();
+    const feedback = hardConsole.querySelector('.hm-feedback');
     feedback.className = 'hm-feedback hm-success';
     feedback.textContent = '✓ Test bestanden. Entschlüssle ...';
 
-    hardConsole.querySelectorAll('input, button:not(.hm-toggle):not(.hm-exit)').forEach(element => {
-        element.disabled = true;
+    hardConsole.querySelectorAll('.hm-body button').forEach(button => {
+        button.disabled = true;
     });
 
     setLocked(puzzle, false);
@@ -554,7 +432,7 @@ function renderFinish(body) {
 
     body.innerHTML = `
         <p class="hm-success hm-finish-title">✓ Portfolio vollständig entschlüsselt</p>
-        <pre class="hm-code">zeit        = "${time} min"
+        <pre class="hm-code">zeit         = "${time} min"
 fehlversuche = ${hardState.wrongTotal}
 hinweise     = ${hardState.hintsUsed}</pre>
         <p class="hm-task">Danke fürs Durchspielen! Wenn Sie mehr sehen möchten: Ich freue mich über Ihre Nachricht.</p>
