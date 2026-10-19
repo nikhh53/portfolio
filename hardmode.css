@@ -61,7 +61,7 @@
 
     display: flex;
     flex-direction: column;
-    width: 390px;
+    width: 440px;
     max-height: calc(100vh - var(--navbar-height) - 2.7rem);
 
     background: rgba(5, 5, 5, 0.96);
@@ -82,7 +82,7 @@ body.intro-active .hm-console {
 
 /* Platz für die Konsole und die Bereichsnavigation links schaffen */
 body.hard-mode {
-    padding-right: calc(390px + 1.5rem);
+    padding-right: calc(440px + 1.5rem);
 }
 
 body.hard-mode .section {
@@ -195,7 +195,8 @@ body.hard-mode .section {
 .hm-code {
     margin-bottom: 0.9rem;
     padding: 0.7rem 0.8rem;
-    overflow-x: auto;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
 
     background: #0d1117;
     border: 1px solid #1f2937;
@@ -388,7 +389,8 @@ body.hard-mode .section {
 .hm-output {
     margin-top: 0.8rem;
     padding: 0.7rem 0.8rem;
-    overflow-x: auto;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
 
     background: #000;
     border: 1px solid #1f2937;

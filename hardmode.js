@@ -8,6 +8,13 @@
  * "portfolio:hard-mode".
  */
 const HARD_PANEL_ORDER = ['hero', 'about', 'skills', 'projects', 'contact'];
+const PANEL_LABELS = {
+    hero: 'Start',
+    about: 'Über mich',
+    skills: 'Skills',
+    projects: 'Projekte',
+    contact: 'Kontakt'
+};
 const HINT_AFTER_ATTEMPTS = 2;
 const NEXT_PUZZLE_DELAY = 1200;
 const WRONG_MARK_DURATION = 600;
@@ -228,15 +235,34 @@ function renderConsole() {
     const puzzle = puzzlesOf(panel).find(item => !hardState.solved.has(item));
 
     if (!puzzle) {
-        body.innerHTML = `
-            <p class="hm-success">✓ Abschnitt entschlüsselt.</p>
-            <button type="button" class="hm-button primary" data-go="${nextPanel(panel)}">Weiter zum nächsten Abschnitt</button>
-        `;
-        bindGoButtons(body);
+        renderSectionDone(body, panel);
         return;
     }
 
     renderPuzzle(body, puzzle);
+}
+
+// Bereich fertig: sagen, was als Nächstes kommt
+function renderSectionDone(body, panel) {
+    const next = nextPanel(panel);
+    const nextPuzzle = puzzlesOf(next).find(item => !hardState.solved.has(item));
+    const ownPuzzles = puzzlesOf(panel);
+
+    const status = ownPuzzles.length > 0
+        ? `✓ Aufgabe ${HARD_MODE_PUZZLES.indexOf(ownPuzzles[ownPuzzles.length - 1]) + 1} gelöst, ${PANEL_LABELS[panel]} ist entschlüsselt.`
+        : `✓ ${PANEL_LABELS[panel]} wurde schon mit der letzten Aufgabe freigeschaltet. Viel Spaß beim Lesen!`;
+
+    const label = nextPuzzle
+        ? `Weiter zu Aufgabe ${HARD_MODE_PUZZLES.indexOf(nextPuzzle) + 1}/${HARD_MODE_PUZZLES.length}: ${nextPuzzle.title}`
+        : `Weiter zu ${PANEL_LABELS[next]}`;
+
+    body.innerHTML = `
+        <p class="hm-success"></p>
+        <button type="button" class="hm-button primary" data-go="${next}"></button>
+    `;
+    body.querySelector('.hm-success').textContent = status;
+    body.querySelector('[data-go]').textContent = `${label} →`;
+    bindGoButtons(body);
 }
 
 function firstUnsolvedPanel() {
@@ -577,10 +603,10 @@ document.addEventListener(
         event.preventDefault();
         event.stopImmediatePropagation();
 
+        // Nur die Konsole aufklappen, gewackelt wird nur bei falschem Code
         hardState.collapsed = false;
-        hardConsole.classList.remove('collapsed', 'shake');
-        void hardConsole.offsetWidth;
-        hardConsole.classList.add('shake');
+        hardConsole.classList.remove('collapsed');
+        hardConsole.querySelector('.hm-toggle').setAttribute('aria-expanded', 'true');
     },
     { capture: true }
 );
