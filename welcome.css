@@ -1,16 +1,3 @@
-/* Vor dem Willkommensbildschirm bleibt die Seite verdeckt (siehe index.html) */
-html.pre-welcome {
-    background: #0a0a0a;
-}
-
-html.pre-welcome body {
-    visibility: hidden;
-}
-
-html.pre-welcome .welcome {
-    visibility: visible;
-}
-
 /* Willkommensbildschirm mit der Auswahl vor dem Portfolio */
 body.welcome-active {
     overflow: hidden;
@@ -33,7 +20,7 @@ body.welcome-active {
     color: #e8e8e8;
     font-family: 'Inter', system-ui, sans-serif;
 
-    animation: welcome-fade 0.5s ease;
+    /* Der Hintergrund blendet nicht ein, sonst scheint das Portfolio durch */
     transition: opacity 0.5s ease;
 }
 
@@ -44,6 +31,7 @@ body.welcome-active {
 .welcome-box {
     width: min(960px, 100%);
     text-align: center;
+    animation: welcome-fade 0.5s ease;
 }
 
 .welcome-kicker {
