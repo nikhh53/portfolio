@@ -2,7 +2,7 @@
  * Boot-Screen im Terminal-Stil
  * Läuft vor dem Portfolio und fragt danach den Modus ab:
  * easy_mode() zeigt das Portfolio normal, hard_mode() startet die Rätsel
- * aus hardmode.js.
+ * aus hardmode.js, os_mode() startet NIK OS aus os.js.
  * Das Overlay wird per JavaScript erzeugt, damit die Seite ohne
  * JavaScript ganz normal sichtbar bleibt.
  */
@@ -63,6 +63,7 @@ const helpLines = [
     [['Wähle, wie du das Portfolio sehen möchtest:']],
     [['  easy_mode()   ', 'syntax-function'], ['das Portfolio ganz normal ansehen', 'muted']],
     [['  hard_mode()   ', 'syntax-function'], ['dich Seite für Seite durchs Portfolio coden', 'muted']],
+    [['  os_mode()     ', 'syntax-function'], ['das Portfolio als eigenes Betriebssystem starten', 'muted']],
     [['  help          ', 'syntax-function'], ['weitere Befehle wie ls, whoami oder git log', 'muted']]
 ];
 
@@ -100,6 +101,9 @@ bootScreen.innerHTML = `
         </button>
         <button type="button" class="boot-choice" data-command="hard_mode()">
             hard_mode()<small>durchs Portfolio coden</small>
+        </button>
+        <button type="button" class="boot-choice" data-command="os_mode()">
+            os_mode()<small>NIK OS starten</small>
         </button>
     </div>
 `;
@@ -237,6 +241,15 @@ function chooseHardMode() {
     }, bootInstant ? 0 : 900);
 }
 
+function chooseOsMode() {
+    printLine([['Starte os_mode() ... NIK OS fährt hoch.', 'success']]);
+
+    window.setTimeout(() => {
+        closeBootScreen();
+        document.dispatchEvent(new CustomEvent('portfolio:os-mode'));
+    }, bootInstant ? 0 : 900);
+}
+
 // Eingaben wie in einer Python-Konsole auswerten
 function runCommand(rawInput) {
     const input = rawInput.trim();
@@ -261,7 +274,12 @@ function runCommand(rawInput) {
         return;
     }
 
-    if (command === 'easy_mode' || command === 'hard_mode') {
+    if (command === 'os_mode()') {
+        chooseOsMode();
+        return;
+    }
+
+    if (command === 'easy_mode' || command === 'hard_mode' || command === 'os_mode') {
         printLine([[`<function ${command}>`, 'muted']]);
         printLine([['Tipp: Funktionen ruft man mit Klammern auf, also '], [`${command}()`, 'syntax-function']]);
         return;

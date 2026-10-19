@@ -4,7 +4,7 @@
  * ein Lückencode, dessen Lücken per Drag-and-drop (oder Antippen) mit
  * Bausteinen gefüllt werden. Jeder Baustein wird sofort geprüft.
  * Rätsel: hardmode-puzzles.js, Effekte: hardmode-effects.js,
- * Editor-Ansicht: hardmode-ide.js.
+ * Editor-Ansicht: hardmode-ide.js, Finale: hardmode-finale.js.
  * Gestartet wird der Modus vom Boot-Screen über das Event
  * "portfolio:hard-mode".
  */
@@ -533,21 +533,30 @@ async function solvePuzzle(puzzle, body) {
 
     window.setTimeout(() => {
         if (hardState.solved.size === HARD_MODE_PUZZLES.length) {
-            showDeployPipeline(finishStats());
+            showFinale(finishSummary());
         }
 
         renderConsole();
     }, NEXT_PUZZLE_DELAY);
 }
 
-function finishStats() {
+function finishSummary() {
     const seconds = Math.round((Date.now() - hardState.startedAt) / 1000);
-    const time = `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
+
+    return {
+        time: `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')} min`,
+        wrong: hardState.wrongTotal,
+        hints: hardState.hintsUsed
+    };
+}
+
+function finishStats() {
+    const summary = finishSummary();
 
     return [
-        `zeit         = "${time} min"`,
-        `fehlversuche = ${hardState.wrongTotal}`,
-        `hinweise     = ${hardState.hintsUsed}`
+        `zeit         = "${summary.time}"`,
+        `fehlversuche = ${summary.wrong}`,
+        `hinweise     = ${summary.hints}`
     ];
 }
 

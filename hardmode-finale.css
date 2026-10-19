@@ -1,0 +1,421 @@
+/* Finale von hard_mode(): Pipeline-Lauf und Erfolgsseite */
+.hm-finale {
+    position: fixed;
+    inset: 0;
+    z-index: 5500;
+
+    display: grid;
+    place-items: center;
+    padding: 1.5rem;
+    overflow-y: auto;
+
+    background:
+        radial-gradient(circle at 50% 40%, rgba(0, 229, 204, 0.12), transparent 55%),
+        rgba(0, 0, 0, 0.82);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    color: #c9d1d9;
+    font-family: 'JetBrains Mono', ui-monospace, Consolas, monospace;
+
+    animation: hm-finale-fade 0.4s ease;
+    transition: opacity 0.6s ease;
+}
+
+.hm-finale.closing {
+    opacity: 0;
+}
+
+.hm-run {
+    width: min(860px, 100%);
+    overflow: hidden;
+
+    background: linear-gradient(180deg, #0b0f12, #050607);
+    border: 1px solid rgba(0, 229, 204, 0.35);
+    border-radius: 16px;
+    box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.03) inset,
+        0 30px 90px rgba(0, 0, 0, 0.7),
+        0 0 80px rgba(0, 229, 204, 0.15);
+
+    animation: hm-finale-rise 0.55s cubic-bezier(0.2, 1.2, 0.4, 1);
+}
+
+.hm-run-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.8rem 1.1rem;
+
+    background: #07090b;
+    border-bottom: 1px solid #161b22;
+    font-size: 0.8rem;
+}
+
+.hm-run-header .hm-window-dots {
+    position: static;
+}
+
+.hm-run-title {
+    flex: 1;
+    color: #e8e8e8;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.hm-run-title span {
+    color: #5c6370;
+}
+
+.hm-run-status {
+    padding: 0.15rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+}
+
+.hm-run-status.running {
+    background: rgba(210, 153, 34, 0.15);
+    color: #d29922;
+}
+
+.hm-run-status.done {
+    background: rgba(63, 185, 80, 0.15);
+    color: #3fb950;
+}
+
+.hm-run-time {
+    min-width: 4.5rem;
+    color: #5c6370;
+    text-align: right;
+}
+
+/* Jobs als verbundene Kette */
+.hm-jobs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.6rem;
+    padding: 1.6rem 1.4rem 1.2rem;
+    list-style: none;
+}
+
+.hm-job {
+    position: relative;
+
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    column-gap: 0.6rem;
+    padding: 0.7rem 0.8rem;
+
+    background: #0d1117;
+    border: 1px solid #1f2937;
+    border-radius: 10px;
+    color: #5c6370;
+
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Verbindungslinie zum nächsten Job, füllt sich nach Abschluss */
+.hm-job:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    width: 1.6rem;
+    height: 2px;
+    background: linear-gradient(90deg, #00e5cc 50%, #1f2937 50%) right / 200% 100%;
+    transition: background-position 0.4s ease;
+}
+
+.hm-job.done:not(:last-child)::after {
+    background-position: left;
+}
+
+.hm-job.running {
+    border-color: rgba(210, 153, 34, 0.6);
+    box-shadow: 0 0 18px rgba(210, 153, 34, 0.15);
+}
+
+.hm-job.done {
+    border-color: rgba(0, 229, 204, 0.5);
+}
+
+.hm-job-icon {
+    grid-row: span 2;
+    width: 1.2rem;
+    height: 1.2rem;
+    border: 2px solid #30363d;
+    border-radius: 50%;
+}
+
+.hm-job.running .hm-job-icon {
+    border-color: #d29922;
+    border-right-color: transparent;
+    animation: hm-finale-spin 0.7s linear infinite;
+}
+
+.hm-job.done .hm-job-icon {
+    display: grid;
+    place-items: center;
+    background: #00e5cc;
+    border-color: #00e5cc;
+}
+
+.hm-job.done .hm-job-icon::before {
+    content: '✓';
+    color: #001a17;
+    font-size: 0.72rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.hm-job-name {
+    color: #e8e8e8;
+    font-size: 0.88rem;
+}
+
+.hm-job-label {
+    overflow: hidden;
+    font-size: 0.7rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Live-Log */
+.hm-run-log {
+    height: 12.5rem;
+    margin: 0 1.4rem 1.4rem;
+    padding: 0.9rem 1rem;
+    overflow-y: auto;
+
+    background: #030405;
+    border: 1px solid #161b22;
+    border-radius: 10px;
+    font: inherit;
+    font-size: 0.78rem;
+    line-height: 1.7;
+    scrollbar-width: none;
+}
+
+.hm-run-log div {
+    animation: hm-finale-fade 0.25s ease;
+}
+
+.hm-run-log .command {
+    color: #8b949e;
+}
+
+.hm-run-log .ok {
+    color: #3fb950;
+}
+
+/* Erfolgsseite */
+.hm-result {
+    padding: 0.4rem 1.4rem 1.8rem;
+    text-align: center;
+    animation: hm-finale-fade 0.5s ease;
+}
+
+.hm-result-check {
+    width: 74px;
+    height: 74px;
+    margin-bottom: 0.8rem;
+    fill: none;
+    stroke: #00e5cc;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 0 14px rgba(0, 229, 204, 0.6));
+}
+
+.hm-result-check circle {
+    stroke-dasharray: 151;
+    stroke-dashoffset: 151;
+    animation: hm-finale-draw 0.7s ease forwards;
+}
+
+.hm-result-check path {
+    stroke-dasharray: 36;
+    stroke-dashoffset: 36;
+    animation: hm-finale-draw 0.4s 0.55s ease forwards;
+}
+
+.hm-result-kicker {
+    color: #00e5cc;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.hm-result-title {
+    margin: 0.5rem 0 0.4rem;
+    color: #fff;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(1.6rem, 4.5vw, 2.6rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    overflow-wrap: anywhere;
+}
+
+.hm-result-meta {
+    color: #8b949e;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.9rem;
+}
+
+.hm-result-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.8rem;
+    max-width: 540px;
+    margin: 1.5rem auto;
+}
+
+.hm-result-stats div {
+    padding: 0.8rem;
+    background: #0d1117;
+    border: 1px solid #1f2937;
+    border-radius: 10px;
+}
+
+.hm-result-stats dt {
+    color: #5c6370;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.hm-result-stats dd {
+    margin-top: 0.2rem;
+    color: #e8e8e8;
+    font-size: 1.35rem;
+    white-space: nowrap;
+}
+
+.hm-result-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.7rem;
+}
+
+.hm-finale-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1.3rem;
+
+    background: #11161c;
+    color: #e8e8e8;
+    border: 1px solid #262c33;
+    border-radius: 10px;
+
+    font: inherit;
+    font-size: 0.85rem;
+    text-decoration: none;
+    cursor: pointer;
+
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hm-finale-button:hover,
+.hm-finale-button:focus-visible {
+    transform: translateY(-2px);
+    border-color: #00e5cc;
+    outline: none;
+}
+
+.hm-finale-button.primary {
+    background: linear-gradient(135deg, #00f5d4, #00b8a3);
+    color: #001a17;
+    border-color: transparent;
+    font-weight: 600;
+    box-shadow: 0 8px 30px rgba(0, 229, 204, 0.35);
+}
+
+.hm-finale-button.primary:hover,
+.hm-finale-button.primary:focus-visible {
+    box-shadow: 0 10px 40px rgba(0, 229, 204, 0.55);
+}
+
+.hm-finale-button.ghost {
+    background: transparent;
+    border-color: transparent;
+    color: #8b949e;
+}
+
+.hm-burst {
+    position: fixed;
+    inset: 0;
+    z-index: 5600;
+    pointer-events: none;
+}
+
+@keyframes hm-finale-fade {
+    from {
+        opacity: 0;
+    }
+}
+
+@keyframes hm-finale-rise {
+    from {
+        transform: translateY(24px) scale(0.96);
+        opacity: 0;
+    }
+}
+
+@keyframes hm-finale-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes hm-finale-draw {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+@media (max-width: 700px) {
+    .hm-finale {
+        padding: 0.75rem;
+    }
+
+    .hm-run-title span,
+    .hm-run-header .hm-window-dots {
+        display: none;
+    }
+
+    .hm-jobs {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.6rem;
+        padding: 1rem;
+    }
+
+    .hm-job:not(:last-child)::after {
+        display: none;
+    }
+
+    .hm-run-log {
+        margin: 0 1rem 1rem;
+    }
+
+    .hm-result-stats {
+        gap: 0.5rem;
+    }
+
+    .hm-result-stats div {
+        padding: 0.7rem 0.3rem;
+    }
+
+    .hm-result-stats dt {
+        font-size: 0.58rem;
+        letter-spacing: 0.04em;
+    }
+
+    .hm-result-stats dd {
+        font-size: 0.95rem;
+    }
+}
