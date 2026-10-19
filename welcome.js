@@ -69,6 +69,7 @@ welcomeScreen.querySelector('.welcome-kicker').textContent = visitorCompany
 
 document.body.prepend(welcomeScreen);
 document.body.classList.add('welcome-active');
+document.documentElement.classList.remove('pre-welcome');
 
 /*
  * Beim Ausblenden darf das Portfolio nicht kurz durchblitzen: Wer einen

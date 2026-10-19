@@ -1,3 +1,16 @@
+/* Vor dem Willkommensbildschirm bleibt die Seite verdeckt (siehe index.html) */
+html.pre-welcome {
+    background: #0a0a0a;
+}
+
+html.pre-welcome body {
+    visibility: hidden;
+}
+
+html.pre-welcome .welcome {
+    visibility: visible;
+}
+
 /* Willkommensbildschirm mit der Auswahl vor dem Portfolio */
 body.welcome-active {
     overflow: hidden;
