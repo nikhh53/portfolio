@@ -385,6 +385,22 @@ body.os-active {
     margin: 1rem 0;
 }
 
+/* Niedrige Bildschirme: etwas kompakter, damit mehr ohne Scrollen passt */
+@media (max-height: 820px) {
+    .os-window-body {
+        padding: 1rem;
+    }
+
+    .os-profile img {
+        width: 68px;
+        height: 68px;
+    }
+
+    .os-window .internship-card {
+        margin-top: 0.7rem;
+    }
+}
+
 .os-profile {
     display: flex;
     align-items: center;

@@ -16,14 +16,19 @@ const OS_SPARK_POINTS = 24;
 const OS_TOAST_DURATION = 4200;
 const OS_MOBILE_WIDTH = 700;
 
+/*
+ * width und height sind die Startmaße. Fenster mit "fit" wachsen danach
+ * so weit, dass der ganze Inhalt ohne Scrollen hineinpasst; nur Terminal
+ * und PDF behalten ihre Größe, weil ihr Inhalt selbst mitwächst.
+ */
 const OS_APPS = {
-    about: { title: 'Über mich', icon: 'fa-user', width: 620, height: 560 },
-    projects: { title: 'Projekte', icon: 'fa-folder-open', width: 820, height: 600 },
-    skills: { title: 'System Monitor', icon: 'fa-microchip', width: 640, height: 500 },
+    about: { title: 'Über mich', icon: 'fa-user', width: 620, height: 560, fit: true },
+    projects: { title: 'Projekte', icon: 'fa-folder-open', width: 980, height: 600, fit: true },
+    skills: { title: 'System Monitor', icon: 'fa-microchip', width: 640, height: 500, fit: true },
     terminal: { title: 'Terminal', icon: 'fa-terminal', width: 620, height: 400 },
     cv: { title: 'lebenslauf.pdf', icon: 'fa-file-pdf', width: 680, height: 640 },
-    contact: { title: 'Kontakt', icon: 'fa-envelope', width: 560, height: 600 },
-    settings: { title: 'Einstellungen', icon: 'fa-gear', width: 460, height: 420 }
+    contact: { title: 'Kontakt', icon: 'fa-envelope', width: 560, height: 600, fit: true },
+    settings: { title: 'Einstellungen', icon: 'fa-gear', width: 460, height: 420, fit: true }
 };
 
 const osState = {
@@ -364,9 +369,42 @@ function openApp(app) {
     enableWindowDrag(windowElement, desktop);
 
     desktop.append(windowElement);
+
+    if (config.fit) {
+        fitWindowToContent(windowElement, desktop, dockSpace);
+    }
+
     osState.windows.set(app, windowElement);
     focusWindow(windowElement);
     updateDock();
+}
+
+/*
+ * Das Fenster so hoch machen, dass der Inhalt ohne Scrollbalken passt.
+ * Reicht der Platz nicht, wird es zuerst nach oben geschoben und erst
+ * dann auf die Desktop-Höhe begrenzt.
+ */
+function fitWindowToContent(windowElement, desktop, dockSpace) {
+    if (window.innerWidth <= OS_MOBILE_WIDTH) {
+        return;
+    }
+
+    const body = windowElement.querySelector('.os-window-body');
+    const chrome = windowElement.offsetHeight - body.clientHeight;
+    const available = desktop.clientHeight - dockSpace - 24;
+    // Breiter werden darf das Fenster nur bis zu einem Drittel mehr
+    const widest = Math.min(desktop.clientWidth - 24, windowElement.offsetWidth * 1.35);
+
+    // Passt der Inhalt nicht in die Höhe, hilft oft etwas mehr Breite
+    while (body.scrollHeight + chrome > available && windowElement.offsetWidth < widest) {
+        windowElement.style.width = `${Math.min(windowElement.offsetWidth + 100, widest)}px`;
+    }
+
+    const wanted = Math.min(body.scrollHeight + chrome, available);
+    windowElement.style.left = `${Math.max(12, Math.min(windowElement.offsetLeft, desktop.clientWidth - windowElement.offsetWidth - 12))}px`;
+
+    windowElement.style.height = `${wanted}px`;
+    windowElement.style.top = `${Math.max(12, Math.min(windowElement.offsetTop, desktop.clientHeight - dockSpace - wanted - 12))}px`;
 }
 
 // Fenster an der Titelleiste verschieben (Maus und Touch)
