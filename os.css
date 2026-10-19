@@ -1,0 +1,787 @@
+/* os_mode(): NIK OS mit Desktop, Fenstern und Dock */
+body.os-active {
+    overflow: hidden;
+}
+
+.os {
+    --os-accent: #00e5cc;
+    --os-glass: rgba(14, 17, 21, 0.78);
+    --os-border: rgba(255, 255, 255, 0.08);
+    --os-dock-space: 84px;
+
+    position: fixed;
+    inset: 0;
+    z-index: 4000;
+
+    display: flex;
+    flex-direction: column;
+
+    background: #05070a;
+    color: #e8e8e8;
+    font-family: 'Inter', system-ui, sans-serif;
+    line-height: 1.6;
+
+    animation: os-boot 0.6s ease;
+    transition: opacity 0.5s ease;
+}
+
+.os.closing {
+    opacity: 0;
+}
+
+/* Hintergründe */
+.os[data-wallpaper='aurora'] {
+    background:
+        radial-gradient(ellipse at 20% 15%, color-mix(in srgb, var(--os-accent) 28%, transparent), transparent 55%),
+        radial-gradient(ellipse at 85% 80%, rgba(124, 58, 237, 0.28), transparent 55%),
+        linear-gradient(160deg, #05070a, #0b1020);
+}
+
+.os[data-wallpaper='grid'] {
+    background:
+        radial-gradient(circle at 50% 45%, color-mix(in srgb, var(--os-accent) 18%, transparent), transparent 50%),
+        linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px) 0 0 / 40px 40px,
+        linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px) 0 0 / 40px 40px,
+        #040506;
+}
+
+.os[data-wallpaper='midnight'] {
+    background:
+        radial-gradient(ellipse at 50% 120%, color-mix(in srgb, var(--os-accent) 35%, transparent), transparent 60%),
+        linear-gradient(180deg, #000, #0a0f24);
+}
+
+.os-desktop::before {
+    content: 'NIK OS';
+    position: absolute;
+    right: 3rem;
+    bottom: calc(var(--os-dock-space) + 1rem);
+
+    color: rgba(255, 255, 255, 0.04);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(3rem, 10vw, 9rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    pointer-events: none;
+}
+
+/* Obere Leiste */
+.os-topbar {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    height: 34px;
+    padding: 0 0.8rem;
+
+    background: rgba(5, 6, 8, 0.7);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-bottom: 1px solid var(--os-border);
+
+    font-family: 'JetBrains Mono', ui-monospace, Consolas, monospace;
+    font-size: 0.78rem;
+}
+
+.os-start {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.2rem 0.6rem;
+
+    background: transparent;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.os-start i {
+    color: var(--os-accent);
+}
+
+.os-start:hover,
+.os-start[aria-expanded='true'] {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.os-topbar-spacer {
+    flex: 1;
+}
+
+.os-user {
+    color: #8b949e;
+}
+
+/* Startmenü */
+.os-menu {
+    position: absolute;
+    top: 40px;
+    left: 0.6rem;
+    z-index: 100000;
+
+    display: grid;
+    width: 290px;
+    padding: 0.5rem;
+
+    background: var(--os-glass);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid var(--os-border);
+    border-radius: 14px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+
+    animation: os-pop 0.2s ease;
+}
+
+.os-menu[hidden] {
+    display: none;
+}
+
+.os-menu hr {
+    margin: 0.4rem 0;
+    border: none;
+    border-top: 1px solid var(--os-border);
+}
+
+.os-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.55rem 0.7rem;
+
+    background: transparent;
+    color: #e8e8e8;
+    border: none;
+    border-radius: 8px;
+    font: inherit;
+    font-size: 0.88rem;
+    text-align: left;
+    cursor: pointer;
+}
+
+.os-menu-item i {
+    width: 1.1rem;
+    color: var(--os-accent);
+    text-align: center;
+}
+
+.os-menu-item:hover,
+.os-menu-item:focus-visible {
+    background: rgba(255, 255, 255, 0.07);
+    outline: none;
+}
+
+/* Desktop und Symbole */
+.os-desktop {
+    position: relative;
+    flex: 1;
+    overflow: hidden;
+}
+
+.os-icons {
+    display: grid;
+    grid-template-rows: repeat(auto-fill, 86px);
+    grid-auto-flow: column;
+    grid-auto-columns: 92px;
+    gap: 0.4rem;
+    height: calc(100% - var(--os-dock-space));
+    padding: 1rem;
+}
+
+.os-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 0.2rem;
+
+    background: transparent;
+    color: #e8e8e8;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    font: inherit;
+    font-size: 0.75rem;
+    line-height: 1.3;
+    cursor: pointer;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+.os-icon i {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.03));
+    border: 1px solid var(--os-border);
+    border-radius: 14px;
+    color: var(--os-accent);
+    font-size: 1.35rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+}
+
+.os-icon:hover,
+.os-icon:focus-visible {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: var(--os-border);
+    outline: none;
+}
+
+/* Fenster */
+.os-window {
+    position: absolute;
+
+    display: flex;
+    flex-direction: column;
+    min-width: 320px;
+    min-height: 220px;
+    overflow: hidden;
+    resize: both;
+
+    background: rgba(12, 14, 17, 0.94);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--os-border);
+    border-radius: 12px;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55);
+
+    animation: os-pop 0.25s ease;
+}
+
+.os-window[hidden] {
+    display: none;
+}
+
+.os-window.focused {
+    border-color: color-mix(in srgb, var(--os-accent) 45%, transparent);
+    box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.65),
+        0 0 40px color-mix(in srgb, var(--os-accent) 12%, transparent);
+}
+
+.os-window.maximized {
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: calc(100% - var(--os-dock-space)) !important;
+    border-radius: 0;
+    resize: none;
+}
+
+.os-window-bar {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    height: 38px;
+
+    background: rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid var(--os-border);
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+}
+
+.os-window-buttons {
+    position: absolute;
+    left: 0.8rem;
+    display: flex;
+    gap: 0.45rem;
+}
+
+.os-window-buttons button {
+    width: 12px;
+    height: 12px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: #ff5f57;
+    cursor: pointer;
+}
+
+.os-window-buttons [data-action='minimize'] {
+    background: #febc2e;
+}
+
+.os-window-buttons [data-action='maximize'] {
+    background: #28c840;
+}
+
+.os-window-title {
+    color: #8b949e;
+    font-family: 'JetBrains Mono', ui-monospace, Consolas, monospace;
+    font-size: 0.78rem;
+}
+
+.os-window-title i {
+    margin-right: 0.3rem;
+    color: var(--os-accent);
+}
+
+.os-window-body {
+    flex: 1;
+    overflow: auto;
+    padding: 1.4rem;
+    scrollbar-width: thin;
+    scrollbar-color: #2a2f36 transparent;
+}
+
+.os-window[data-app='terminal'] .os-window-body,
+.os-window[data-app='cv'] .os-window-body {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+}
+
+.os-window h2 {
+    margin-bottom: 0.4rem;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.5rem;
+}
+
+.os-kicker {
+    margin-bottom: 0.3rem;
+    color: var(--os-accent);
+    font-family: 'JetBrains Mono', ui-monospace, Consolas, monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.os-muted {
+    color: #8b949e;
+    font-size: 0.85rem;
+}
+
+/* Übernommene Portfolio-Inhalte an Fenstergröße anpassen */
+.os-window .about-content p {
+    margin-bottom: 0.8rem;
+    color: #c9d1d9;
+}
+
+.os-window .internship-card {
+    grid-template-columns: repeat(2, 1fr);
+    margin-top: 1rem;
+}
+
+.os-window .projects-grid {
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+}
+
+.os-window .project-card {
+    min-height: 0;
+    padding: 1.2rem;
+}
+
+.os-window .contact-options {
+    grid-template-columns: 1fr;
+    margin: 1rem 0;
+}
+
+.os-profile {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    margin-bottom: 1.2rem;
+}
+
+.os-profile img {
+    width: 88px;
+    height: 88px;
+    object-fit: cover;
+    border: 2px solid var(--os-accent);
+    border-radius: 50%;
+}
+
+.os-path {
+    margin-bottom: 1rem;
+    color: #8b949e;
+    font-family: 'JetBrains Mono', ui-monospace, Consolas, monospace;
+    font-size: 0.8rem;
+}
+
+/* System Monitor */
+.os-monitor-head,
+.os-processes li {
+    display: grid;
+    grid-template-columns: 9rem 1fr 120px;
+    align-items: center;
+    gap: 1rem;
+}
+
+.os-monitor-head {
+    padding: 0 0.6rem 0.5rem;
+    border-bottom: 1px solid var(--os-border);
+    color: #5c6370;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.os-processes {
+    list-style: none;
+}
+
+.os-processes li {
+    padding: 0.7rem 0.6rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.os-processes li:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.os-process-name {
+    font-weight: 600;
+}
+
+.os-processes canvas {
+    width: 100%;
+    height: 28px;
+}
+
+.os-process-name i {
+    width: 1.3rem;
+    color: var(--os-accent);
+}
+
+/* Terminal */
+.os-terminal-output {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem 1rem 0;
+    background: #030405;
+    font-family: 'JetBrains Mono', ui-monospace, Consolas, monospace;
+    font-size: 0.82rem;
+    white-space: pre-wrap;
+}
+
+.os-terminal-output .command {
+    color: #e8e8e8;
+}
+
+.os-terminal-output .muted {
+    color: #5c6370;
+}
+
+.os-terminal-output .success {
+    color: var(--os-accent);
+}
+
+.os-terminal-output .error {
+    color: #ff6b6b;
+}
+
+.os-terminal-output .warn {
+    color: #d29922;
+}
+
+.os-terminal-row {
+    display: flex;
+    gap: 0.6rem;
+    padding: 0.6rem 1rem 1rem;
+    background: #030405;
+    color: var(--os-accent);
+    font-family: 'JetBrains Mono', ui-monospace, Consolas, monospace;
+    font-size: 0.82rem;
+}
+
+.os-terminal-row input {
+    flex: 1;
+    min-width: 0;
+    background: transparent;
+    color: #e8e8e8;
+    caret-color: var(--os-accent);
+    border: none;
+    outline: none;
+    font: inherit;
+}
+
+/* Lebenslauf */
+.os-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem 1rem;
+    border-bottom: 1px solid var(--os-border);
+}
+
+.os-pdf {
+    flex: 1;
+    width: 100%;
+    border: none;
+    background: #fff;
+}
+
+.os-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.9rem;
+
+    background: rgba(255, 255, 255, 0.06);
+    color: #e8e8e8;
+    border: 1px solid var(--os-border);
+    border-radius: 8px;
+    font-size: 0.82rem;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.os-button.primary {
+    background: var(--os-accent);
+    color: #031210;
+    border-color: transparent;
+    font-family: 'JetBrains Mono', ui-monospace, Consolas, monospace;
+    font-weight: 600;
+}
+
+/* Einstellungen */
+.os-wallpapers,
+.os-accents {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    margin: 0.5rem 0 1.3rem;
+}
+
+.os-wallpaper-choice {
+    width: 110px;
+    height: 68px;
+    border: 2px solid var(--os-border);
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.os-wallpaper-choice[data-wallpaper='aurora'] {
+    background: radial-gradient(ellipse at 20% 15%, var(--os-accent), transparent 70%), linear-gradient(160deg, #05070a, #2a1458);
+}
+
+.os-wallpaper-choice[data-wallpaper='grid'] {
+    background:
+        linear-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px) 0 0 / 12px 12px,
+        linear-gradient(90deg, rgba(255, 255, 255, 0.12) 1px, transparent 1px) 0 0 / 12px 12px,
+        #040506;
+}
+
+.os-wallpaper-choice[data-wallpaper='midnight'] {
+    background: radial-gradient(ellipse at 50% 130%, var(--os-accent), transparent 70%), linear-gradient(180deg, #000, #0a0f24);
+}
+
+.os-accent-choice {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.8rem;
+
+    background: rgba(255, 255, 255, 0.04);
+    color: #e8e8e8;
+    border: 2px solid var(--os-border);
+    border-radius: 999px;
+    font: inherit;
+    font-size: 0.82rem;
+    cursor: pointer;
+}
+
+.os-accent-choice::before {
+    content: '';
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--swatch);
+}
+
+.os-wallpaper-choice.selected,
+.os-accent-choice.selected {
+    border-color: var(--os-accent);
+}
+
+/* Dock */
+.os-dock {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    z-index: 99999;
+
+    display: flex;
+    gap: 0.4rem;
+    max-width: calc(100% - 1.5rem);
+    padding: 0.5rem;
+    overflow-x: auto;
+
+    background: var(--os-glass);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid var(--os-border);
+    border-radius: 18px;
+    box-shadow: 0 16px 50px rgba(0, 0, 0, 0.5);
+    transform: translateX(-50%);
+    scrollbar-width: none;
+}
+
+.os-dock-item {
+    position: relative;
+
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02));
+    color: var(--os-accent);
+    border: 1px solid var(--os-border);
+    border-radius: 12px;
+    font-size: 1.2rem;
+    cursor: pointer;
+
+    transition: transform 0.2s ease;
+}
+
+.os-dock-item span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+}
+
+.os-dock-item:hover,
+.os-dock-item:focus-visible {
+    transform: translateY(-6px) scale(1.08);
+    outline: none;
+}
+
+.os-dock-item.open::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--os-accent);
+}
+
+/* Benachrichtigung */
+.os-toast {
+    position: absolute;
+    top: 46px;
+    right: 1rem;
+    z-index: 100000;
+
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    max-width: min(360px, calc(100% - 2rem));
+    padding: 0.8rem 1rem;
+
+    background: var(--os-glass);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid var(--os-border);
+    border-radius: 12px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+    font-size: 0.85rem;
+
+    animation: os-slide 0.4s ease;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.os-toast i {
+    color: var(--os-accent);
+}
+
+.os-toast.closing {
+    opacity: 0;
+    transform: translateX(20px);
+}
+
+@keyframes os-boot {
+    from {
+        opacity: 0;
+        filter: brightness(2);
+    }
+}
+
+@keyframes os-pop {
+    from {
+        opacity: 0;
+        transform: scale(0.96);
+    }
+}
+
+@keyframes os-slide {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+}
+
+/* Handy: Fenster immer bildschirmfüllend, Symbole als Raster */
+@media (max-width: 700px) {
+    .os {
+        --os-dock-space: 76px;
+    }
+
+    .os-user,
+    .os-desktop::before {
+        display: none;
+    }
+
+    .os-toast {
+        top: auto;
+        bottom: calc(var(--os-dock-space) + 0.5rem);
+    }
+
+    .os-icons {
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: none;
+        grid-auto-flow: row;
+        grid-auto-columns: auto;
+        align-content: start;
+    }
+
+    .os-window {
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: calc(100% - var(--os-dock-space)) !important;
+        min-width: 0;
+        border-radius: 0;
+        resize: none;
+    }
+
+    .os-window-bar {
+        cursor: default;
+    }
+
+    .os-window .internship-card {
+        grid-template-columns: 1fr;
+    }
+
+    .os-monitor-head {
+        display: none;
+    }
+
+    .os-processes li {
+        grid-template-columns: 1fr 90px;
+    }
+
+    .os-processes .os-muted {
+        grid-column: 1 / -1;
+        grid-row: 2;
+    }
+
+    .os-dock-item {
+        width: 42px;
+        height: 42px;
+        font-size: 1.05rem;
+    }
+}
