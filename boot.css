@@ -1,0 +1,241 @@
+/* Boot-Screen im Terminal-Stil */
+body.boot-active {
+    overflow: hidden;
+}
+
+.boot-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 5000;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 2.5rem 3rem;
+
+    background: #000;
+    color: #c9d1d9;
+
+    font-family: 'JetBrains Mono', ui-monospace, 'Cascadia Code', Consolas, monospace;
+    font-size: 0.92rem;
+    line-height: 1.65;
+
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+.boot-screen.closing {
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* Leichte Bildschirmlinien wie bei einem alten Monitor */
+.boot-screen::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.025) 0,
+        rgba(255, 255, 255, 0.025) 1px,
+        transparent 1px,
+        transparent 3px
+    );
+}
+
+.boot-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+
+    padding-bottom: 0.8rem;
+    margin-bottom: 1.2rem;
+    border-bottom: 1px solid #1a1a1a;
+
+    color: #5c6370;
+    font-size: 0.8rem;
+}
+
+.boot-skip {
+    position: relative;
+    z-index: 1;
+
+    padding: 0.3rem 0.8rem;
+
+    background: transparent;
+    color: #5c6370;
+    border: 1px solid #262626;
+    border-radius: 6px;
+
+    font-family: inherit;
+    font-size: 0.78rem;
+    cursor: pointer;
+
+    transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.boot-skip:hover,
+.boot-skip:focus-visible {
+    color: #00e5cc;
+    border-color: #00e5cc;
+    outline: none;
+}
+
+.boot-log {
+    flex: 1;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+    scrollbar-width: none;
+}
+
+.boot-log::-webkit-scrollbar {
+    display: none;
+}
+
+.boot-line {
+    min-height: 1.65em;
+}
+
+.boot-line .prompt-sign {
+    color: #00e5cc;
+}
+
+.boot-line.command {
+    color: #e8e8e8;
+}
+
+.boot-line.muted {
+    color: #5c6370;
+}
+
+.boot-line.error {
+    color: #ff6b6b;
+}
+
+.boot-line.success {
+    color: #00e5cc;
+}
+
+.tag-ok {
+    color: #3fb950;
+}
+
+.tag-info {
+    color: #58a6ff;
+}
+
+.tag-warn {
+    color: #d29922;
+}
+
+.syntax-keyword {
+    color: #c678dd;
+}
+
+.syntax-string {
+    color: #98c379;
+}
+
+.syntax-function {
+    color: #61afef;
+}
+
+/* Blinkender Cursor beim Tippen */
+.boot-cursor {
+    display: inline-block;
+    width: 0.6em;
+    height: 1.1em;
+    margin-left: 1px;
+    vertical-align: text-bottom;
+    background: #00e5cc;
+    animation: boot-blink 1s steps(1) infinite;
+}
+
+@keyframes boot-blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+/* Eingabezeile für die Moduswahl */
+.boot-input-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.boot-input-row[hidden] {
+    display: none;
+}
+
+.boot-input-row .prompt-sign {
+    color: #00e5cc;
+}
+
+.boot-input {
+    flex: 1;
+    min-width: 0;
+
+    background: transparent;
+    color: #e8e8e8;
+    caret-color: #00e5cc;
+    border: none;
+    outline: none;
+
+    font: inherit;
+}
+
+.boot-choices {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1rem;
+}
+
+.boot-choices[hidden] {
+    display: none;
+}
+
+.boot-choice {
+    position: relative;
+    z-index: 1;
+
+    padding: 0.45rem 1rem;
+
+    background: #0d0d0d;
+    color: #e8e8e8;
+    border: 1px solid #262626;
+    border-radius: 6px;
+
+    font-family: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+
+    transition: border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.boot-choice:hover,
+.boot-choice:focus-visible {
+    color: #00e5cc;
+    border-color: #00e5cc;
+    transform: translateY(-2px);
+    outline: none;
+}
+
+.boot-choice small {
+    margin-left: 0.5rem;
+    color: #5c6370;
+}
+
+@media (max-width: 768px) {
+    .boot-screen {
+        padding: 1.4rem 1.2rem;
+        font-size: 0.8rem;
+    }
+
+    .boot-header span:first-child {
+        display: none;
+    }
+}
