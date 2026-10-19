@@ -172,40 +172,6 @@ body.hard-mode .section {
     font-size: 0.78rem;
 }
 
-.hm-form {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.35rem 0.35rem 0.35rem 0.7rem;
-
-    background: #0d0d0d;
-    border: 1px solid #262626;
-    border-radius: 8px;
-}
-
-.hm-form:focus-within {
-    border-color: #00e5cc;
-}
-
-.hm-sql-form {
-    margin-top: 0.4rem;
-}
-
-.hm-prompt {
-    color: #00e5cc;
-}
-
-.hm-input {
-    flex: 1;
-    min-width: 0;
-    background: transparent;
-    color: #e8e8e8;
-    caret-color: #00e5cc;
-    border: none;
-    outline: none;
-    font: inherit;
-}
-
 .hm-button {
     padding: 0.4rem 0.8rem;
     background: #141414;
@@ -236,8 +202,8 @@ body.hard-mode .section {
     cursor: default;
 }
 
-.hm-check {
-    margin-top: 0.8rem;
+.hm-run {
+    margin-top: 0.9rem;
 }
 
 .hm-feedback {
@@ -273,114 +239,111 @@ body.hard-mode .section {
     color: #d29922;
 }
 
-/* Auswahl-Rätsel */
-.hm-choices {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
-}
+/* Lückencode mit Bausteinen */
+.hm-slot {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 3.2em;
+    min-height: 1.75em;
+    margin: 0.1em 0.15em;
+    padding: 0 0.15em;
+    vertical-align: middle;
 
-.hm-choice,
-.hm-node {
-    padding: 0.5rem 0.6rem;
-    background: #0d0d0d;
-    color: #e8e8e8;
-    border: 1px solid #262626;
-    border-radius: 8px;
-    font: inherit;
-    text-align: left;
+    border: 1px dashed #3a4450;
+    border-radius: 6px;
+    background: rgba(0, 229, 204, 0.04);
+
     cursor: pointer;
-    transition: border-color 0.2s ease, color 0.2s ease;
+    transition: border-color 0.2s ease, background 0.2s ease;
 }
 
-.hm-choice:hover:not(:disabled),
-.hm-node:hover {
+.hm-slot.filled {
+    border-style: solid;
+    border-color: transparent;
+    background: none;
+    padding: 0;
+}
+
+.hm-slot.hover,
+.hm-slot:focus-visible {
     border-color: #00e5cc;
+    background: rgba(0, 229, 204, 0.12);
+    outline: none;
 }
 
-.hm-choice.correct {
+.hm-slot.wrong .hm-chip {
+    border-color: #ff6b6b;
+    color: #ff6b6b;
+    animation: hm-shake 0.4s ease;
+}
+
+.hm-slot.correct .hm-chip {
     border-color: #3fb950;
     color: #3fb950;
 }
 
-.hm-choice.wrong {
-    border-color: #ff6b6b;
-    color: #ff6b6b;
-    text-decoration: line-through;
-}
-
-/* Verknüpfungs-Rätsel */
-.hm-connect {
-    position: relative;
-    display: grid;
-    grid-template-columns: 1fr 1.3fr;
-    gap: 0.6rem 2.2rem;
-}
-
-.hm-column {
+.hm-pool {
     display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    min-height: 2.4rem;
+    margin-top: 0.5rem;
+    padding: 0.6rem;
+
+    border: 1px solid #1a1a1a;
+    border-radius: 8px;
+    background: #080808;
 }
 
-.hm-node {
-    position: relative;
-    z-index: 1;
-    font-size: 0.76rem;
+.hm-chip {
+    padding: 0.2rem 0.6rem;
+
+    background: #141a1f;
+    color: #e8e8e8;
+    border: 1px solid #2c3e44;
+    border-radius: 6px;
+
+    font: inherit;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    white-space: nowrap;
+
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+
+    transition: border-color 0.2s ease, color 0.2s ease, opacity 0.2s ease;
 }
 
-.hm-node.selected {
+.hm-chip:hover:not(:disabled),
+.hm-chip:focus-visible,
+.hm-chip.selected {
     border-color: #00e5cc;
     color: #00e5cc;
+    outline: none;
 }
 
-.hm-node.linked {
-    border-color: #2c5f59;
+.hm-chip.dragging {
+    opacity: 0.3;
 }
 
-.hm-lines {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    overflow: visible;
-    pointer-events: none;
+.hm-chip:disabled {
+    cursor: default;
 }
 
-.hm-lines line {
-    stroke: #00e5cc;
-    stroke-width: 1.5;
-    stroke-dasharray: 4 3;
-}
-
-.hm-lines.correct line {
-    stroke: #3fb950;
-    stroke-dasharray: none;
-}
-
-/* SQL-Ergebnis */
-.hm-sql-output {
-    margin-top: 0.7rem;
-    overflow-x: auto;
-}
-
-.hm-sql-result {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.75rem;
-}
-
-.hm-sql-result th,
-.hm-sql-result td {
-    padding: 0.25rem 0.45rem;
-    border: 1px solid #262626;
-    text-align: left;
-    white-space: nowrap;
-}
-
-.hm-sql-result th {
+/* Kopie des Bausteins, die beim Ziehen am Zeiger hängt */
+.hm-ghost {
+    position: fixed;
+    z-index: 6000;
+    transform: translate(-50%, -50%) scale(1.08);
+    font-family: 'JetBrains Mono', ui-monospace, Consolas, monospace;
+    border-color: #00e5cc;
     color: #00e5cc;
-    font-weight: 500;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    pointer-events: none;
+    cursor: grabbing;
 }
 
 .hm-finish-title {
