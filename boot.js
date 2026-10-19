@@ -11,9 +11,14 @@ const LINE_PAUSE = 140;
 
 // Jede Zeile besteht aus Teilen [Text, CSS-Klasse]
 const bootScript = [
-    { type: 'command', parts: [['$ ', 'prompt-sign'], ['ssh gast@nikhh53.github.io']] },
+    { type: 'command', parts: [['$ ', 'prompt-sign'], [`ssh ${visitorUser}@nikhh53.github.io`]] },
     { type: 'log', parts: [['Verbindung zu nikhh53.github.io wird aufgebaut ...', 'muted']] },
-    { type: 'log', parts: [['[ OK ] ', 'tag-ok'], ['Verbunden. Willkommen, Gast.']] },
+    {
+        type: 'log',
+        parts: visitorCompany
+            ? [['[ OK ] ', 'tag-ok'], ['Verbindung zu '], [visitorCompany, 'syntax-string'], [' hergestellt. Schön, dass Sie da sind!']]
+            : [['[ OK ] ', 'tag-ok'], ['Verbunden. Willkommen, Gast.']]
+    },
     { type: 'command', parts: [['$ ', 'prompt-sign'], ['cd ~/portfolio && npm run build']] },
     { type: 'log', parts: [['> portfolio@2027.6.0 build', 'muted']] },
     { type: 'log', parts: [['[info] ', 'tag-info'], ['Kompiliere index.html ...']] },
@@ -57,8 +62,10 @@ const bootScript = [
 const helpLines = [
     [['Wähle, wie du das Portfolio sehen möchtest:']],
     [['  easy_mode()   ', 'syntax-function'], ['das Portfolio ganz normal ansehen', 'muted']],
-    [['  hard_mode()   ', 'syntax-function'], ['dich Seite für Seite durchs Portfolio coden', 'muted']]
+    [['  hard_mode()   ', 'syntax-function'], ['dich Seite für Seite durchs Portfolio coden', 'muted']],
+    [['  help          ', 'syntax-function'], ['weitere Befehle wie ls, whoami oder git log', 'muted']]
 ];
+
 
 const prefersReducedMotion =
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -72,7 +79,7 @@ bootScreen.setAttribute('role', 'dialog');
 bootScreen.setAttribute('aria-label', 'Portfolio wird geladen');
 bootScreen.innerHTML = `
     <div class="boot-header">
-        <span>gast@nikhh53: ~/portfolio</span>
+        <span>${visitorUser}@nikhh53: ~/portfolio</span>
         <button type="button" class="boot-skip">Überspringen (Esc)</button>
     </div>
     <div class="boot-log" aria-live="polite"></div>
@@ -265,13 +272,20 @@ function runCommand(rawInput) {
         return;
     }
 
-    if (command === 'clear()') {
+    if (command === 'clear()' || command === 'clear') {
         bootLog.textContent = '';
         return;
     }
 
+    const shellOutput = runShellCommand(input);
+
+    if (shellOutput) {
+        shellOutput.forEach(({ text, kind }) => printLine([[text]], kind));
+        return;
+    }
+
     const name = input.split('(')[0] || input;
-    printLine([[`NameError: name '${name}' is not defined. Probier help()`]], 'error');
+    printLine([[`NameError: name '${name}' is not defined. Probier help`]], 'error');
 }
 
 bootInput.addEventListener('keydown', event => {

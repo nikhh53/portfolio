@@ -1,12 +1,12 @@
 /*
  * Effekte für hard_mode(): Texte "entschlüsseln", Programm-Ausgaben
- * eintippen und die Erfolgsmeldung am Ende.
+ * eintippen und das Deploy-Finale am Ende.
  */
 const DECODE_DURATION = 900;
 const DECODE_GLYPHS = '01<>/{}[]#$%&*+=?';
 const OUTPUT_CHAR_DELAY = 14;
 const OUTPUT_LINE_PAUSE = 220;
-const SUCCESS_BANNER_DURATION = 2600;
+const PIPELINE_STEP_DURATION = 650;
 
 const effectsReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -82,21 +82,72 @@ async function typeOutput(container, lines) {
     }
 }
 
-// Großer Abschluss mitten auf dem Bildschirm
-function showSuccessBanner(lines) {
+// Großes Finale: eine CI-Pipeline läuft durch, danach der Kontaktknopf
+async function showDeployPipeline(stats) {
+    const target = visitorCompany || 'Ihr Team';
+    const steps = [
+        ['lint', 'Code-Stil geprüft'],
+        ['test', `${HARD_MODE_PUZZLES.length}/${HARD_MODE_PUZZLES.length} Aufgaben bestanden`],
+        ['build', 'Portfolio kompiliert'],
+        ['deploy', `ausgeliefert an ${target}`]
+    ];
+
     const banner = document.createElement('div');
     banner.className = 'hm-banner';
-    banner.setAttribute('role', 'status');
+    banner.setAttribute('role', 'dialog');
+    banner.setAttribute('aria-label', 'Portfolio entschlüsselt');
     banner.innerHTML = `
         <div class="hm-banner-box">
-            <p class="hm-banner-title">BUILD SUCCESSFUL</p>
-            <pre></pre>
+            <p class="hm-pipeline-command">$ git push origin praktikum</p>
+            <ul class="hm-pipeline"></ul>
+            <div class="hm-pipeline-result" hidden>
+                <p class="hm-banner-title">BUILD SUCCESSFUL</p>
+                <p class="hm-banner-target"></p>
+                <pre></pre>
+                <div class="hm-banner-actions">
+                    <a class="hm-button primary hm-hire">sudo hire niklas</a>
+                    <button type="button" class="hm-button hm-banner-close">Portfolio ansehen</button>
+                </div>
+            </div>
         </div>
     `;
-    banner.querySelector('pre').textContent = lines.join('\n');
+
+    banner.querySelector('.hm-banner-target').textContent =
+        `Niklas → ${target}: bereit fürs Praktikum ab 07.06.2027`;
+    banner.querySelector('pre').textContent = stats.join('\n');
+    banner.querySelector('.hm-hire').href = hireMailLink();
     document.body.append(banner);
 
-    window.setTimeout(() => banner.classList.add('closing'), SUCCESS_BANNER_DURATION);
-    window.setTimeout(() => banner.remove(), SUCCESS_BANNER_DURATION + 600);
-    banner.addEventListener('click', () => banner.remove());
+    function close() {
+        banner.classList.add('closing');
+        window.setTimeout(() => banner.remove(), 600);
+        document.removeEventListener('keydown', closeOnEscape);
+    }
+
+    function closeOnEscape(event) {
+        if (event.key === 'Escape') {
+            close();
+        }
+    }
+
+    banner.querySelector('.hm-banner-close').addEventListener('click', close);
+    document.addEventListener('keydown', closeOnEscape);
+
+    const list = banner.querySelector('.hm-pipeline');
+
+    for (const [name, label] of steps) {
+        const step = document.createElement('li');
+        step.className = 'running';
+        step.innerHTML = '<span class="hm-step-icon"></span><span class="hm-step-name"></span><span class="hm-step-label"></span>';
+        step.querySelector('.hm-step-name').textContent = name;
+        step.querySelector('.hm-step-label').textContent = label;
+        list.append(step);
+
+        await effectWait(PIPELINE_STEP_DURATION);
+        step.className = 'done';
+    }
+
+    await effectWait(PIPELINE_STEP_DURATION / 2);
+    banner.querySelector('.hm-pipeline-result').hidden = false;
+    banner.querySelector('.hm-hire').focus({ preventScroll: true });
 }

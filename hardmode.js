@@ -13,6 +13,7 @@ const NEXT_PUZZLE_DELAY = 1200;
 const WRONG_MARK_DURATION = 600;
 const REVEAL_STAGGER = 180;
 const DRAG_THRESHOLD = 5;
+const SHELL_MAX_LINES = 14;
 
 const TOTAL_SLOTS = HARD_MODE_PUZZLES.reduce((sum, puzzle) => sum + puzzle.solution.length, 0);
 
@@ -125,6 +126,14 @@ function createConsole() {
         </div>
         <div class="hm-bar"><span></span></div>
         <div class="hm-body"></div>
+        <form class="hm-shell">
+            <div class="hm-shell-output" aria-live="polite"></div>
+            <label class="hm-shell-row">
+                <span class="hm-shell-prompt">$</span>
+                <input class="hm-shell-input" type="text" autocomplete="off" autocapitalize="off"
+                    spellcheck="false" placeholder="Befehl tippen, z. B. help" aria-label="Shell-Befehl">
+            </label>
+        </form>
     `;
 
     document.body.append(hardConsole);
@@ -136,6 +145,50 @@ function createConsole() {
     });
 
     hardConsole.querySelector('.hm-exit').addEventListener('click', stopHardMode);
+    hardConsole.querySelector('.hm-shell').addEventListener('submit', runConsoleShell);
+}
+
+// Mini-Shell unten in der Konsole (Befehle aus shell.js)
+function runConsoleShell(event) {
+    event.preventDefault();
+
+    const input = hardConsole.querySelector('.hm-shell-input');
+    const output = hardConsole.querySelector('.hm-shell-output');
+    const command = input.value.trim();
+    input.value = '';
+
+    if (command === '') {
+        return;
+    }
+
+    if (command === 'clear') {
+        output.textContent = '';
+        return;
+    }
+
+    if (command === 'easy_mode()') {
+        stopHardMode();
+        return;
+    }
+
+    const lines = runShellCommand(command) || [{ text: `${command}: Befehl nicht gefunden. Probier help`, kind: 'error' }];
+
+    [{ text: `$ ${command}`, kind: 'command' }, ...lines].forEach(({ text, kind }) => {
+        const row = document.createElement('div');
+        row.textContent = text;
+
+        if (kind) {
+            row.className = `hm-shell-${kind}`;
+        }
+
+        output.append(row);
+    });
+
+    while (output.children.length > SHELL_MAX_LINES) {
+        output.firstElementChild.remove();
+    }
+
+    output.scrollTop = output.scrollHeight;
 }
 
 function updateProgressBar() {
@@ -448,7 +501,7 @@ async function solvePuzzle(puzzle, body) {
 
     window.setTimeout(() => {
         if (hardState.solved.size === HARD_MODE_PUZZLES.length) {
-            showSuccessBanner(finishStats());
+            showDeployPipeline(finishStats());
         }
 
         renderConsole();
