@@ -1,9 +1,4 @@
 /* hard_mode(): verschlüsselte Inhalte und Rätsel-Konsole */
-.hm-locked,
-.hm-decoding {
-    transition: filter 0.9s ease, opacity 0.9s ease;
-}
-
 /* Kurzes Aufleuchten, während ein Teil entschlüsselt wird */
 .hm-decoding {
     animation: hm-decode-glow 0.9s ease;
@@ -41,11 +36,40 @@
     }
 }
 
+/* Gesperrt: Inhalt unsichtbar, darüber liegt verschlüsselter Code (hardmode-ide.js) */
 .hm-locked {
-    filter: blur(8px) grayscale(1);
-    opacity: 0.35;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
     user-select: none;
     pointer-events: none;
+}
+
+.hm-locked > * {
+    visibility: hidden;
+}
+
+.hm-cipher-anchor {
+    position: relative;
+}
+
+.hm-locked::after {
+    content: attr(data-cipher);
+    position: absolute;
+    inset: 0;
+    padding: inherit;
+    overflow: hidden;
+    visibility: visible;
+
+    color: rgba(0, 229, 204, 0.42);
+    -webkit-text-fill-color: rgba(0, 229, 204, 0.42);
+    font-family: 'JetBrains Mono', ui-monospace, Consolas, monospace;
+    font-size: min(0.85em, 2.2rem);
+    font-weight: 400;
+    letter-spacing: normal;
+    line-height: 1.5;
+    text-align: left;
+    white-space: pre-wrap;
+    word-break: break-all;
 }
 
 .hm-nav-locked {
