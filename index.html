@@ -33,6 +33,15 @@
             'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap'
         );
     </style>
+
+    <!--
+        Bis der Willkommensbildschirm steht, bleibt die Seite verdeckt,
+        damit das Portfolio nicht kurz aufblitzt. Ohne JavaScript wird
+        die Klasse nie gesetzt und die Seite ist sofort sichtbar.
+    -->
+    <script>
+        document.documentElement.classList.add('pre-welcome');
+    </script>
 </head>
 
 <body class="intro-active">
