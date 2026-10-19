@@ -1,0 +1,445 @@
+/* hard_mode(): verschlüsselte Inhalte und Rätsel-Konsole */
+.hm-locked,
+.hm-unlocking {
+    transition: filter 0.9s ease, opacity 0.9s ease;
+}
+
+.hm-locked {
+    filter: blur(8px) grayscale(1);
+    opacity: 0.35;
+    user-select: none;
+    pointer-events: none;
+}
+
+.hm-nav-locked {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+.hm-console {
+    position: fixed;
+    top: calc(var(--navbar-height) + 1.2rem);
+    right: 1.5rem;
+    z-index: 1500;
+
+    display: flex;
+    flex-direction: column;
+    width: 390px;
+    max-height: calc(100vh - var(--navbar-height) - 2.7rem);
+
+    background: rgba(5, 5, 5, 0.96);
+    border: 1px solid #262626;
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+
+    color: #c9d1d9;
+    font-family: 'JetBrains Mono', ui-monospace, Consolas, monospace;
+    font-size: 0.82rem;
+    line-height: 1.6;
+}
+
+body.intro-active .hm-console {
+    top: 1.5rem;
+    max-height: calc(100vh - 3rem);
+}
+
+/* Platz für die Konsole und die Bereichsnavigation links schaffen */
+body.hard-mode {
+    padding-right: calc(390px + 1.5rem);
+}
+
+body.hard-mode .section {
+    padding-left: calc(clamp(18px, 3vw, 52px) + 90px);
+    padding-right: 1.5rem;
+}
+
+@media (max-width: 1600px) {
+    body.hard-mode .skills-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.hm-console.shake {
+    animation: hm-shake 0.4s ease;
+}
+
+@keyframes hm-shake {
+    20%, 60% {
+        transform: translateX(-6px);
+    }
+
+    40%, 80% {
+        transform: translateX(6px);
+    }
+}
+
+.hm-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+    padding: 0.7rem 0.9rem;
+    border-bottom: 1px solid #1a1a1a;
+}
+
+.hm-toggle {
+    display: flex;
+    align-items: baseline;
+    gap: 0.7rem;
+    padding: 0;
+
+    background: none;
+    border: none;
+    color: inherit;
+    font: inherit;
+    cursor: default;
+}
+
+.hm-title {
+    color: #00e5cc;
+    font-weight: 500;
+}
+
+.hm-progress {
+    color: #5c6370;
+}
+
+.hm-exit {
+    padding: 0.2rem 0.6rem;
+    background: transparent;
+    color: #5c6370;
+    border: 1px solid #262626;
+    border-radius: 6px;
+    font: inherit;
+    font-size: 0.75rem;
+    cursor: pointer;
+}
+
+.hm-exit:hover,
+.hm-exit:focus-visible {
+    color: #00e5cc;
+    border-color: #00e5cc;
+    outline: none;
+}
+
+.hm-bar {
+    height: 2px;
+    background: #1a1a1a;
+}
+
+.hm-bar span {
+    display: block;
+    width: 0;
+    height: 100%;
+    background: #00e5cc;
+    transition: width 0.6s ease;
+}
+
+.hm-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem 0.9rem 1.2rem;
+}
+
+.hm-kicker {
+    color: #00e5cc;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.hm-task {
+    margin: 0.5rem 0 0.8rem;
+    color: #e8e8e8;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.92rem;
+}
+
+.hm-code {
+    margin-bottom: 0.9rem;
+    padding: 0.7rem 0.8rem;
+    overflow-x: auto;
+
+    background: #0d1117;
+    border: 1px solid #1f2937;
+    border-radius: 8px;
+    color: #c9d1d9;
+    font-family: inherit;
+}
+
+.hm-muted {
+    color: #5c6370;
+    font-size: 0.78rem;
+}
+
+.hm-form {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.35rem 0.35rem 0.7rem;
+
+    background: #0d0d0d;
+    border: 1px solid #262626;
+    border-radius: 8px;
+}
+
+.hm-form:focus-within {
+    border-color: #00e5cc;
+}
+
+.hm-sql-form {
+    margin-top: 0.4rem;
+}
+
+.hm-prompt {
+    color: #00e5cc;
+}
+
+.hm-input {
+    flex: 1;
+    min-width: 0;
+    background: transparent;
+    color: #e8e8e8;
+    caret-color: #00e5cc;
+    border: none;
+    outline: none;
+    font: inherit;
+}
+
+.hm-button {
+    padding: 0.4rem 0.8rem;
+    background: #141414;
+    color: #e8e8e8;
+    border: 1px solid #262626;
+    border-radius: 6px;
+    font: inherit;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.hm-button.primary {
+    background: #00e5cc;
+    color: #001a17;
+    border-color: #00e5cc;
+    font-weight: 500;
+}
+
+.hm-button:hover:not(:disabled),
+.hm-button:focus-visible {
+    border-color: #00e5cc;
+    outline: none;
+}
+
+.hm-button:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
+.hm-check {
+    margin-top: 0.8rem;
+}
+
+.hm-feedback {
+    min-height: 1.6em;
+    margin-top: 0.7rem;
+}
+
+.hm-error {
+    color: #ff6b6b;
+}
+
+.hm-success {
+    color: #3fb950;
+}
+
+.hm-success + .hm-button,
+.hm-error + .hm-button {
+    margin-top: 0.8rem;
+}
+
+.hm-hint-button {
+    padding: 0;
+    background: none;
+    border: none;
+    color: #d29922;
+    font: inherit;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.hm-hint {
+    margin-top: 0.4rem;
+    color: #d29922;
+}
+
+/* Auswahl-Rätsel */
+.hm-choices {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+}
+
+.hm-choice,
+.hm-node {
+    padding: 0.5rem 0.6rem;
+    background: #0d0d0d;
+    color: #e8e8e8;
+    border: 1px solid #262626;
+    border-radius: 8px;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.hm-choice:hover:not(:disabled),
+.hm-node:hover {
+    border-color: #00e5cc;
+}
+
+.hm-choice.correct {
+    border-color: #3fb950;
+    color: #3fb950;
+}
+
+.hm-choice.wrong {
+    border-color: #ff6b6b;
+    color: #ff6b6b;
+    text-decoration: line-through;
+}
+
+/* Verknüpfungs-Rätsel */
+.hm-connect {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: 0.6rem 2.2rem;
+}
+
+.hm-column {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.hm-node {
+    position: relative;
+    z-index: 1;
+    font-size: 0.76rem;
+}
+
+.hm-node.selected {
+    border-color: #00e5cc;
+    color: #00e5cc;
+}
+
+.hm-node.linked {
+    border-color: #2c5f59;
+}
+
+.hm-lines {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+}
+
+.hm-lines line {
+    stroke: #00e5cc;
+    stroke-width: 1.5;
+    stroke-dasharray: 4 3;
+}
+
+.hm-lines.correct line {
+    stroke: #3fb950;
+    stroke-dasharray: none;
+}
+
+/* SQL-Ergebnis */
+.hm-sql-output {
+    margin-top: 0.7rem;
+    overflow-x: auto;
+}
+
+.hm-sql-result {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.75rem;
+}
+
+.hm-sql-result th,
+.hm-sql-result td {
+    padding: 0.25rem 0.45rem;
+    border: 1px solid #262626;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.hm-sql-result th {
+    color: #00e5cc;
+    font-weight: 500;
+}
+
+.hm-finish-title {
+    margin-bottom: 0.8rem;
+    font-size: 0.95rem;
+}
+
+/* Kleinere Bildschirme: Konsole als einklappbares Panel unten */
+@media (max-width: 1100px) {
+    body.hard-mode {
+        padding-right: 0;
+        padding-bottom: 50vh;
+    }
+
+    body.hard-mode.intro-active {
+        overflow-y: auto;
+    }
+
+    body.hard-mode .section {
+        padding-left: calc(clamp(18px, 3vw, 52px) + 90px);
+    }
+
+    .hm-console,
+    body.intro-active .hm-console {
+        top: auto;
+        right: 0.75rem;
+        bottom: 0.75rem;
+        left: 0.75rem;
+        width: auto;
+        max-height: 48vh;
+    }
+
+    .hm-toggle {
+        cursor: pointer;
+    }
+
+    .hm-toggle::after {
+        content: '▾';
+        color: #5c6370;
+    }
+
+    .hm-console.collapsed .hm-toggle::after {
+        content: '▴';
+    }
+
+    .hm-console.collapsed .hm-body,
+    .hm-console.collapsed .hm-bar {
+        display: none;
+    }
+}
+
+/* Unter 900px liegt die Bereichsnavigation unten, dort sitzt jetzt die Konsole */
+@media (max-width: 900px) {
+    body.hard-mode .section {
+        padding-left: 1.25rem;
+        padding-right: 1.25rem;
+    }
+
+    body.hard-mode .progress {
+        display: none;
+    }
+}
