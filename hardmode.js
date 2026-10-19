@@ -3,7 +3,8 @@
  * Lösen der Rätsel Stück für Stück im Hintergrund auf. Jedes Rätsel ist
  * ein Lückencode, dessen Lücken per Drag-and-drop (oder Antippen) mit
  * Bausteinen gefüllt werden. Jeder Baustein wird sofort geprüft.
- * Rätsel: hardmode-puzzles.js, Effekte: hardmode-effects.js.
+ * Rätsel: hardmode-puzzles.js, Effekte: hardmode-effects.js,
+ * Editor-Ansicht: hardmode-ide.js.
  * Gestartet wird der Modus vom Boot-Screen über das Event
  * "portfolio:hard-mode".
  */
@@ -77,6 +78,7 @@ function revealElements(puzzle) {
 
 function lockElement(element) {
     element.classList.add('hm-locked');
+    encryptElement(element);
     element.setAttribute('aria-hidden', 'true');
     element.setAttribute('inert', '');
 }
@@ -87,6 +89,7 @@ function unlockElement(element, animate) {
     }
 
     element.classList.remove('hm-locked');
+    decryptElement(element);
     element.removeAttribute('aria-hidden');
     element.removeAttribute('inert');
 
@@ -213,6 +216,7 @@ function renderConsole() {
 
     updateProgressBar();
     updateNavigationLocks();
+    updateIde();
 
     const panel = currentPanel();
     const body = hardConsole.querySelector('.hm-body');
@@ -309,6 +313,7 @@ function renderPuzzle(body, puzzle) {
     hintButton.hidden = hardState.attempts < HINT_AFTER_ATTEMPTS;
     hintButton.addEventListener('click', () => {
         hardState.hintsUsed++;
+        updateIde();
         hintButton.hidden = true;
         const hint = body.querySelector('.hm-hint');
         hint.textContent = `# Hinweis: ${puzzle.hint}`;
@@ -488,6 +493,7 @@ function setupDragAndDrop(body, puzzle) {
 function failPuzzle(message) {
     hardState.attempts++;
     hardState.wrongTotal++;
+    updateIde();
 
     const feedback = hardConsole.querySelector('.hm-feedback');
     feedback.className = 'hm-feedback hm-error';
@@ -569,6 +575,7 @@ function startHardMode() {
     hardState.startedAt = Date.now();
 
     document.body.classList.add('hard-mode');
+    createIde();
     HARD_MODE_PUZZLES.forEach(puzzle => revealElements(puzzle).forEach(lockElement));
 
     createConsole();
@@ -580,6 +587,7 @@ function stopHardMode() {
     hardState.active = false;
     HARD_MODE_PUZZLES.forEach(puzzle => revealElements(puzzle).forEach(element => unlockElement(element, false)));
     document.body.classList.remove('hard-mode');
+    removeIde();
     updateNavigationLocks();
 
     if (hardConsole) {

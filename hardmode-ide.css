@@ -1,0 +1,360 @@
+/* hard_mode(): Editor-Ansicht mit Tabs, Explorer, Zeilennummern und Statusleiste */
+body.hm-ide-active {
+    --ide-title-height: 30px;
+    --ide-tabs-height: 38px;
+    --ide-status-height: 24px;
+    --ide-explorer-width: 220px;
+    --ide-gutter-width: 52px;
+    --navbar-height: calc(var(--ide-title-height) + var(--ide-tabs-height));
+
+    padding-left: calc(var(--ide-explorer-width) + var(--ide-gutter-width));
+    padding-bottom: var(--ide-status-height);
+}
+
+body.hm-ide-active .navbar,
+body.hm-ide-active .progress {
+    display: none;
+}
+
+body.hm-ide-active .section {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+}
+
+body.hm-ide-active .hero {
+    padding-top: var(--navbar-height);
+}
+
+@media (min-width: 1101px) {
+    body.hm-ide-active .hm-console,
+    body.hm-ide-active.intro-active .hm-console {
+        top: calc(var(--navbar-height) + 1.2rem);
+        max-height: calc(100vh - var(--navbar-height) - var(--ide-status-height) - 2.4rem);
+    }
+}
+
+.hm-ide {
+    color: #9da5b4;
+    font-family: 'JetBrains Mono', ui-monospace, Consolas, monospace;
+    font-size: 0.78rem;
+}
+
+.hm-titlebar,
+.hm-tabs,
+.hm-explorer,
+.hm-gutter,
+.hm-statusbar {
+    position: fixed;
+    z-index: 1400;
+}
+
+/* Fensterleiste */
+.hm-titlebar {
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--ide-title-height);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #050505;
+    border-bottom: 1px solid #161b22;
+    color: #5c6370;
+}
+
+.hm-window-dots {
+    position: absolute;
+    left: 0.9rem;
+    display: flex;
+    gap: 0.45rem;
+}
+
+.hm-window-dots i {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: #ff5f57;
+}
+
+.hm-window-dots i:nth-child(2) {
+    background: #febc2e;
+}
+
+.hm-window-dots i:nth-child(3) {
+    background: #28c840;
+}
+
+/* Datei-Tabs */
+.hm-tabs {
+    top: var(--ide-title-height);
+    left: var(--ide-explorer-width);
+    right: 0;
+    height: var(--ide-tabs-height);
+
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+
+    background: #070707;
+    border-bottom: 1px solid #161b22;
+}
+
+.hm-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.hm-tab,
+.hm-explorer-file {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    background: transparent;
+    color: #7d8590;
+    border: none;
+    font: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.hm-tab {
+    flex-shrink: 0;
+    padding: 0 0.9rem;
+    border-right: 1px solid #161b22;
+    border-top: 2px solid transparent;
+}
+
+.hm-tab.active {
+    background: #0a0a0a;
+    color: #e8e8e8;
+    border-top-color: #00e5cc;
+}
+
+.hm-tab[data-state='locked'],
+.hm-explorer-file[data-state='locked'] {
+    color: #3b4048;
+    cursor: not-allowed;
+}
+
+.hm-tab:hover:not([data-state='locked']),
+.hm-explorer-file:hover:not([data-state='locked']) {
+    color: #e8e8e8;
+}
+
+.hm-badge {
+    font-size: 0.62rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.hm-badge-py {
+    color: #4b8bbe;
+}
+
+.hm-badge-md {
+    color: #519aba;
+}
+
+.hm-badge-conf {
+    color: #a074c4;
+}
+
+.hm-badge-sql {
+    color: #e38c00;
+}
+
+.hm-badge-js {
+    color: #f1e05a;
+}
+
+.hm-file-state {
+    margin-left: auto;
+    font-size: 0.65rem;
+}
+
+.hm-file-state.fa-check {
+    color: #3fb950;
+}
+
+/* Offene Datei mit "ungespeicherten Änderungen" */
+.hm-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #e8e8e8;
+}
+
+/* Explorer */
+.hm-explorer {
+    top: var(--ide-title-height);
+    bottom: var(--ide-status-height);
+    left: 0;
+    width: var(--ide-explorer-width);
+
+    display: flex;
+    flex-direction: column;
+    padding: 0.6rem 0;
+
+    background: #070707;
+    border-right: 1px solid #161b22;
+}
+
+.hm-explorer-title {
+    padding: 0 1rem 0.6rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.hm-explorer-folder {
+    padding: 0.2rem 1rem;
+    color: #c9d1d9;
+    font-weight: 600;
+}
+
+.hm-explorer-folder i {
+    font-size: 0.6rem;
+}
+
+.hm-explorer-file {
+    padding: 0.3rem 1rem 0.3rem 1.9rem;
+    text-align: left;
+}
+
+.hm-explorer-file.active {
+    background: rgba(0, 229, 204, 0.08);
+    color: #e8e8e8;
+    box-shadow: inset 2px 0 #00e5cc;
+}
+
+/* Zeilennummern, scrollen mit der Seite mit */
+.hm-gutter {
+    top: var(--navbar-height);
+    bottom: var(--ide-status-height);
+    left: var(--ide-explorer-width);
+    width: var(--ide-gutter-width);
+
+    overflow: hidden;
+    border-right: 1px solid #11161c;
+    background: #0a0a0a;
+}
+
+.hm-gutter pre {
+    padding-right: 0.8rem;
+    color: #30363d;
+    font: inherit;
+    font-size: 0.72rem;
+    line-height: 24px;
+    text-align: right;
+}
+
+.hm-line-highlight {
+    position: fixed;
+    top: 0;
+    left: calc(var(--ide-explorer-width) + var(--ide-gutter-width));
+    right: calc(440px + 1.5rem);
+    z-index: 1;
+
+    height: 24px;
+    background: rgba(255, 255, 255, 0.025);
+    border-top: 1px solid rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    pointer-events: none;
+}
+
+/* Statusleiste */
+.hm-statusbar {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: var(--ide-status-height);
+
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    padding: 0 0.9rem;
+
+    background: #00796b;
+    color: #e6fffb;
+    font-size: 0.72rem;
+    white-space: nowrap;
+}
+
+.hm-status-spacer {
+    flex: 1;
+}
+
+/* Dunkle, schmale Scrollbalken in der Konsole */
+.hm-console * {
+    scrollbar-width: thin;
+    scrollbar-color: #2a2f36 transparent;
+}
+
+.hm-console ::-webkit-scrollbar {
+    width: 6px;
+}
+
+.hm-console ::-webkit-scrollbar-thumb {
+    background: #2a2f36;
+    border-radius: 3px;
+}
+
+.hm-console ::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* Kleinere Laptops: Explorer nur als Symbolleiste */
+@media (max-width: 1500px) {
+    body.hm-ide-active {
+        --ide-explorer-width: 52px;
+    }
+
+    .hm-explorer-title,
+    .hm-explorer-folder,
+    .hm-explorer-file .hm-file-name,
+    .hm-explorer-file .hm-file-state {
+        display: none;
+    }
+
+    .hm-explorer-file {
+        justify-content: center;
+        padding: 0.55rem 0;
+    }
+}
+
+/* Konsole unten: kein Explorer und keine Statusleiste */
+@media (max-width: 1100px) {
+    body.hm-ide-active {
+        --ide-explorer-width: 0px;
+        --ide-status-height: 0px;
+        padding-bottom: 50vh;
+    }
+
+    .hm-explorer,
+    .hm-statusbar {
+        display: none;
+    }
+
+    .hm-line-highlight {
+        right: 0;
+    }
+}
+
+@media (max-width: 900px) {
+    body.hm-ide-active {
+        --ide-gutter-width: 0px;
+    }
+
+    body.hm-ide-active .section {
+        padding-left: 1.25rem;
+        padding-right: 1.25rem;
+    }
+
+    .hm-titlebar .hm-window-dots,
+    .hm-gutter,
+    .hm-line-highlight {
+        display: none;
+    }
+}
