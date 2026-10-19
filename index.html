@@ -36,11 +36,34 @@
 
     <!--
         Bis der Willkommensbildschirm steht, bleibt die Seite verdeckt,
-        damit das Portfolio nicht kurz aufblitzt. Ohne JavaScript wird
-        die Klasse nie gesetzt und die Seite ist sofort sichtbar.
+        damit das Portfolio nicht kurz aufblitzt. Regel und Klasse stehen
+        bewusst hier und nicht in welcome.css: So wirken sie auch dann
+        sofort, wenn der Browser noch eine alte Fassung der Stildatei im
+        Zwischenspeicher hat. Ohne JavaScript wird die Klasse nie gesetzt
+        und die Seite ist ganz normal sichtbar.
     -->
+    <style>
+        html.pre-welcome {
+            background: #0a0a0a;
+        }
+
+        html.pre-welcome body {
+            visibility: hidden;
+        }
+
+        html.pre-welcome .welcome {
+            visibility: visible;
+        }
+    </style>
+
     <script>
         document.documentElement.classList.add('pre-welcome');
+
+        // Sollte welcome.js einmal nicht laden, wird die Seite trotzdem sichtbar
+        window.setTimeout(
+            () => document.documentElement.classList.remove('pre-welcome'),
+            4000
+        );
     </script>
 </head>
 
