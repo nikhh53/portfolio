@@ -626,3 +626,41 @@ document.addEventListener(
         }
     }
 );
+
+// Bildvorschau der Projekte: Klick vergrößert, Escape und Klick daneben schließen
+const zoomDialog = document.getElementById('zoom-dialog');
+
+if (zoomDialog) {
+    const zoomImage = zoomDialog.querySelector('img');
+
+    document.addEventListener('click', (event) => {
+        const trigger = event.target.closest('[data-zoom]');
+
+        if (trigger) {
+            zoomImage.src = trigger.dataset.zoom;
+            zoomImage.alt = trigger.querySelector('img')?.alt ?? '';
+            zoomDialog.showModal();
+            return;
+        }
+
+        if (
+            event.target === zoomDialog ||
+            event.target.closest('.zoom-close')
+        ) {
+            zoomDialog.close();
+        }
+    });
+
+    // Solange die Vorschau offen ist, bedienen Tasten nicht das Portfolio dahinter
+    document.addEventListener(
+        'keydown',
+        (event) => {
+            if (!zoomDialog.open) {
+                return;
+            }
+
+            event.stopImmediatePropagation();
+        },
+        true
+    );
+}
