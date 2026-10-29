@@ -73,6 +73,7 @@ function startMatrix() {
 const SHELL_HELP = [
     { text: 'Verfügbare Befehle:' },
     { text: '  whoami, ls, cat <datei>, git log, ./kontakt.sh', kind: 'muted' },
+    { text: '  ai                 ', kind: 'muted' },
     { text: '  sudo hire niklas   ', kind: 'success' },
     { text: '  clear              ', kind: 'muted' },
     { text: 'Es gibt auch ein paar versteckte Befehle ...', kind: 'muted' }
@@ -84,12 +85,31 @@ const SHELL_COMMANDS = {
         { text: visitorCompany ? `${visitorUser} (Besuch von ${visitorCompany})` : 'gast' },
         { text: 'Gegenüber: Niklas Bakowsky, Anwendungsentwickler in der Umschulung, Hamburg', kind: 'muted' }
     ],
-    'ls': () => [{ text: 'about.txt  skills.json  projekte/  lebenslauf.pdf  kontakt.sh' }],
+    'ls': () => [{ text: 'about.txt  skills.json  huddl.md  klassenbot.md  projekte/  lebenslauf.pdf  kontakt.sh' }],
     'ls projekte': () => [{ text: 'huddl/  bots-und-web/  klassenbot/  python-projekte/' }],
     'cat about.txt': () => [
         { text: 'Umschulung zum Fachinformatiker für Anwendungsentwicklung.' },
         { text: 'Am meisten lerne ich, wenn aus einer Idee eine funktionierende Anwendung wird.' },
         { text: 'Gesucht: Umschulungspraktikum in Hamburg, 07.06.2027 - 31.01.2028.', kind: 'success' }
+    ],
+    'cat huddl.md': () => [
+        { text: '# Huddl, Familien-App', kind: 'success' },
+        { text: 'Private Web-App (PWA) mit Kalender, Chat, Einkaufslisten, Aufgaben und Stammbaum.' },
+        { text: 'Rechtemodell für Eltern, Kinder und Gäste, immer auf dem Server geprüft.' },
+        { text: 'Login mit Passkeys, Datenexport, Konto löschen. Kinderdaten besonders geschützt.' },
+        { text: 'Stack: TypeScript, React, Node.js, PostgreSQL, Docker.', kind: 'muted' }
+    ],
+    'cat klassenbot.md': () => [
+        { text: '# Klassenbot', kind: 'success' },
+        { text: 'Discord-Bot für meine Umschulungsklasse: Berichtsheft, Termine, Wissensbereich.' },
+        { text: 'Rund 100 Lernartikel als Markdown, mit Diagrammen, automatisch synchronisiert.' },
+        { text: 'Stack: TypeScript, SQLite, Discord.', kind: 'muted' }
+    ],
+    'ai': () => [
+        { text: 'Ich arbeite mit KI-Unterstützung (Claude Code).', kind: 'success' },
+        { text: 'Ziel, Aufbau und Regeln lege ich fest, die KI schreibt Entwürfe und Code mit.' },
+        { text: 'Jede Änderung läuft als Pull Request, ich prüfe und teste sie und veröffentliche selbst.' },
+        { text: 'Was ich zeige, erkläre ich im Gespräch.', kind: 'muted' }
     ],
     'cat skills.json': () => [
         { text: '["TypeScript", "React", "Node.js", "PostgreSQL", "Docker", "Python", "Git"]' }
