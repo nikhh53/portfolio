@@ -85,14 +85,14 @@ const SHELL_COMMANDS = {
         { text: 'Gegenüber: Niklas Bakowsky, Anwendungsentwickler in der Umschulung, Hamburg', kind: 'muted' }
     ],
     'ls': () => [{ text: 'about.txt  skills.json  projekte/  lebenslauf.pdf  kontakt.sh' }],
-    'ls projekte': () => [{ text: 'ticketsystem/  pokemon-minigame/  api-dashboard/' }],
+    'ls projekte': () => [{ text: 'huddl/  bots-und-web/  klassenbot/  python-projekte/' }],
     'cat about.txt': () => [
         { text: 'Umschulung zum Fachinformatiker für Anwendungsentwicklung.' },
         { text: 'Am meisten lerne ich, wenn aus einer Idee eine funktionierende Anwendung wird.' },
         { text: 'Gesucht: Umschulungspraktikum in Hamburg, 07.06.2027 - 31.01.2028.', kind: 'success' }
     ],
     'cat skills.json': () => [
-        { text: '["Python", "JavaScript", "SQL", "Lua", "HTML/CSS", "Git"]' }
+        { text: '["TypeScript", "React", "Node.js", "PostgreSQL", "Docker", "Python", "Git"]' }
     ],
     'cat lebenslauf.pdf': () => {
         downloadCv();
@@ -105,11 +105,11 @@ const SHELL_COMMANDS = {
         { text: 'commit HEAD (gesucht)', kind: 'warn' },
         { text: '    todo: Umschulungspraktikum ab 07.06.2027 in Hamburg' },
         { text: 'commit a3f9e21', kind: 'warn' },
-        { text: '    wip: API-Dashboard mit REST-API, Filtern und Favoriten' },
+        { text: '    feat: Huddl, Familien-App (TypeScript, React, PostgreSQL, Passkeys)' },
         { text: 'commit 7c41b08', kind: 'warn' },
-        { text: '    feat: Pokémon Minigame (Konsole + Tkinter-GUI, CSV-Daten)' },
+        { text: '    feat: Klassenbot mit Berichtsheft und Wissensbereich' },
         { text: 'commit 2e8d5a4', kind: 'warn' },
-        { text: '    feat: Ticketsystem (Python, Tkinter, JSON, OOP)' },
+        { text: '    feat: Python-Projekte (Ticketsystem, Pokémon Minigame)' },
         { text: 'commit 0b1c3f7', kind: 'warn' },
         { text: '    init: Umschulung Fachinformatiker Anwendungsentwicklung' }
     ],

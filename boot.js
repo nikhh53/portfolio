@@ -23,7 +23,7 @@ const bootScript = [
     { type: 'log', parts: [['> portfolio@2027.6.0 build', 'muted']] },
     { type: 'log', parts: [['[info] ', 'tag-info'], ['Kompiliere index.html ...']] },
     { type: 'log', parts: [['[ OK ] ', 'tag-ok'], ['about.module      geladen']] },
-    { type: 'log', parts: [['[ OK ] ', 'tag-ok'], ['skills.module     geladen  '], ['(Python, JavaScript, SQL, Lua, HTML/CSS, Git)', 'muted']] },
+    { type: 'log', parts: [['[ OK ] ', 'tag-ok'], ['skills.module     geladen  '], ['(TypeScript, React, Node.js, PostgreSQL, Docker, Python, Git)', 'muted']] },
     { type: 'log', parts: [['[ OK ] ', 'tag-ok'], ['projects.module   geladen  '], ['(2 fertig, 1 in Planung)', 'muted']] },
     { type: 'log', parts: [['[ OK ] ', 'tag-ok'], ['contact.module    geladen']] },
     { type: 'log', parts: [['[warn] ', 'tag-warn'], ['praktikum.status = "gesucht"  '], ['(Hamburg, 07.06.2027 - 31.01.2028)', 'muted']] },

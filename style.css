@@ -1123,3 +1123,81 @@ footer {
         transition-duration: 0.01ms !important;
     }
 }
+/* Projekte: Hauptprojekt über die volle Breite */
+.project-wide {
+    grid-column: 1 / -1;
+    min-height: 0;
+}
+
+.project-wide ul {
+    columns: 2;
+    column-gap: 2rem;
+}
+
+.project-wide li {
+    break-inside: avoid;
+}
+
+.project-card li a {
+    color: var(--accent, #00e5cc);
+}
+
+.project-ai {
+    margin-top: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    color: #8fa8a1;
+    font-size: 0.8rem;
+}
+
+/* Hinweis zur Arbeit mit KI */
+.ai-note {
+    max-width: 900px;
+    margin: 1.6rem auto;
+    padding: 1.2rem 1.4rem;
+
+    border: 1px solid #2d393c;
+    border-left: 3px solid var(--accent, #00e5cc);
+    border-radius: 12px;
+
+    background: rgba(18, 24, 26, 0.92);
+    text-align: left;
+}
+
+.ai-note h3 {
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+.ai-note i {
+    margin-right: 6px;
+    color: var(--accent, #00e5cc);
+}
+
+.ai-note p {
+    color: #9ba6a3;
+    font-size: 0.9rem;
+    line-height: 1.65;
+}
+
+.skills-container {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+@media (max-width: 1200px) {
+    .skills-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 950px) {
+    .skills-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .project-wide ul {
+        columns: 1;
+    }
+}
