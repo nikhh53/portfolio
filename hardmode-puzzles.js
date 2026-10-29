@@ -51,9 +51,9 @@ const HARD_MODE_PUZZLES = [
         solution: ['SELECT', 'FROM', 'ORDER'],
         output: [
             'mysql> SELECT name, status FROM projekte ORDER BY name;',
-            'API-Dashboard     | geplant',
-            'Pokémon Minigame  | fertig',
-            'Ticketsystem      | fertig',
+            'Huddl             | in Betrieb',
+            'Klassenbot        | in Betrieb',
+            'Python-Projekte   | fertig',
             '3 rows in set (0.01 sec)'
         ],
         hint: 'Eine Abfrage beginnt mit SELECT ... FROM ..., sortiert wird mit ORDER BY.',
