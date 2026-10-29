@@ -1201,3 +1201,10 @@ footer {
         columns: 1;
     }
 }
+
+/* Seitennavigation links darf nie Inhalte überdecken */
+@media (min-width: 901px) {
+    .section {
+        padding-inline: 7.5rem;
+    }
+}
