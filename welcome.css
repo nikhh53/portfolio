@@ -13,14 +13,9 @@ body.welcome-active {
     padding: 2rem 1.25rem;
     overflow-y: auto;
 
-    background:
-        radial-gradient(circle at 12% 10%, rgba(45, 212, 191, 0.3), transparent 42%),
-        radial-gradient(circle at 88% 18%, rgba(129, 140, 248, 0.4), transparent 42%),
-        radial-gradient(circle at 70% 95%, rgba(244, 114, 182, 0.26), transparent 45%),
-        linear-gradient(170deg, #232853, #1b1f3b);
-
-    color: #eef2ff;
-    font-family: 'Inter', system-ui, sans-serif;
+    background-color: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-text);
 
     /* Der Hintergrund blendet nicht ein, sonst scheint das Portfolio durch */
     transition: opacity 0.5s ease;
@@ -37,8 +32,8 @@ body.welcome-active {
 }
 
 .welcome-kicker {
-    color: #2dd4bf;
-    font-family: 'JetBrains Mono', ui-monospace, Consolas, monospace;
+    color: var(--orange);
+    font-family: var(--font-mono);
     font-size: 0.8rem;
     letter-spacing: 0.14em;
     text-transform: uppercase;
@@ -47,122 +42,137 @@ body.welcome-active {
 .welcome-box h1 {
     margin: 0.7rem 0 1rem;
 
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: clamp(1.8rem, 5vw, 3.2rem);
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5.5vw, 3.8rem);
     font-weight: 700;
     letter-spacing: -0.035em;
-    line-height: 1.1;
+    line-height: 1.05;
 }
 
 .welcome-text {
     max-width: 640px;
-    margin: 0 auto 2.2rem;
-    color: #c5cbe8;
-    font-size: clamp(0.95rem, 2vw, 1.08rem);
+    margin: 0 auto 2.6rem;
+    color: var(--ink-soft);
+    font-size: clamp(0.98rem, 2vw, 1.1rem);
     line-height: 1.7;
 }
 
 .welcome-choices {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
+    gap: 1.4rem;
     text-align: left;
 }
 
+/* Auswahl als Karteikarten, leicht schief aufgelegt */
 .welcome-choice {
     position: relative;
 
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    padding: 1.5rem 1.3rem 1.3rem;
+    padding: 1.6rem 1.4rem 1.3rem;
 
-    background: rgba(255, 255, 255, 0.08);
-    color: #eef2ff;
-    border: 1px solid rgba(255, 255, 255, 0.13);
-    border-radius: 20px;
-    box-shadow:
-        0 1px 2px rgba(4, 6, 28, 0.06),
-        0 12px 30px -12px rgba(4, 6, 28, 0.22);
+    background: var(--paper-light);
+    color: var(--ink);
+    border: 2px solid var(--ink);
+    border-radius: 3px;
+    box-shadow: 6px 6px 0 var(--ink);
 
     font: inherit;
     text-align: left;
     cursor: pointer;
 
-    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.welcome-choice:nth-child(1) {
+    transform: rotate(-1.2deg);
+}
+
+.welcome-choice:nth-child(2) {
+    transform: rotate(0.8deg);
+}
+
+.welcome-choice:nth-child(3) {
+    transform: rotate(-0.6deg);
 }
 
 .welcome-choice:hover,
 .welcome-choice:focus-visible {
-    transform: translateY(-4px);
-    border-color: rgba(94, 234, 212, 0.55);
-    box-shadow:
-        0 1px 2px rgba(4, 6, 28, 0.06),
-        0 24px 44px -14px rgba(15, 165, 143, 0.35);
+    transform: rotate(0) translate(3px, 3px);
+    box-shadow: 2px 2px 0 var(--ink);
     outline: none;
 }
 
 .welcome-choice > i {
-    display: grid;
-    place-items: center;
     width: 46px;
     height: 46px;
     margin-bottom: 0.3rem;
 
-    background: linear-gradient(135deg, rgba(94, 234, 212, 0.25), rgba(129, 140, 248, 0.28));
-    border-radius: 14px;
-    color: #2dd4bf;
-    font-size: 1.15rem;
+    display: grid;
+    place-items: center;
+
+    border: 2px solid var(--ink);
+    border-radius: 50%;
+    background: var(--orange-soft);
+    color: var(--ink);
+    font-size: 1.1rem;
 }
 
 .welcome-choice-title {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 1.25rem;
-    font-weight: 600;
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
 }
 
 .welcome-choice-text {
     flex: 1;
-    color: #b4bce0;
-    font-size: 0.9rem;
+    color: var(--ink-soft);
+    font-size: 0.92rem;
     line-height: 1.6;
 }
 
 .welcome-choice-action {
     margin-top: 0.5rem;
-    color: #2dd4bf;
-    font-family: 'JetBrains Mono', ui-monospace, Consolas, monospace;
+    color: var(--orange);
+    font-family: var(--font-mono);
     font-size: 0.78rem;
+    font-weight: 500;
 }
 
-/* Empfehlung hervorheben, damit der schnelle Weg sofort auffällt */
+/* Empfehlung als Stempel */
 .welcome-choice[data-mode='portfolio'] {
-    border-color: rgba(94, 234, 212, 0.4);
-    background: linear-gradient(180deg, rgba(94, 234, 212, 0.16), rgba(255, 255, 255, 0.06));
+    background: var(--orange-soft);
 }
 
 .welcome-hint {
     position: absolute;
-    top: -0.7rem;
-    left: 1.3rem;
+    top: -0.9rem;
+    right: 1rem;
 
-    padding: 0.15rem 0.6rem;
+    padding: 0.15rem 0.7rem;
 
-    background: #2dd4bf;
-    color: #0b1230;
-    border-radius: 999px;
+    border: 2px solid var(--orange);
+    border-radius: 3px;
+    background: var(--paper-light);
+    color: var(--orange);
 
-    font-family: 'JetBrains Mono', ui-monospace, Consolas, monospace;
-    font-size: 0.68rem;
-    font-weight: 600;
-    letter-spacing: 0.04em;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
+
+    transform: rotate(4deg);
 }
 
 .welcome-note {
-    margin-top: 1.6rem;
-    color: #9aa3cf;
-    font-size: 0.85rem;
+    margin-top: 2rem;
+    color: var(--ink-soft);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
 }
 
 @keyframes welcome-fade {

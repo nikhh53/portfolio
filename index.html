@@ -15,13 +15,13 @@
 
     <title>Niklas Bakowsky | Anwendungsentwickler</title>
 
-    <link rel="stylesheet" href="style.css?v=20261108">
-    <link rel="stylesheet" href="welcome.css?v=20261108">
-    <link rel="stylesheet" href="boot.css?v=20261108">
-    <link rel="stylesheet" href="hardmode.css?v=20261108">
-    <link rel="stylesheet" href="hardmode-ide.css?v=20261108">
-    <link rel="stylesheet" href="hardmode-finale.css?v=20261108">
-    <link rel="stylesheet" href="os.css?v=20261108">
+    <link rel="stylesheet" href="style.css?v=20261109">
+    <link rel="stylesheet" href="welcome.css?v=20261109">
+    <link rel="stylesheet" href="boot.css?v=20261109">
+    <link rel="stylesheet" href="hardmode.css?v=20261109">
+    <link rel="stylesheet" href="hardmode-ide.css?v=20261109">
+    <link rel="stylesheet" href="hardmode-finale.css?v=20261109">
+    <link rel="stylesheet" href="os.css?v=20261109">
 
     <link
         rel="stylesheet"
@@ -30,7 +30,7 @@
 
     <style>
         @import url(
-            'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap'
+            'https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500..800;1,9..144,400..600&family=Instrument+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap'
         );
     </style>
 
@@ -44,7 +44,7 @@
     -->
     <style>
         html.pre-welcome {
-            background: #1b1f3b;
+            background: #f4ecdc;
         }
 
         html.pre-welcome body {
@@ -69,9 +69,6 @@
 
 <body class="intro-active">
 
-    <!-- Partikel-Hintergrund -->
-    <canvas id="particles"></canvas>
-
     <!-- Hauptnavigation -->
     <nav
         class="navbar"
@@ -80,7 +77,7 @@
         <div class="nav-container">
 
             <div class="logo">
-                Niklas Bakowsky
+                Niklas <em>Bakowsky</em>
             </div>
 
             <div class="nav-links">
@@ -139,7 +136,6 @@
                 <p class="eyebrow">
                     Portfolio
                     <span class="availability">
-                        <span class="availability-dot" aria-hidden="true"></span>
                         Praktikum ab Juni 2027
                     </span>
                 </p>
@@ -233,6 +229,7 @@
             class="section portfolio-panel"
             data-panel="about"
         >
+            <div class="section-head">
             <p class="section-kicker">
                 01 · Über mich
             </p>
@@ -240,8 +237,10 @@
             <h2 id="about-title">
                 Entwicklung mit Praxisbezug
             </h2>
+            </div>
 
-            <div class="about-content">
+            <div class="section-body">
+<div class="about-content">
 
                 <p>
                     Ich absolviere aktuell eine Umschulung zum
@@ -293,7 +292,9 @@
                     </strong>
                 </div>
 
-            </div>        </section>
+            </div>
+            </div>
+        </section>
 
         <!-- Skills -->
         <section
@@ -301,6 +302,7 @@
             class="section portfolio-panel"
             data-panel="skills"
         >
+            <div class="section-head">
             <p class="section-kicker">
                 02 · Kenntnisse
             </p>
@@ -312,8 +314,10 @@
             <p class="section-intro">
                 Diese Übersicht basiert auf meinen Projekten, vor allem Huddl.
             </p>
+            </div>
 
-            <div class="skills-container">
+            <div class="section-body">
+<div class="skills-container">
 
                 <div class="skill-card">
                     <i class="fas fa-code"></i>
@@ -395,7 +399,9 @@
                     </p>
                 </div>
 
-            </div>        </section>
+            </div>
+            </div>
+        </section>
 
             <!-- Projekte -->
             <section
@@ -403,6 +409,7 @@
                 class="section portfolio-panel"
                 data-panel="projects"
             >
+            <div class="section-head">
                 <p class="section-kicker">
                     03 · Projekte
                 </p>
@@ -416,8 +423,10 @@
                     die Familien tatsächlich nutzen. Aufbau und
                     Entscheidungen erkläre ich gern im Gespräch.
                 </p>
+            </div>
 
-                <div class="projects-grid">
+            <div class="section-body">
+<div class="projects-grid">
 
                     <!-- Huddl -->
                     <article class="project-card featured project-wide">
@@ -584,13 +593,16 @@
                         </div>
                     </article>
 
-                </div>            </section>
+                </div>
+            </div>
+        </section>
         <!-- Kontakt -->
         <section
             id="contact"
             class="section portfolio-panel"
             data-panel="contact"
         >
+            <div class="section-head">
             <p class="section-kicker">
                 04 · Kontakt
             </p>
@@ -598,8 +610,10 @@
             <h2>
                 Lassen Sie uns kennenlernen
             </h2>
+            </div>
 
-            <p class="contact-copy">
+            <div class="section-body">
+<p class="contact-copy">
                 Sie bieten ein Praktikum in der
                 Anwendungsentwicklung an oder möchten mehr
                 über meine Projekte erfahren? Ich freue mich
@@ -649,7 +663,9 @@
                     </span>
                 </a>
 
-            </div>        </section>
+            </div>
+            </div>
+        </section>
 
     </main>
 
@@ -665,16 +681,16 @@
         <img src="" alt="">
     </dialog>
 
-    <script src="script.js?v=20261108"></script>
-    <script src="shell.js?v=20261108"></script>
-    <script src="hardmode-puzzles.js?v=20261108"></script>
-    <script src="hardmode-effects.js?v=20261108"></script>
-    <script src="hardmode-ide.js?v=20261108"></script>
-    <script src="hardmode-finale.js?v=20261108"></script>
-    <script src="hardmode.js?v=20261108"></script>
-    <script src="os.js?v=20261108"></script>
-    <script src="boot.js?v=20261108"></script>
-    <script src="welcome.js?v=20261108"></script>
+    <script src="script.js?v=20261109"></script>
+    <script src="shell.js?v=20261109"></script>
+    <script src="hardmode-puzzles.js?v=20261109"></script>
+    <script src="hardmode-effects.js?v=20261109"></script>
+    <script src="hardmode-ide.js?v=20261109"></script>
+    <script src="hardmode-finale.js?v=20261109"></script>
+    <script src="hardmode.js?v=20261109"></script>
+    <script src="os.js?v=20261109"></script>
+    <script src="boot.js?v=20261109"></script>
+    <script src="welcome.js?v=20261109"></script>
 
 </body>
 </html>
