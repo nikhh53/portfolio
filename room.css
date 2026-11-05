@@ -430,3 +430,16 @@ body.embedded .welcome {
         opacity: 0;
     }
 }
+
+.room.moving .room-screen::after {
+    animation-play-state: paused;
+    opacity: 0;
+}
+
+/* Weichzeichner im Bildschirm kostet bei der Kamerafahrt viel Leistung */
+body.embedded *,
+body.embedded *::before,
+body.embedded *::after {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+}

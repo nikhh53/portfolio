@@ -171,7 +171,8 @@ document.addEventListener('keydown', event => {
         showPanel(panelOrder[currentIndex - 1]);
     }
 
-    if (event.key === 'Escape') {
+    // Im Schreibtisch-Bildschirm führt Escape zurück an den Tisch, die Seite bleibt, wie sie ist
+    if (event.key === 'Escape' && window.portfolioEntry !== 'embed') {
         event.preventDefault();
         showPanel('hero');
     }
