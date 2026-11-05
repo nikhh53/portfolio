@@ -32,7 +32,7 @@ body.welcome-active {
 }
 
 .welcome-kicker {
-    color: var(--orange);
+    color: var(--accent);
     font-family: var(--font-mono);
     font-size: 0.8rem;
     letter-spacing: 0.14em;
@@ -115,7 +115,7 @@ body.welcome-active {
 
     border: 2px solid var(--ink);
     border-radius: 50%;
-    background: var(--orange-soft);
+    background: var(--accent-soft);
     color: var(--ink);
     font-size: 1.1rem;
 }
@@ -136,7 +136,7 @@ body.welcome-active {
 
 .welcome-choice-action {
     margin-top: 0.5rem;
-    color: var(--orange);
+    color: var(--accent);
     font-family: var(--font-mono);
     font-size: 0.78rem;
     font-weight: 500;
@@ -144,7 +144,7 @@ body.welcome-active {
 
 /* Empfehlung als Stempel */
 .welcome-choice[data-mode='portfolio'] {
-    background: var(--orange-soft);
+    background: var(--accent-soft);
 }
 
 .welcome-hint {
@@ -154,10 +154,10 @@ body.welcome-active {
 
     padding: 0.15rem 0.7rem;
 
-    border: 2px solid var(--orange);
+    border: 2px solid var(--accent);
     border-radius: 3px;
     background: var(--paper-light);
-    color: var(--orange);
+    color: var(--accent);
 
     font-family: var(--font-mono);
     font-size: 0.7rem;
