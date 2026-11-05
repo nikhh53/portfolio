@@ -113,7 +113,7 @@ function startRoom() {
     room.innerHTML = `
         <div class="room-stage">
             <div class="room-rig">
-                <div class="room-wall"><i></i></div>
+                <div class="room-wall"><i></i><i></i><i></i></div>
                 <div class="room-desk">
                     <div class="room-mat"></div>
                     <div class="room-notebook"></div>
