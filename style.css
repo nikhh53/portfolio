@@ -10,7 +10,13 @@ body {
     --navbar-height: 101px;
 
     font-family: 'Inter', system-ui, sans-serif;
-    background-color: #f6faf9;
+    background-color: #f4faf8;
+    background-image:
+        radial-gradient(circle at 8% 12%, rgba(15, 165, 143, 0.18), transparent 38%),
+        radial-gradient(circle at 92% 20%, rgba(129, 140, 248, 0.16), transparent 36%),
+        radial-gradient(circle at 75% 92%, rgba(251, 191, 160, 0.24), transparent 42%),
+        radial-gradient(circle at 15% 85%, rgba(125, 211, 252, 0.16), transparent 38%);
+    background-attachment: fixed;
     color: #1e2b29;
     line-height: 1.8;
     overflow-x: hidden;
@@ -142,13 +148,6 @@ body.intro-active .navbar {
 
     display: flex;
     align-items: center;
-
-    background:
-        linear-gradient(
-            135deg,
-            #f6fbf9 0%,
-            #e3f2ee 100%
-        );
 
     overflow: hidden;
     z-index: auto;
@@ -1216,4 +1215,111 @@ footer {
     .availability-dot {
         animation: none;
     }
+}
+
+/* Tiefe: Schichten, weiche Schatten, Verlaufsflächen */
+.navbar {
+    box-shadow: 0 6px 24px -12px rgba(30, 60, 55, 0.25);
+}
+
+.project-card,
+.skill-card,
+.contact-option,
+.internship-card {
+    border-radius: 20px;
+    box-shadow:
+        0 1px 2px rgba(30, 60, 55, 0.06),
+        0 14px 32px -14px rgba(30, 60, 55, 0.2);
+}
+
+.project-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.project-card::before {
+    content: '';
+
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+
+    height: 4px;
+
+    background: linear-gradient(90deg, #0fa58f, #818cf8, #fbbfa0);
+}
+
+.project-card:hover,
+.skill-card:hover,
+.contact-option:hover {
+    box-shadow:
+        0 1px 2px rgba(30, 60, 55, 0.06),
+        0 26px 46px -16px rgba(15, 165, 143, 0.35);
+}
+
+.skill-card i {
+    width: 58px;
+    height: 58px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 16px;
+
+    background: linear-gradient(135deg, #d9f3ee, #ecebff);
+    color: #0b8f7e;
+
+    font-size: 1.5rem;
+}
+
+.hero-image {
+    position: relative;
+}
+
+.hero-image::before {
+    content: '';
+
+    position: absolute;
+    top: 6%;
+    right: 2%;
+    bottom: -4%;
+    left: 14%;
+
+    border-radius: 32px;
+
+    background: linear-gradient(145deg, #0fa58f, #818cf8);
+    opacity: 0.35;
+    transform: rotate(5deg);
+}
+
+.hero-image img {
+    position: relative;
+
+    box-shadow:
+        0 2px 4px rgba(30, 60, 55, 0.08),
+        0 34px 70px -20px rgba(30, 60, 55, 0.4);
+}
+
+.section > h2::after {
+    content: '';
+
+    width: 64px;
+    height: 4px;
+    margin: 1rem auto 0;
+
+    display: block;
+
+    border-radius: 4px;
+
+    background: linear-gradient(90deg, #0fa58f, #818cf8);
+}
+
+.tech-list span {
+    box-shadow: 0 1px 2px rgba(30, 60, 55, 0.06);
+}
+
+.btn.primary {
+    background: linear-gradient(135deg, #0fa58f, #0b8f7e);
+    box-shadow: 0 10px 22px -10px rgba(15, 165, 143, 0.7);
 }

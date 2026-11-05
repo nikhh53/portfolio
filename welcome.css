@@ -14,10 +14,12 @@ body.welcome-active {
     overflow-y: auto;
 
     background:
-        radial-gradient(ellipse at 50% 0%, rgba(0, 229, 204, 0.14), transparent 55%),
-        linear-gradient(170deg, #0a0a0a, #0c1016);
+        radial-gradient(circle at 12% 10%, rgba(15, 165, 143, 0.22), transparent 42%),
+        radial-gradient(circle at 88% 18%, rgba(129, 140, 248, 0.2), transparent 40%),
+        radial-gradient(circle at 70% 95%, rgba(251, 191, 160, 0.28), transparent 45%),
+        linear-gradient(170deg, #f7fbfa, #e8f3f0);
 
-    color: #e8e8e8;
+    color: #1e2b29;
     font-family: 'Inter', system-ui, sans-serif;
 
     /* Der Hintergrund blendet nicht ein, sonst scheint das Portfolio durch */
@@ -35,7 +37,7 @@ body.welcome-active {
 }
 
 .welcome-kicker {
-    color: #00e5cc;
+    color: #0b8f7e;
     font-family: 'JetBrains Mono', ui-monospace, Consolas, monospace;
     font-size: 0.8rem;
     letter-spacing: 0.14em;
@@ -55,7 +57,7 @@ body.welcome-active {
 .welcome-text {
     max-width: 640px;
     margin: 0 auto 2.2rem;
-    color: #b8c2c0;
+    color: #4f5f5c;
     font-size: clamp(0.95rem, 2vw, 1.08rem);
     line-height: 1.7;
 }
@@ -75,10 +77,13 @@ body.welcome-active {
     gap: 0.5rem;
     padding: 1.5rem 1.3rem 1.3rem;
 
-    background: rgba(18, 22, 25, 0.85);
-    color: #e8e8e8;
-    border: 1px solid #2d393c;
-    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.88);
+    color: #1e2b29;
+    border: 1px solid #dbe7e3;
+    border-radius: 20px;
+    box-shadow:
+        0 1px 2px rgba(30, 60, 55, 0.06),
+        0 12px 30px -12px rgba(30, 60, 55, 0.22);
 
     font: inherit;
     text-align: left;
@@ -90,8 +95,10 @@ body.welcome-active {
 .welcome-choice:hover,
 .welcome-choice:focus-visible {
     transform: translateY(-4px);
-    border-color: #00e5cc;
-    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+    border-color: #6cbfb0;
+    box-shadow:
+        0 1px 2px rgba(30, 60, 55, 0.06),
+        0 24px 44px -14px rgba(15, 165, 143, 0.35);
     outline: none;
 }
 
@@ -102,9 +109,9 @@ body.welcome-active {
     height: 46px;
     margin-bottom: 0.3rem;
 
-    background: rgba(0, 229, 204, 0.1);
-    border-radius: 12px;
-    color: #00e5cc;
+    background: linear-gradient(135deg, #d9f3ee, #eef7f5);
+    border-radius: 14px;
+    color: #0b8f7e;
     font-size: 1.15rem;
 }
 
@@ -116,22 +123,22 @@ body.welcome-active {
 
 .welcome-choice-text {
     flex: 1;
-    color: #9ba6a3;
+    color: #566663;
     font-size: 0.9rem;
     line-height: 1.6;
 }
 
 .welcome-choice-action {
     margin-top: 0.5rem;
-    color: #00e5cc;
+    color: #0b8f7e;
     font-family: 'JetBrains Mono', ui-monospace, Consolas, monospace;
     font-size: 0.78rem;
 }
 
 /* Empfehlung hervorheben, damit der schnelle Weg sofort auffällt */
 .welcome-choice[data-mode='portfolio'] {
-    border-color: #49635e;
-    background: linear-gradient(180deg, rgba(0, 229, 204, 0.08), rgba(18, 22, 25, 0.9));
+    border-color: #8fcfc3;
+    background: linear-gradient(180deg, #e6f6f2, rgba(255, 255, 255, 0.95));
 }
 
 .welcome-hint {
@@ -141,8 +148,8 @@ body.welcome-active {
 
     padding: 0.15rem 0.6rem;
 
-    background: #00e5cc;
-    color: #001a17;
+    background: #0b8f7e;
+    color: #ffffff;
     border-radius: 999px;
 
     font-family: 'JetBrains Mono', ui-monospace, Consolas, monospace;
@@ -154,7 +161,7 @@ body.welcome-active {
 
 .welcome-note {
     margin-top: 1.6rem;
-    color: #77827f;
+    color: #6f7f7b;
     font-size: 0.85rem;
 }
 
