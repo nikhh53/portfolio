@@ -1,0 +1,306 @@
+/* Zimmer mit drei Bildschirmen: dunkler Raum, helle Displays, Kamerafahrt in CSS 3D */
+
+body.room-active {
+    overflow: hidden;
+    background: #04070a;
+}
+
+body.room-active > *:not(.room) {
+    display: none !important;
+}
+
+.room {
+    position: fixed;
+    inset: 0;
+    z-index: 7000;
+    overflow: hidden;
+
+    background:
+        radial-gradient(ellipse at 50% 38%, #0d1620 0%, #05090d 55%, #020406 100%);
+    color: #e6eef0;
+    font-family: var(--font-text);
+}
+
+.room-stage {
+    position: absolute;
+    inset: 0;
+    perspective: 1600px;
+    perspective-origin: 50% 50%;
+}
+
+.room-rig {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+    will-change: transform;
+}
+
+/* Schreibtischplatte liegt flach unter den Monitoren */
+.room-desk {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 3200px;
+    height: 1600px;
+    margin: -800px 0 0 -1600px;
+
+    transform: translateY(300px) rotateX(90deg);
+
+    background:
+        radial-gradient(ellipse 520px 300px at 920px 780px, rgba(170, 215, 255, 0.34), transparent 70%),
+        radial-gradient(ellipse 620px 360px at 1600px 740px, rgba(190, 225, 255, 0.4), transparent 70%),
+        radial-gradient(ellipse 520px 300px at 2290px 780px, rgba(170, 215, 255, 0.34), transparent 70%),
+        linear-gradient(#0b1218, #141e26 55%, #1a2630);
+    box-shadow: 0 0 0 2px #0a1015;
+}
+
+.room-mat {
+    position: absolute;
+    top: 900px;
+    left: 1180px;
+    width: 840px;
+    height: 380px;
+
+    background: #0a0f14;
+    border-radius: 14px;
+    box-shadow: inset 0 0 0 2px #1b2733;
+}
+
+.room-keyboard {
+    position: absolute;
+    top: 960px;
+    left: 1300px;
+    width: 480px;
+    height: 170px;
+
+    border-radius: 10px;
+    background:
+        repeating-linear-gradient(90deg, transparent 0 34px, #0a0f14 34px 38px),
+        repeating-linear-gradient(0deg, transparent 0 32px, #0a0f14 32px 36px),
+        #26323d;
+    box-shadow: 0 0 0 4px #1a242c, 0 0 24px rgba(120, 200, 255, 0.15);
+}
+
+.room-mouse {
+    position: absolute;
+    top: 990px;
+    left: 1860px;
+    width: 64px;
+    height: 104px;
+
+    border-radius: 32px;
+    background: #26323d;
+    box-shadow: 0 0 0 3px #1a242c;
+}
+
+/* Monitor */
+.room-monitor {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform-style: preserve-3d;
+}
+
+.room-frame {
+    position: absolute;
+    inset: 0;
+    padding: 14px 14px 0;
+
+    background: linear-gradient(#1d2830, #10171d);
+    border-radius: 14px;
+    box-shadow:
+        0 0 0 2px #2c3a45,
+        0 0 160px 30px rgba(180, 220, 255, 0.2);
+
+    transition: box-shadow 0.3s ease;
+}
+
+.room-monitor.hover .room-frame {
+    box-shadow:
+        0 0 0 2px #7fd6c8,
+        0 0 200px 50px rgba(190, 230, 255, 0.34);
+}
+
+.room.focused .room-frame {
+    box-shadow: 0 0 0 2px #2c3a45;
+}
+
+.room-screen {
+    position: relative;
+    overflow: hidden;
+    background: #fff;
+    border-radius: 4px;
+
+    opacity: 0;
+    transition: opacity 1.8s ease 1.6s;
+}
+
+.room.lit .room-screen {
+    opacity: 1;
+}
+
+.room-screen iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 0;
+    background: #fff;
+    transform-origin: 0 0;
+    pointer-events: none;
+}
+
+.room.focused .room-monitor.active iframe {
+    pointer-events: auto;
+}
+
+.room-hit {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    pointer-events: none;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+}
+
+.room-chin {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+
+    color: #8fa3ad;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.room-chin b {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #3de0c4;
+    box-shadow: 0 0 8px #3de0c4;
+}
+
+.room-neck {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    width: 44px;
+    margin-left: -22px;
+
+    background: linear-gradient(90deg, #121a21, #26333d, #121a21);
+}
+
+.room-base {
+    position: absolute;
+    left: 50%;
+    width: 240px;
+    height: 140px;
+    margin-left: -120px;
+
+    background: #151e25;
+    border-radius: 18px;
+    box-shadow: 0 0 0 2px #26333d;
+    transform: rotateX(90deg);
+}
+
+/* Bedienelemente über der Szene */
+.room-back,
+.room-caption,
+.room-hint {
+    position: absolute;
+    z-index: 3;
+}
+
+.room-back {
+    top: 1.2rem;
+    left: 1.2rem;
+    padding: 0.55rem 1rem;
+
+    background: rgba(8, 14, 19, 0.86);
+    border: 1px solid #3a4c58;
+    border-radius: 999px;
+    color: #eef4f3;
+    font: inherit;
+    font-size: 0.9rem;
+    cursor: pointer;
+    backdrop-filter: blur(6px);
+}
+
+.room-back:hover {
+    border-color: #3de0c4;
+    color: #3de0c4;
+}
+
+.room-caption {
+    bottom: 0.9rem;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.35rem 1rem;
+
+    background: rgba(8, 14, 19, 0.78);
+    border-radius: 999px;
+    color: #b5c6cc;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    white-space: nowrap;
+}
+
+.room-hint {
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+
+    color: #b5c6cc;
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    letter-spacing: 0.06em;
+    text-align: center;
+    animation: roomHint 0.8s ease both;
+}
+
+.room-hint a {
+    color: #6f838d;
+    font-size: 0.75rem;
+}
+
+.room-hint a:hover {
+    color: #3de0c4;
+}
+
+@keyframes roomHint {
+    from {
+        opacity: 0;
+        transform: translate(-50%, 10px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .room-screen {
+        transition-duration: 0.01s;
+        transition-delay: 0s;
+    }
+}
+
+/* Im Bildschirm: kein Willkommen, Seite wie normal */
+body.embedded .welcome {
+    display: none;
+}
+
+.room [hidden] {
+    display: none !important;
+}

@@ -32,67 +32,70 @@ const WELCOME_CHOICES = [
     }
 ];
 
-const welcomeScreen = document.createElement('div');
-welcomeScreen.className = 'welcome';
-welcomeScreen.setAttribute('role', 'dialog');
-welcomeScreen.setAttribute('aria-label', 'Willkommen');
-welcomeScreen.innerHTML = `
-    <div class="welcome-box">
-        <p class="welcome-kicker"></p>
-        <h1>Hallo, ich bin Niklas Bakowsky</h1>
-        <p class="welcome-text">
-            Ich mache eine Umschulung zum Fachinformatiker für Anwendungsentwicklung
-            und suche ein Praktikum in Hamburg. Diese Seite habe ich selbst
-            programmiert. Sie können sie ganz normal lesen oder sich ansehen,
-            was sonst noch darin steckt.
-        </p>
-        <div class="welcome-choices">
-            ${WELCOME_CHOICES.map(choice => `
-                <button type="button" class="welcome-choice" data-mode="${choice.mode}">
-                    ${choice.hint ? `<span class="welcome-hint">${choice.hint}</span>` : ''}
-                    <i class="fas ${choice.icon}"></i>
-                    <span class="welcome-choice-title">${choice.title}</span>
-                    <span class="welcome-choice-text">${choice.text}</span>
-                    <span class="welcome-choice-action">${choice.action}</span>
-                </button>
-            `).join('')}
+/* Nur wenn weder das Zimmer noch ein Bildschirm den Einstieg übernimmt (kleine Bildschirme, ?klassisch) */
+if (window.portfolioEntry === 'welcome') {
+    const welcomeScreen = document.createElement('div');
+    welcomeScreen.className = 'welcome';
+    welcomeScreen.setAttribute('role', 'dialog');
+    welcomeScreen.setAttribute('aria-label', 'Willkommen');
+    welcomeScreen.innerHTML = `
+        <div class="welcome-box">
+            <p class="welcome-kicker"></p>
+            <h1>Hallo, ich bin Niklas Bakowsky</h1>
+            <p class="welcome-text">
+                Ich mache eine Umschulung zum Fachinformatiker für Anwendungsentwicklung
+                und suche ein Praktikum in Hamburg. Diese Seite habe ich selbst
+                programmiert. Sie können sie ganz normal lesen oder sich ansehen,
+                was sonst noch darin steckt.
+            </p>
+            <div class="welcome-choices">
+                ${WELCOME_CHOICES.map(choice => `
+                    <button type="button" class="welcome-choice" data-mode="${choice.mode}">
+                        ${choice.hint ? `<span class="welcome-hint">${choice.hint}</span>` : ''}
+                        <i class="fas ${choice.icon}"></i>
+                        <span class="welcome-choice-title">${choice.title}</span>
+                        <span class="welcome-choice-text">${choice.text}</span>
+                        <span class="welcome-choice-action">${choice.action}</span>
+                    </button>
+                `).join('')}
+            </div>
+            <p class="welcome-note">
+                Die beiden Extras können Sie jederzeit beenden und landen dann im normalen Portfolio.
+            </p>
         </div>
-        <p class="welcome-note">
-            Die beiden Extras können Sie jederzeit beenden und landen dann im normalen Portfolio.
-        </p>
-    </div>
-`;
+    `;
 
-welcomeScreen.querySelector('.welcome-kicker').textContent = visitorCompany
-    ? `Schön, dass Sie da sind, ${visitorCompany}!`
-    : 'Willkommen';
+    welcomeScreen.querySelector('.welcome-kicker').textContent = visitorCompany
+        ? `Schön, dass Sie da sind, ${visitorCompany}!`
+        : 'Willkommen';
 
-document.body.prepend(welcomeScreen);
-document.body.classList.add('welcome-active');
-document.documentElement.classList.remove('pre-welcome');
+    document.body.prepend(welcomeScreen);
+    document.body.classList.add('welcome-active');
+    document.documentElement.classList.remove('pre-welcome');
 
-/*
- * Beim Ausblenden darf das Portfolio nicht kurz durchblitzen: Wer einen
- * der Modi wählt, bekommt den Boot-Screen sofort darunter aufgebaut.
- */
-function closeWelcome() {
-    welcomeScreen.classList.add('closing');
-    document.body.classList.remove('welcome-active');
-    window.setTimeout(() => welcomeScreen.remove(), WELCOME_FADE);
+    /*
+     * Beim Ausblenden darf das Portfolio nicht kurz durchblitzen: Wer einen
+     * der Modi wählt, bekommt den Boot-Screen sofort darunter aufgebaut.
+     */
+    function closeWelcome() {
+        welcomeScreen.classList.add('closing');
+        document.body.classList.remove('welcome-active');
+        window.setTimeout(() => welcomeScreen.remove(), WELCOME_FADE);
+    }
+
+    welcomeScreen.addEventListener('click', event => {
+        const choice = event.target.closest('[data-mode]');
+
+        if (!choice) {
+            return;
+        }
+
+        const mode = choice.dataset.mode;
+
+        if (mode !== 'portfolio') {
+            startBootScreen(mode);
+        }
+
+        closeWelcome();
+    });
 }
-
-welcomeScreen.addEventListener('click', event => {
-    const choice = event.target.closest('[data-mode]');
-
-    if (!choice) {
-        return;
-    }
-
-    const mode = choice.dataset.mode;
-
-    if (mode !== 'portfolio') {
-        startBootScreen(mode);
-    }
-
-    closeWelcome();
-});
