@@ -1303,3 +1303,139 @@ footer {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
+
+/* Feinschliff: Lebenslauf-Zugang, Verfügbarkeit, ruhigere Lesbarkeit */
+.nav-links a.nav-cv {
+    padding: 0.45rem 1rem;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    border: 1px solid #49635e;
+    border-radius: 999px;
+
+    color: #9dc1b9;
+
+    font-size: 0.9rem;
+}
+
+.nav-links a.nav-cv:hover {
+    border-color: #00f5d4;
+    background: rgba(0, 245, 212, 0.08);
+}
+
+.availability {
+    margin-left: 0.9rem;
+    padding: 0.2rem 0.7rem;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    border: 1px solid #2d4a45;
+    border-radius: 999px;
+
+    background: rgba(0, 245, 212, 0.06);
+    color: #9dc1b9;
+
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: none;
+}
+
+.availability-dot {
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #00f5d4;
+    box-shadow: 0 0 0 0 rgba(0, 245, 212, 0.6);
+
+    animation: availabilityPulse 2.4s ease-out infinite;
+}
+
+@keyframes availabilityPulse {
+    70% {
+        box-shadow: 0 0 0 8px rgba(0, 245, 212, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(0, 245, 212, 0);
+    }
+}
+
+.btn.ghost {
+    border: 1px solid transparent;
+
+    background: transparent;
+    color: #9dc1b9;
+}
+
+.btn.ghost:hover {
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+.about-content {
+    max-width: 700px;
+
+    font-size: 1.1rem;
+    line-height: 1.85;
+    text-align: left;
+}
+
+.about-content p + p {
+    margin-top: 1.4rem;
+}
+
+.project-card,
+.skill-card,
+.contact-option {
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.03) inset;
+}
+
+.project-card:hover,
+.skill-card:hover,
+.contact-option:hover {
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.03) inset,
+        0 14px 34px -18px rgba(0, 245, 212, 0.35);
+}
+
+.contact-options {
+    max-width: 1000px;
+}
+
+.contact-option.primary {
+    border-color: #49635e;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(0, 245, 212, 0.1),
+            rgba(18, 24, 26, 0.92) 70%
+        );
+}
+
+#contact .contact-options {
+    margin-bottom: 2.4rem;
+}
+
+@media (max-width: 768px) {
+    .nav-links a.nav-cv {
+        display: none;
+    }
+
+    .availability {
+        margin: 0.6rem 0 0;
+        display: flex;
+        width: fit-content;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .availability-dot {
+        animation: none;
+    }
+}
