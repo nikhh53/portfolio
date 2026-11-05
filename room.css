@@ -407,7 +407,7 @@ body.embedded .welcome {
     height: 1500px;
     margin: -400px 0 0 -450px;
 
-    transform: translate3d(var(--x), 0, -150px);
+    transform: translate3d(var(--x), 0, 250px);
     background: url('assets/plant.svg?v=20261126') center / 100% 100% no-repeat;
     filter: drop-shadow(0 30px 40px rgba(0, 0, 0, 0.4));
 }
