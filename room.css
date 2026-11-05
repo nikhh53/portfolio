@@ -41,22 +41,22 @@ body.room-active > *:not(.room) {
     top: 50%;
     left: 50%;
     width: 3200px;
-    height: 1600px;
-    margin: -800px 0 0 -1600px;
+    height: 1120px;
+    margin: -560px 0 0 -1600px;
 
-    transform: translateY(300px) rotateX(90deg);
+    transform: translate3d(0, 300px, 140px) rotateX(90deg);
 
     background:
-        radial-gradient(ellipse 520px 300px at 920px 780px, rgba(170, 215, 255, 0.34), transparent 70%),
-        radial-gradient(ellipse 620px 360px at 1600px 740px, rgba(190, 225, 255, 0.4), transparent 70%),
-        radial-gradient(ellipse 520px 300px at 2290px 780px, rgba(170, 215, 255, 0.34), transparent 70%),
-        linear-gradient(#0b1218, #141e26 55%, #1a2630);
-    box-shadow: 0 0 0 2px #0a1015;
+        radial-gradient(ellipse 520px 300px at 920px 420px, rgba(170, 215, 255, 0.2), transparent 70%),
+        radial-gradient(ellipse 620px 360px at 1600px 400px, rgba(190, 225, 255, 0.26), transparent 70%),
+        radial-gradient(ellipse 520px 300px at 2290px 420px, rgba(170, 215, 255, 0.2), transparent 70%),
+        linear-gradient(#17222b, #20303b 55%, #2b3d4a);
+    box-shadow: inset 0 -6px 0 #0d151b, 0 0 0 2px #0a1015;
 }
 
 .room-mat {
     position: absolute;
-    top: 900px;
+    top: 520px;
     left: 1180px;
     width: 840px;
     height: 380px;
@@ -68,8 +68,8 @@ body.room-active > *:not(.room) {
 
 .room-keyboard {
     position: absolute;
-    top: 960px;
-    left: 1300px;
+    top: 580px;
+    left: 1360px;
     width: 480px;
     height: 170px;
 
@@ -83,7 +83,7 @@ body.room-active > *:not(.room) {
 
 .room-mouse {
     position: absolute;
-    top: 990px;
+    top: 610px;
     left: 1860px;
     width: 64px;
     height: 104px;
@@ -104,25 +104,25 @@ body.room-active > *:not(.room) {
 .room-frame {
     position: absolute;
     inset: 0;
-    padding: 14px 14px 0;
+    padding: 10px 10px 0;
 
-    background: linear-gradient(#1d2830, #10171d);
-    border-radius: 14px;
+    background: linear-gradient(#1b252d, #0e1419);
+    border-radius: 12px;
     box-shadow:
-        0 0 0 2px #2c3a45,
-        0 0 160px 30px rgba(180, 220, 255, 0.2);
+        0 0 0 1px #2c3a45,
+        0 0 50px 4px rgba(170, 210, 240, 0.09);
 
     transition: box-shadow 0.3s ease;
 }
 
 .room-monitor.hover .room-frame {
     box-shadow:
-        0 0 0 2px #7fd6c8,
-        0 0 200px 50px rgba(190, 230, 255, 0.34);
+        0 0 0 1px #6fcfc0,
+        0 0 70px 6px rgba(150, 220, 215, 0.16);
 }
 
 .room.focused .room-frame {
-    box-shadow: 0 0 0 2px #2c3a45;
+    box-shadow: 0 0 0 1px #2c3a45;
 }
 
 .room-screen {
@@ -168,7 +168,7 @@ body.room-active > *:not(.room) {
     right: 0;
     bottom: 0;
     left: 0;
-    height: 38px;
+    height: 30px;
 
     display: flex;
     align-items: center;
@@ -177,8 +177,8 @@ body.room-active > *:not(.room) {
 
     color: #8fa3ad;
     font-family: var(--font-mono);
-    font-size: 13px;
-    letter-spacing: 0.14em;
+    font-size: 11px;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
 }
 
@@ -222,16 +222,16 @@ body.room-active > *:not(.room) {
 }
 
 .room-back {
-    top: 1.2rem;
-    left: 1.2rem;
-    padding: 0.55rem 1rem;
+    top: 0.7rem;
+    left: 0.7rem;
+    padding: 0.28rem 0.75rem;
 
-    background: rgba(8, 14, 19, 0.86);
+    background: rgba(8, 14, 19, 0.7);
     border: 1px solid #3a4c58;
     border-radius: 999px;
     color: #eef4f3;
     font: inherit;
-    font-size: 0.9rem;
+    font-size: 0.72rem;
     cursor: pointer;
     backdrop-filter: blur(6px);
 }
@@ -273,15 +273,6 @@ body.room-active > *:not(.room) {
     animation: roomHint 0.8s ease both;
 }
 
-.room-hint a {
-    color: #6f838d;
-    font-size: 0.75rem;
-}
-
-.room-hint a:hover {
-    color: #3de0c4;
-}
-
 @keyframes roomHint {
     from {
         opacity: 0;
@@ -303,4 +294,81 @@ body.embedded .welcome {
 
 .room [hidden] {
     display: none !important;
+}
+
+/* Rückwand mit LED-Streifen */
+.room-wall {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5200px;
+    height: 2600px;
+    margin: -1500px 0 0 -2600px;
+
+    transform: translate3d(0, 0, -520px);
+
+    background:
+        linear-gradient(rgba(5, 9, 13, 0) 0%, rgba(5, 9, 13, 0.5) 100%),
+        radial-gradient(ellipse 1400px 900px at 50% 52%, #14212c, #070c11 75%);
+}
+
+.room-wall i {
+    position: absolute;
+    top: 1210px;
+    left: 600px;
+    right: 600px;
+    height: 4px;
+
+    background: #3de0c4;
+    border-radius: 2px;
+    box-shadow: 0 0 22px 3px rgba(61, 224, 196, 0.35);
+    opacity: 0.8;
+}
+
+/* Kleinigkeiten auf dem Tisch */
+.room-notebook {
+    position: absolute;
+    top: 570px;
+    left: 1010px;
+    width: 190px;
+    height: 150px;
+
+    background:
+        repeating-linear-gradient(transparent 0 16px, rgba(61, 224, 196, 0.22) 16px 17px),
+        #c8d4d6;
+    border-left: 12px solid #12a58a;
+    border-radius: 4px;
+    transform: rotate(-7deg);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.5);
+}
+
+.room-mug {
+    position: absolute;
+    top: 600px;
+    left: 2090px;
+    width: 76px;
+    height: 76px;
+
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 50%, #3a2a22 0 34%, #d9e4e6 36% 82%, #aab8bb 84%);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.55), 22px 0 0 -14px #d9e4e6;
+}
+
+/* Bildschirm bedienen: flach vor die Szene gelegt */
+.room.flat .room-stage {
+    perspective: none;
+}
+
+.room.flat .room-rig {
+    transform: none !important;
+    transform-style: flat;
+    will-change: auto;
+}
+
+.room.flat .room-rig > *:not(.active) {
+    display: none;
+}
+
+.room.flat .room-monitor.active {
+    transform-style: flat;
 }

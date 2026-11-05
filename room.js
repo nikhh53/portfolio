@@ -6,13 +6,13 @@
  *
  * Die Bildschirme sind dieselbe Seite noch einmal in einem iframe
  * (?embed=portfolio|os|hard), die den Modus ohne Willkommensbildschirm startet.
- * Auf kleinen Bildschirmen und mit ?klassisch bleibt der alte Einstieg.
+ * Auf kleinen Bildschirmen bleibt der Willkommensbildschirm.
  */
 const ROOM_PERSPECTIVE = 1600;
 const ROOM_DESK_Y = 300;
-const ROOM_FRAME_PAD = 14;
-const ROOM_FRAME_CHIN = 38;
-const ROOM_INTRO_MS = 5200;
+const ROOM_FRAME_PAD = 10;
+const ROOM_FRAME_CHIN = 30;
+const ROOM_INTRO_MS = 5600;
 const ROOM_FOCUS_MS = 1700;
 const ROOM_FRAME_LOGICAL = { width: 1440, height: 900 };
 
@@ -32,7 +32,7 @@ window.portfolioEntry = (() => {
 
     const wideScreen = window.matchMedia('(min-width: 900px) and (min-height: 520px)').matches;
 
-    return wideScreen && !roomParams.has('klassisch') ? 'room' : 'welcome';
+    return wideScreen ? 'room' : 'welcome';
 })();
 
 /* In einem Bildschirm: Modus sofort starten, ohne Willkommen und Boot-Screen */
@@ -112,10 +112,13 @@ function startRoom() {
     room.innerHTML = `
         <div class="room-stage">
             <div class="room-rig">
+                <div class="room-wall"><i></i></div>
                 <div class="room-desk">
                     <div class="room-mat"></div>
+                    <div class="room-notebook"></div>
                     <div class="room-keyboard"></div>
                     <div class="room-mouse"></div>
+                    <div class="room-mug"></div>
                 </div>
             </div>
         </div>
@@ -123,10 +126,7 @@ function startRoom() {
             <i class="fas fa-arrow-left"></i> Zurück zum Schreibtisch
         </button>
         <p class="room-caption" hidden></p>
-        <p class="room-hint" hidden>
-            Klicke einen Bildschirm an
-            <a href="?klassisch${roomParams.get('firma') ? `&firma=${encodeURIComponent(roomParams.get('firma'))}` : ''}">Lieber die klassische Ansicht</a>
-        </p>
+        <p class="room-hint" hidden>Klicke einen Bildschirm an</p>
     `;
 
     const rig = room.querySelector('.room-rig');
@@ -151,17 +151,17 @@ function startRoom() {
     }
 
     function overviewScale() {
-        return Math.min(window.innerWidth / 2020, window.innerHeight / 780);
+        return Math.min(window.innerWidth / 2120, window.innerHeight / 780);
     }
 
     function overviewTransform(extraYaw = 0, extraPitch = 0) {
         const z = ROOM_PERSPECTIVE * (1 - 1 / overviewScale());
-        return rigTransform(z, 8 + extraPitch, extraYaw, [0, -35, 0]);
+        return rigTransform(z, -14 + extraPitch, extraYaw, [0, 35, 0]);
     }
 
     function introTransform() {
-        const z = ROOM_PERSPECTIVE * (1 - 1 / overviewScale()) - 2300;
-        return rigTransform(z, 16, -7, [0, -35, 0]);
+        const z = ROOM_PERSPECTIVE * (1 - 1 / overviewScale()) - 1500;
+        return rigTransform(z, -68, 0, [0, 35, 0]);
     }
 
     function focusTransform(config) {
@@ -181,6 +181,7 @@ function startRoom() {
 
     function showOverview(animate = true) {
         window.clearTimeout(focusTimer);
+        leaveFlat();
         state = 'overview';
         room.classList.remove('focused');
         back.hidden = true;
@@ -202,6 +203,44 @@ function startRoom() {
         }
     }
 
+    /*
+     * Nach der Anfahrt wird der Bildschirm flach vor die Szene gelegt: Der Browser
+     * trifft Klicks in einem 3D-Kontext nicht zuverlässig, so bleibt der Inhalt bedienbar.
+     */
+    function enterFlat(index) {
+        const config = ROOM_MONITORS[index];
+        const monitor = monitors[index];
+        const rect = monitor.querySelector('.room-screen').getBoundingClientRect();
+        const scale = rect.width / config.width;
+
+        monitor.dataset.css = monitor.style.cssText;
+        monitor.style.cssText = `
+            position: fixed;
+            top: ${rect.top - ROOM_FRAME_PAD * scale}px;
+            left: ${rect.left - ROOM_FRAME_PAD * scale}px;
+            width: ${config.width + ROOM_FRAME_PAD * 2}px;
+            height: ${config.height + ROOM_FRAME_PAD + ROOM_FRAME_CHIN}px;
+            margin: 0;
+            transform: scale(${scale});
+            transform-origin: 0 0;
+        `;
+        room.classList.add('flat');
+    }
+
+    function leaveFlat() {
+        if (!room.classList.contains('flat')) {
+            return;
+        }
+
+        room.classList.remove('flat');
+        monitors.forEach(monitor => {
+            if (monitor.dataset.css) {
+                monitor.style.cssText = monitor.dataset.css;
+                delete monitor.dataset.css;
+            }
+        });
+    }
+
     function focusMonitor(index) {
         if (state !== 'overview') {
             return;
@@ -218,6 +257,7 @@ function startRoom() {
         rig.style.transform = focusTransform(config);
 
         focusTimer = window.setTimeout(() => {
+            enterFlat(index);
             state = 'focused';
             room.classList.add('focused');
             back.hidden = false;
@@ -232,7 +272,7 @@ function startRoom() {
 
     window.requestAnimationFrame(() => window.requestAnimationFrame(() => {
         state = 'intro-running';
-        setTransition(ROOM_INTRO_MS, 'cubic-bezier(0.22, 0.8, 0.25, 1)');
+        setTransition(ROOM_INTRO_MS, 'cubic-bezier(0.45, 0.05, 0.2, 1)');
         rig.style.transform = overviewTransform();
         room.classList.add('lit');
 
