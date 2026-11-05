@@ -10,8 +10,8 @@ body {
     --navbar-height: 101px;
 
     font-family: 'Inter', system-ui, sans-serif;
-    background-color: #0a0a0a;
-    color: #e8e8e8;
+    background-color: #f6faf9;
+    color: #1e2b29;
     line-height: 1.8;
     overflow-x: hidden;
 }
@@ -47,12 +47,12 @@ body.intro-active {
 
     width: 100%;
 
-    background: rgba(10, 10, 10, 0.98);
+    background: rgba(255, 255, 255, 0.92);
 
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
 
-    border-bottom: 1px solid #1a1a1a;
+    border-bottom: 1px solid #e1e9e7;
 
     z-index: 1000;
 
@@ -85,8 +85,8 @@ body.intro-active .navbar {
     background:
         linear-gradient(
             90deg,
-            #00f5d4,
-            #00d4b8
+            #0fa58f,
+            #0b8f7e
         );
 
     background-clip: text;
@@ -104,7 +104,7 @@ body.intro-active .navbar {
 
     margin-left: 2.5rem;
 
-    color: #d0d0d0;
+    color: #3d4f4b;
 
     font-weight: 500;
     text-decoration: none;
@@ -113,11 +113,11 @@ body.intro-active .navbar {
 }
 
 .nav-links a:hover {
-    color: #00f5d4;
+    color: #0fa58f;
 }
 
 .nav-links a.active {
-    color: #9dc1b9;
+    color: #0b7a6a;
 }
 
 .nav-links a.active::after {
@@ -130,7 +130,7 @@ body.intro-active .navbar {
 
     height: 1px;
 
-    background: #789f96;
+    background: #1a9a86;
 }
 
 /* Startseite */
@@ -146,8 +146,8 @@ body.intro-active .navbar {
     background:
         linear-gradient(
             135deg,
-            #0a0a0a 0%,
-            #12122b 100%
+            #f6fbf9 0%,
+            #e3f2ee 100%
         );
 
     overflow: hidden;
@@ -181,7 +181,7 @@ body.intro-active .navbar {
 .hero-text h2 {
     margin-bottom: 1.2rem;
 
-    color: #b8c2c0;
+    color: #4a5a57;
 
     font-size: clamp(1.05rem, 2vw, 1.45rem);
     font-weight: 500;
@@ -193,8 +193,8 @@ body.intro-active .navbar {
     background:
         linear-gradient(
             90deg,
-            #00f5d4,
-            #7fffe8
+            #0fa58f,
+            #2cc4ab
         );
 
     background-clip: text;
@@ -204,7 +204,7 @@ body.intro-active .navbar {
 
 .eyebrow,
 .section-kicker {
-    color: #79a89e;
+    color: #0b8f7e;
 
     font-size: 0.78rem;
     font-weight: 600;
@@ -224,7 +224,7 @@ body.intro-active .navbar {
     max-width: 700px;
     margin-bottom: 1.4rem;
 
-    color: #aeb8b6;
+    color: #4f5f5c;
 
     font-size: 1.08rem;
     line-height: 1.75;
@@ -240,11 +240,11 @@ body.intro-active .navbar {
 
 .hero-meta span,
 .tech-list span {
-    border: 1px solid #334043;
+    border: 1px solid #d3e0dc;
     border-radius: 999px;
 
-    background: rgba(18, 24, 26, 0.78);
-    color: #b8c4c1;
+    background: #eef6f3;
+    color: #3d4c49;
 }
 
 .hero-meta span {
@@ -255,7 +255,7 @@ body.intro-active .navbar {
 
 .hero-meta i {
     margin-right: 0.35rem;
-    color: #789f96;
+    color: #1a9a86;
 }
 
 .hero-buttons {
@@ -269,11 +269,11 @@ body.intro-active .navbar {
     width: 100%;
     max-width: 420px;
 
-    border: 8px solid #161616;
+    border: 8px solid #ffffff;
     border-radius: 26px;
 
     box-shadow:
-        0 25px 60px rgba(0, 245, 212, 0.3);
+        0 25px 60px rgba(15, 165, 143, 0.22);
 
     transition: transform 0.5s ease;
 }
@@ -309,32 +309,32 @@ body.intro-active .navbar {
 }
 
 .btn.primary {
-    border: 1px solid #dce6e3;
+    border: 1px solid #0b8f7e;
 
-    background: #dce6e3;
-    color: #101817;
+    background: #0b8f7e;
+    color: #ffffff;
 }
 
 .btn.primary:hover {
-    border-color: #edf2f0;
+    border-color: #097565;
 
-    background: #edf2f0;
+    background: #097565;
 
     transform: translateY(-2px);
 }
 
 .btn.secondary {
-    border: 1px solid #394548;
+    border: 1px solid #cfdcd8;
 
-    background: #151b1d;
-    color: #c8d0ce;
+    background: #ffffff;
+    color: #2f3f3c;
 }
 
 .btn.secondary:hover {
-    border-color: #5d6b6e;
+    border-color: #9fb3ae;
 
-    background: #1d2628;
-    color: #ffffff;
+    background: #eef6f3;
+    color: #0b7a6a;
 
     transform: translateY(-2px);
 }
@@ -395,19 +395,11 @@ body.intro-active .navbar {
     max-width: 680px;
     margin: 0 auto 2.4rem;
 
-    color: #9eaaa7;
+    color: #566663;
 
     font-size: 1.02rem;
 }
 
-.section-navigation {
-    margin-top: 3.5rem;
-
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1rem;
-}
 
 @keyframes panelIn {
     from {
@@ -421,184 +413,23 @@ body.intro-active .navbar {
     }
 }
 
-/* Vertikale Bereichsnavigation */
-.progress {
-    position: fixed;
 
-    top:
-        calc(
-            var(--navbar-height) +
-            (100vh - var(--navbar-height)) / 2
-        );
 
-    left: clamp(18px, 3vw, 52px);
 
-    padding: 14px 11px;
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
 
-    border: 1px solid rgba(45, 57, 60, 0.82);
-    border-radius: 999px;
 
-    background: rgba(13, 17, 18, 0.9);
 
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
 
-    box-shadow:
-        0 18px 45px rgba(0, 0, 0, 0.28);
 
-    transform: translateY(-50%);
 
-    z-index: 950;
-
-    transition:
-        opacity 0.35s ease,
-        visibility 0.35s ease,
-        border-color 0.25s ease,
-        box-shadow 0.25s ease;
-}
-
-.progress.scrolled-away {
-    border-color: rgba(80, 106, 101, 0.9);
-
-    box-shadow:
-        0 20px 50px rgba(0, 0, 0, 0.42);
-}
-
-body.intro-active .progress {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-}
-
-/* Einzelne Navigationszahlen */
-.progress-step {
-    position: relative;
-
-    width: 36px;
-    height: 36px;
-    padding: 0;
-
-    display: grid;
-    place-items: center;
-
-    flex-shrink: 0;
-
-    border: 1px solid #343f42;
-    border-radius: 50%;
-
-    background: #101719;
-    color: #71807d;
-
-    font-family: inherit;
-    font-size: 0.76rem;
-    font-weight: 600;
-    line-height: 1;
-
-    cursor: pointer;
-
-    transition:
-        color 0.25s ease,
-        background-color 0.25s ease,
-        border-color 0.25s ease,
-        box-shadow 0.25s ease,
-        transform 0.25s ease;
-}
-
-/* Beschriftung neben der Zahl */
-.progress-step::after {
-    content: attr(data-label);
-
-    position: absolute;
-    top: 50%;
-    left: 48px;
-
-    padding: 0.4rem 0.75rem;
-
-    border: 1px solid #31403f;
-    border-radius: 7px;
-
-    background: rgba(15, 21, 22, 0.97);
-    color: #aebbb8;
-
-    font-size: 0.72rem;
-    font-weight: 600;
-    line-height: 1.3;
-    white-space: nowrap;
-
-    opacity: 0;
-    pointer-events: none;
-
-    transform: translate(-8px, -50%);
-
-    transition:
-        opacity 0.2s ease,
-        transform 0.2s ease;
-}
-
-.progress-step:hover::after,
-.progress-step:focus-visible::after,
-.progress-step.active::after {
-    opacity: 1;
-    transform: translate(0, -50%);
-}
-
-.progress-step:hover {
-    border-color: #627b76;
-
-    color: #d9e4e1;
-
-    transform: scale(1.06);
-}
-
-/* Aktiver Bereich */
-.progress-step.active {
-    border-color: #00f5d4;
-
-    background: #00f5d4;
-    color: #07110f;
-
-    box-shadow:
-        0 0 0 5px rgba(0, 245, 212, 0.08),
-        0 0 22px rgba(0, 245, 212, 0.38);
-}
-
-/* Bereits besuchte Bereiche */
-.progress-step.completed {
-    border-color: #506a65;
-
-    background: #1a2826;
-    color: #9cb4af;
-}
-
-/* Tastatur-Fokus */
-.progress-step:focus-visible {
-    outline: 2px solid rgba(0, 245, 212, 0.65);
-    outline-offset: 4px;
-}
-
-/* Verbindungslinien */
-.progress-line {
-    width: 1px;
-    height: 34px;
-
-    flex-shrink: 0;
-
-    background: #34413f;
-
-    transition: background-color 0.25s ease;
-}
 
 /* Über-mich-Bereich */
 .about-content {
     max-width: 720px;
     margin: 0 auto;
 
-    color: #c8c8c8;
+    color: #34423f;
 
     font-size: 1.22rem;
 }
@@ -610,10 +441,10 @@ body.intro-active .progress {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
 
-    border: 1px solid #2d393c;
+    border: 1px solid #d9e4e1;
     border-radius: 14px;
 
-    background: rgba(18, 24, 26, 0.88);
+    background: #ffffff;
 
     overflow: hidden;
 }
@@ -621,7 +452,7 @@ body.intro-active .progress {
 .internship-card div {
     padding: 1.25rem;
 
-    border-right: 1px solid #2d393c;
+    border-right: 1px solid #d9e4e1;
 
     text-align: left;
 }
@@ -634,7 +465,7 @@ body.intro-active .progress {
 .contact-option small {
     display: block;
 
-    color: #77827f;
+    color: #6f7f7b;
 
     font-size: 0.7rem;
     letter-spacing: 0.08em;
@@ -646,7 +477,7 @@ body.intro-active .progress {
 
     margin-top: 0.25rem;
 
-    color: #dce3e1;
+    color: #1e2b29;
 
     font-size: 0.92rem;
 }
@@ -672,10 +503,10 @@ body.intro-active .progress {
 
     padding: 1.5rem 1.15rem;
 
-    border: 1px solid #2d393c;
+    border: 1px solid #d9e4e1;
     border-radius: 12px;
 
-    background: rgba(19, 25, 28, 0.9);
+    background: #ffffff;
 
     text-align: left;
 
@@ -688,18 +519,18 @@ body.intro-active .progress {
 }
 
 .skill-card:hover {
-    border-color: #506a65;
+    border-color: #6cbfb0;
 
     transform: translateY(-4px);
 
     box-shadow:
-        0 14px 35px rgba(0, 0, 0, 0.24);
+        0 14px 35px rgba(30, 60, 55, 0.14);
 }
 
 .skill-card i {
     margin-bottom: 1rem;
 
-    color: #789f96;
+    color: #1a9a86;
 
     font-size: 2rem;
 }
@@ -711,7 +542,7 @@ body.intro-active .progress {
 }
 
 .skill-card p {
-    color: #909c99;
+    color: #566663;
 
     font-size: 0.84rem;
     line-height: 1.6;
@@ -733,10 +564,10 @@ body.intro-active .progress {
     display: flex;
     flex-direction: column;
 
-    border: 1px solid #2d393c;
+    border: 1px solid #d9e4e1;
     border-radius: 14px;
 
-    background: rgba(18, 24, 26, 0.92);
+    background: #ffffff;
 
     transition:
         transform 0.25s ease,
@@ -744,16 +575,16 @@ body.intro-active .progress {
 }
 
 .project-card:hover {
-    border-color: #55736c;
+    border-color: #6cbfb0;
     transform: translateY(-5px);
 }
 
 .project-card.featured {
-    border-color: #49635e;
+    border-color: #8fcfc3;
 }
 
 .project-card.muted {
-    background: rgba(15, 20, 22, 0.78);
+    background: #f1f7f5;
 }
 
 .project-topline {
@@ -763,7 +594,7 @@ body.intro-active .progress {
     align-items: center;
     justify-content: space-between;
 
-    color: #5f6b68;
+    color: #6f7f7b;
 
     font-size: 0.75rem;
 }
@@ -779,13 +610,13 @@ body.intro-active .progress {
 }
 
 .status.finished {
-    background: #243632;
-    color: #a9c9c1;
+    background: #dff3ee;
+    color: #0b7a6a;
 }
 
 .status.planned {
-    background: #292d2e;
-    color: #a7aaa9;
+    background: #eceeed;
+    color: #6a7370;
 }
 
 .project-card h3 {
@@ -794,7 +625,7 @@ body.intro-active .progress {
 }
 
 .project-card > p {
-    color: #9ba6a3;
+    color: #566663;
 
     font-size: 0.9rem;
     line-height: 1.65;
@@ -803,7 +634,7 @@ body.intro-active .progress {
 .project-card ul {
     margin: 1.1rem 0 1.4rem 1.1rem;
 
-    color: #bec7c5;
+    color: #3d4c49;
 
     font-size: 0.86rem;
 }
@@ -842,11 +673,11 @@ body.intro-active .progress {
     align-items: center;
     gap: 1rem;
 
-    border: 1px solid #2d393c;
+    border: 1px solid #d9e4e1;
     border-radius: 12px;
 
-    background: rgba(18, 24, 26, 0.92);
-    color: #d4dcda;
+    background: #ffffff;
+    color: #1e2b29;
 
     text-align: left;
     text-decoration: none;
@@ -858,12 +689,12 @@ body.intro-active .progress {
 }
 
 .contact-option:hover {
-    border-color: #55736c;
+    border-color: #6cbfb0;
     transform: translateY(-3px);
 }
 
 .contact-option i {
-    color: #789f96;
+    color: #1a9a86;
     font-size: 1.35rem;
 }
 
@@ -877,9 +708,9 @@ footer {
 
     padding: 6rem 2rem 4rem;
 
-    border-top: 1px solid #1f1f1f;
+    border-top: 1px solid #dbe5e2;
 
-    color: #555;
+    color: #6a7a76;
     text-align: center;
 
     z-index: 100;
@@ -916,39 +747,16 @@ footer {
     }
 
     .internship-card div:nth-child(-n + 2) {
-        border-bottom: 1px solid #2d393c;
+        border-bottom: 1px solid #d9e4e1;
     }
 }
 
-/* Navigation auf kleineren Bildschirmen unten anzeigen */
 @media (max-width: 900px) {
-    .progress {
-        top: auto;
-        right: auto;
-        bottom: 18px;
-        left: 50%;
-
-        flex-direction: row;
-
-        padding: 10px 13px;
-
-        transform: translateX(-50%);
-    }
-
-    .progress-line {
-        width: 24px;
-        height: 1px;
-    }
-
-    .progress-step::after {
-        display: none;
-    }
-
     .section {
         padding:
             calc(var(--navbar-height) + 2rem)
             1.25rem
-            120px;
+            60px;
     }
 }
 
@@ -958,8 +766,25 @@ footer {
         padding: 1rem 1.2rem;
     }
 
+    .nav-container {
+        flex-wrap: wrap;
+        gap: 0.4rem;
+    }
+
+    .logo {
+        font-size: 1.4rem;
+    }
+
     .nav-links {
-        display: none;
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .nav-links a {
+        margin: 0 1.3rem 0 0;
+
+        font-size: 0.92rem;
+        white-space: nowrap;
     }
 
     .hero {
@@ -990,11 +815,11 @@ footer {
         width: 100%;
         max-width: 470px;
 
-        border: 8px solid #161616;
+        border: 8px solid #ffffff;
         border-radius: 26px;
 
         box-shadow:
-            0 25px 60px rgba(0, 245, 212, 0.3);
+            0 25px 60px rgba(15, 165, 143, 0.22);
 
         transition: transform 0.5s ease;
     }
@@ -1024,27 +849,15 @@ footer {
 
     .internship-card div {
         border-right: 0;
-        border-bottom: 1px solid #2d393c;
+        border-bottom: 1px solid #d9e4e1;
     }
 
     .internship-card div:last-child {
         border-bottom: 0;
     }
 
-    .progress {
-        bottom: 12px;
 
-        max-width: calc(100vw - 24px);
-    }
 
-    .progress-step {
-        width: 34px;
-        height: 34px;
-    }
-
-    .progress-line {
-        width: clamp(12px, 5vw, 24px);
-    }
 }
 
 .project-card-link {
@@ -1086,12 +899,12 @@ footer {
     margin-top: 22px;
     font-size: 0.9rem;
     font-weight: 600;
-    color: var(--accent, #00e5cc) !important;
+    color: var(--accent, #0b8f7e) !important;
 }
 
 .project-card-link:hover {
     transform: translateY(-6px);
-    border-color: var(--accent, #00e5cc);
+    border-color: var(--accent, #0b8f7e);
 }
 
 .project-card-link:hover .project-number i {
@@ -1108,7 +921,7 @@ footer {
 }
 
 .project-card-link:focus-visible {
-    outline: 2px solid var(--accent, #00e5cc);
+    outline: 2px solid var(--accent, #0b8f7e);
     outline-offset: 5px;
 }
 
@@ -1139,48 +952,13 @@ footer {
 }
 
 .project-card li a {
-    color: var(--accent, #00e5cc);
+    color: var(--accent, #0b8f7e);
 }
 
-.project-ai {
-    margin-top: 1.2rem;
-    display: flex;
-    align-items: center;
-    gap: 8px;
 
-    color: #8fa8a1;
-    font-size: 0.8rem;
-}
 
-/* Hinweis zur Arbeit mit KI */
-.ai-note {
-    max-width: 900px;
-    margin: 1.6rem auto;
-    padding: 1.2rem 1.4rem;
 
-    border: 1px solid #2d393c;
-    border-left: 3px solid var(--accent, #00e5cc);
-    border-radius: 12px;
 
-    background: rgba(18, 24, 26, 0.92);
-    text-align: left;
-}
-
-.ai-note h3 {
-    margin-bottom: 0.5rem;
-    font-size: 1rem;
-}
-
-.ai-note i {
-    margin-right: 6px;
-    color: var(--accent, #00e5cc);
-}
-
-.ai-note p {
-    color: #9ba6a3;
-    font-size: 0.9rem;
-    line-height: 1.65;
-}
 
 .skills-container {
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -1221,9 +999,9 @@ footer {
 .preview-shot,
 .preview-wide {
     padding: 0;
-    border: 1px solid #2d393c;
+    border: 1px solid #d9e4e1;
     border-radius: 14px;
-    background: #0f1416;
+    background: #f1f6f5;
     overflow: hidden;
     cursor: zoom-in;
     transition: transform 0.25s ease, border-color 0.25s ease;
@@ -1231,7 +1009,7 @@ footer {
 
 .preview-shot:hover,
 .preview-wide:hover {
-    border-color: var(--accent, #00e5cc);
+    border-color: var(--accent, #0b8f7e);
     transform: translateY(-3px);
 }
 
@@ -1251,13 +1029,13 @@ footer {
 .preview-wide span {
     display: block;
     padding: 0.4rem 0.7rem;
-    color: #8fa8a1;
+    color: #566663;
     font-size: 0.72rem;
 }
 
 .preview-caption {
     margin-bottom: 1rem;
-    color: #7d8a87;
+    color: #6f7f7b;
     font-size: 0.72rem;
 }
 
@@ -1273,7 +1051,7 @@ footer {
 }
 
 .zoom-dialog::backdrop {
-    background: rgba(0, 0, 0, 0.82);
+    background: #eef5f3;
 }
 
 .zoom-dialog img {
@@ -1312,17 +1090,17 @@ footer {
     align-items: center;
     gap: 0.5rem;
 
-    border: 1px solid #49635e;
+    border: 1px solid #8fcfc3;
     border-radius: 999px;
 
-    color: #9dc1b9;
+    color: #0b7a6a;
 
     font-size: 0.9rem;
 }
 
 .nav-links a.nav-cv:hover {
-    border-color: #00f5d4;
-    background: rgba(0, 245, 212, 0.08);
+    border-color: #0fa58f;
+    background: rgba(15, 165, 143, 0.08);
 }
 
 .availability {
@@ -1333,11 +1111,11 @@ footer {
     align-items: center;
     gap: 0.5rem;
 
-    border: 1px solid #2d4a45;
+    border: 1px solid #bfe3db;
     border-radius: 999px;
 
-    background: rgba(0, 245, 212, 0.06);
-    color: #9dc1b9;
+    background: rgba(15, 165, 143, 0.06);
+    color: #0b7a6a;
 
     font-size: 0.72rem;
     letter-spacing: 0.08em;
@@ -1350,19 +1128,19 @@ footer {
 
     border-radius: 50%;
 
-    background: #00f5d4;
-    box-shadow: 0 0 0 0 rgba(0, 245, 212, 0.6);
+    background: #0fa58f;
+    box-shadow: 0 0 0 0 rgba(15, 165, 143, 0.6);
 
     animation: availabilityPulse 2.4s ease-out infinite;
 }
 
 @keyframes availabilityPulse {
     70% {
-        box-shadow: 0 0 0 8px rgba(0, 245, 212, 0);
+        box-shadow: 0 0 0 8px rgba(15, 165, 143, 0);
     }
 
     100% {
-        box-shadow: 0 0 0 0 rgba(0, 245, 212, 0);
+        box-shadow: 0 0 0 0 rgba(15, 165, 143, 0);
     }
 }
 
@@ -1370,11 +1148,11 @@ footer {
     border: 1px solid transparent;
 
     background: transparent;
-    color: #9dc1b9;
+    color: #0b7a6a;
 }
 
 .btn.ghost:hover {
-    color: #ffffff;
+    color: #097565;
     transform: translateY(-2px);
 }
 
@@ -1393,15 +1171,15 @@ footer {
 .project-card,
 .skill-card,
 .contact-option {
-    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.03) inset;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset;
 }
 
 .project-card:hover,
 .skill-card:hover,
 .contact-option:hover {
     box-shadow:
-        0 1px 0 rgba(255, 255, 255, 0.03) inset,
-        0 14px 34px -18px rgba(0, 245, 212, 0.35);
+        0 1px 0 rgba(255, 255, 255, 0.6) inset,
+        0 14px 34px -18px rgba(15, 165, 143, 0.35);
 }
 
 .contact-options {
@@ -1409,12 +1187,12 @@ footer {
 }
 
 .contact-option.primary {
-    border-color: #49635e;
+    border-color: #8fcfc3;
     background:
         linear-gradient(
             135deg,
-            rgba(0, 245, 212, 0.1),
-            rgba(18, 24, 26, 0.92) 70%
+            rgba(15, 165, 143, 0.1),
+            #ffffff 70%
         );
 }
 
