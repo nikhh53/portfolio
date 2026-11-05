@@ -124,6 +124,9 @@ function startRoom() {
             <div class="room-rig">
                 <div class="room-glass"></div>
                 <div class="room-floor"></div>
+                <div class="room-rug"></div>
+                <div class="room-sidewall left"></div>
+                <div class="room-sidewall right"></div>
                 <div class="room-plant" style="--x:-1350px"></div>
                 <div class="room-plant" style="--x:1350px"></div>
                 <div class="room-desk">
