@@ -556,7 +556,27 @@ function startOs() {
     updateClock();
     osState.timers.push(window.setInterval(updateClock, OS_CLOCK_INTERVAL));
 
+    // Im Zimmer läuft NIK OS schon, bevor man heranzoomt: Das erste Fenster kommt erst beim Hinfahren
+    if (window.portfolioEntry === 'embed') {
+        window.addEventListener('message', event => {
+            if (event.origin === window.location.origin && event.data && event.data.type === 'room-first-focus') {
+                welcomeInOs(true);
+            }
+        }, { once: true });
+    } else {
+        welcomeInOs(false);
+    }
+}
+
+function welcomeInOs(flyIn) {
     openApp('about');
+
+    if (flyIn) {
+        const first = osState.windows.get('about');
+        first.classList.add('flying-in');
+        first.addEventListener('animationend', () => first.classList.remove('flying-in'), { once: true });
+    }
+
     showToast(visitorCompany
         ? `Willkommen bei NIK OS, ${visitorCompany}! Alles hier ist anklickbar.`
         : 'Willkommen bei NIK OS! Alles hier ist anklickbar.');
