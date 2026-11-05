@@ -13,6 +13,11 @@ const ROOM_DESK_Y = 300;
 const ROOM_FRAME_PAD = 10;
 const ROOM_FRAME_CHIN = 30;
 const ROOM_INTRO_MS = 5600;
+const ROOM_GLASS_PANES = 15;
+const ROOM_GLASS_STEP = 5;
+const ROOM_GLASS_RADIUS = 3400;
+const ROOM_GLASS_CENTER = 2880;
+const ROOM_GLASS_WIDTH = 300;
 const ROOM_FOCUS_MS = 2400;
 const ROOM_FOCUS_EASING = 'cubic-bezier(0.5, 0, 0.15, 1)';
 const ROOM_FRAME_LOGICAL = { width: 1440, height: 900 };
@@ -113,7 +118,8 @@ function startRoom() {
     room.innerHTML = `
         <div class="room-stage">
             <div class="room-rig">
-                <div class="room-wall"><i></i><i></i><i></i></div>
+                <div class="room-glass"></div>
+                <div class="room-floor"></div>
                 <div class="room-desk">
                     <div class="room-mat"></div>
                     <div class="room-notebook"></div>
@@ -131,6 +137,27 @@ function startRoom() {
     `;
 
     const rig = room.querySelector('.room-rig');
+
+    // Glasfront als Bogen aus leicht gegeneinander gekippten Scheiben, wie bei der Elbphilharmonie
+    const glass = room.querySelector('.room-glass');
+
+    for (let i = 0; i < ROOM_GLASS_PANES; i += 1) {
+        const angle = (i - (ROOM_GLASS_PANES - 1) / 2) * ROOM_GLASS_STEP;
+        const facet = i % 2 === 0 ? 2 : -2;
+        const radians = (angle * Math.PI) / 180;
+        const pane = document.createElement('div');
+
+        pane.className = 'room-pane';
+        pane.style.backgroundPosition = `${-i * ROOM_GLASS_WIDTH}px -500px`;
+        pane.style.backgroundSize = `${ROOM_GLASS_PANES * ROOM_GLASS_WIDTH}px 2600px`;
+        pane.style.transform = `translate3d(${ROOM_GLASS_RADIUS * Math.sin(radians)}px, 0, ${ROOM_GLASS_CENTER - ROOM_GLASS_RADIUS * Math.cos(radians)}px) rotateY(${-angle + facet}deg)`;
+
+        if (i % 3 === 0) {
+            pane.classList.add('mullion');
+        }
+
+        glass.append(pane);
+    }
     const back = room.querySelector('.room-back');
     const caption = room.querySelector('.room-caption');
     const hint = room.querySelector('.room-hint');
