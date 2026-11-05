@@ -30,9 +30,9 @@ body.os-active {
     --accent-soft: rgba(0, 229, 204, 0.16);
 }
 
-/* Alles ist in rem gebaut: so passt jede Seite auf einen Bildschirm */
+/* Alles ist in rem gebaut: die Größe folgt dem Bildschirm */
 html {
-    font-size: clamp(11px, min(1.05vw, 1.6vh), 22px);
+    font-size: clamp(13px, min(1.3vw, 1.85vh), 28px);
 }
 
 html:has(body.welcome-active, body.boot-active, body.hard-mode, body.hm-ide-active, body.os-active) {
@@ -106,7 +106,7 @@ body.intro-active .navbar {
 }
 
 .nav-container {
-    max-width: 80rem;
+    max-width: 92rem;
     margin: 0 auto;
     padding: 1.1rem 2.5rem;
 
@@ -202,7 +202,7 @@ body.intro-active .navbar {
 }
 
 .hero-content {
-    max-width: 80rem;
+    max-width: 92rem;
     margin: 0 auto;
     padding: 0 2.5rem;
 
@@ -442,7 +442,7 @@ body.intro-active .navbar {
 .section {
     position: relative;
 
-    max-width: 80rem;
+    max-width: 92rem;
     min-height: 100vh;
 
     margin: 0 auto;
@@ -450,7 +450,7 @@ body.intro-active .navbar {
     padding:
         calc(var(--navbar-height) + 2rem)
         2.5rem
-        3.2rem;
+        4.6rem;
 
     z-index: 2;
 }
@@ -1096,4 +1096,35 @@ footer {
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
     }
+}
+
+/* Seiten mit wenig Inhalt füllen den Bildschirm besser */
+.portfolio-panel[data-panel='skills'].active-panel,
+.portfolio-panel[data-panel='contact'].active-panel {
+    zoom: 1.22;
+    min-height: calc(100vh / 1.22);
+}
+
+.portfolio-panel[data-panel='about'].active-panel {
+    zoom: 1.08;
+    min-height: calc(100vh / 1.08);
+}
+
+/* Technologie-Chips unter dem Titel */
+.tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin: 1.4rem 0 1.8rem;
+    list-style: none;
+}
+
+.tech-tags li {
+    padding: 0.25rem 0.8rem;
+    border: 1.5px solid var(--ink);
+    background: var(--paper-light);
+    box-shadow: 3px 3px 0 var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    line-height: 1.5;
 }
