@@ -540,8 +540,4 @@ body.hard-mode .section {
         padding-left: 1.25rem;
         padding-right: 1.25rem;
     }
-
-    body.hard-mode .progress {
-        display: none;
-    }
 }

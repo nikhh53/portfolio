@@ -11,8 +11,7 @@ body.hm-ide-active {
     padding-bottom: var(--ide-status-height);
 }
 
-body.hm-ide-active .navbar,
-body.hm-ide-active .progress {
+body.hm-ide-active .navbar {
     display: none;
 }
 
