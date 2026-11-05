@@ -198,8 +198,8 @@ function startRoom() {
     }
 
     function introTransform() {
-        const z = ROOM_PERSPECTIVE * (1 - 1 / overviewScale()) - 1500;
-        return rigTransform(z, -68, 0, [0, 35, 0]);
+        const z = ROOM_PERSPECTIVE * (1 - 1 / overviewScale()) - 1900;
+        return rigTransform(z, -16, 0, [0, 35, 0]);
     }
 
     function focusTransform(config) {
