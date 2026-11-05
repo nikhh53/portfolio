@@ -23,10 +23,14 @@ const ROOM_FOCUS_EASING = 'cubic-bezier(0.5, 0, 0.15, 1)';
 const ROOM_FRAME_LOGICAL = { width: 1440, height: 900 };
 
 const ROOM_MONITORS = [
-    { embed: 'os', title: 'NIK OS', hint: 'Mein Portfolio als Betriebssystem', x: -690, z: -50, yaw: 18, width: 560, height: 350 },
-    { embed: 'portfolio', title: 'Portfolio', hint: 'Lebenslauf, Projekte, Kontakt', x: 0, z: -110, yaw: 0, width: 720, height: 450 },
-    { embed: 'hard', title: 'Programmieren', hint: 'Vier Aufgaben schalten die Seite frei', x: 690, z: -50, yaw: -18, width: 560, height: 350 }
+    { embed: 'os', title: 'NIK OS', hint: 'Mein Portfolio als Betriebssystem', x: -668, z: 17, yaw: 22, width: 680, height: 425 },
+    { embed: 'portfolio', title: 'Portfolio', hint: 'Lebenslauf, Projekte, Kontakt', x: 0, z: -110, yaw: 0, width: 680, height: 425 },
+    { embed: 'hard', title: 'Programmieren', hint: 'Vier Aufgaben schalten die Seite frei', x: 668, z: 17, yaw: -22, width: 680, height: 425 }
 ];
+
+// Beim Heranzoomen bleibt an den Seiten Platz für die Nachbarmonitore
+const ROOM_FOCUS_FILL = { width: 0.72, height: 0.86 };
+const ROOM_CAN_LIFT = typeof HTMLElement !== 'undefined' && 'showPopover' in HTMLElement.prototype;
 
 const roomParams = new URLSearchParams(window.location.search);
 const roomEmbed = roomParams.get('embed');
@@ -180,7 +184,7 @@ function startRoom() {
     }
 
     function overviewScale() {
-        return Math.min(window.innerWidth / 2120, window.innerHeight / 780);
+        return Math.min(window.innerWidth / 2450, window.innerHeight / 780);
     }
 
     function overviewTransform(extraYaw = 0, extraPitch = 0) {
@@ -195,8 +199,8 @@ function startRoom() {
 
     function focusTransform(config) {
         const scale = Math.min(
-            (window.innerWidth * 0.97) / config.width,
-            (window.innerHeight * 0.92) / config.height
+            (window.innerWidth * ROOM_FOCUS_FILL.width) / config.width,
+            (window.innerHeight * ROOM_FOCUS_FILL.height) / config.height
         );
         const z = ROOM_PERSPECTIVE * (1 - 1 / scale);
 
@@ -226,8 +230,8 @@ function startRoom() {
         markMoving(animate);
         state = 'overview';
         room.classList.remove('focused');
-        back.hidden = true;
-        caption.hidden = true;
+        setOverlay(back, false);
+        setOverlay(caption, false);
         hint.hidden = false;
 
         setTransition(animate ? ROOM_FOCUS_MS : 0, ROOM_FOCUS_EASING);
@@ -248,7 +252,30 @@ function startRoom() {
     /*
      * Nach der Anfahrt wird der Bildschirm flach vor die Szene gelegt: Der Browser
      * trifft Klicks in einem 3D-Kontext nicht zuverlässig, so bleibt der Inhalt bedienbar.
+     * Mit der Top Layer bleibt die Szene mit den Nachbarmonitoren dahinter stehen,
+     * der Bildschirm wird dabei nicht neu geladen.
      */
+    let liftedMonitor = null;
+
+    function setOverlay(element, visible) {
+        if (!ROOM_CAN_LIFT) {
+            element.hidden = !visible;
+            return;
+        }
+
+        if (visible && !element.matches(':popover-open')) {
+            element.hidden = false;
+            element.setAttribute('popover', 'manual');
+            element.showPopover();
+        } else if (!visible && element.matches(':popover-open')) {
+            element.hidePopover();
+            element.removeAttribute('popover');
+            element.hidden = true;
+        } else if (!visible) {
+            element.hidden = true;
+        }
+    }
+
     function enterFlat(index) {
         const config = ROOM_MONITORS[index];
         const monitor = monitors[index];
@@ -260,12 +287,26 @@ function startRoom() {
             position: fixed;
             top: ${rect.top - ROOM_FRAME_PAD * scale}px;
             left: ${rect.left - ROOM_FRAME_PAD * scale}px;
+            right: auto;
+            bottom: auto;
             width: ${config.width + ROOM_FRAME_PAD * 2}px;
             height: ${config.height + ROOM_FRAME_PAD + ROOM_FRAME_CHIN}px;
             margin: 0;
+            padding: 0;
+            border: 0;
+            overflow: visible;
+            background: none;
             transform: scale(${scale});
             transform-origin: 0 0;
         `;
+
+        if (ROOM_CAN_LIFT) {
+            monitor.setAttribute('popover', 'manual');
+            monitor.showPopover();
+            liftedMonitor = monitor;
+            return;
+        }
+
         // Ohne Übergang umschalten, sonst gleitet die Szene noch einmal zur Seite
         setTransition(0, 'linear');
         room.classList.add('flat');
@@ -273,11 +314,20 @@ function startRoom() {
     }
 
     function leaveFlat() {
-        if (!room.classList.contains('flat')) {
+        const flat = room.classList.contains('flat');
+
+        if (!flat && !liftedMonitor) {
             return;
         }
 
         setTransition(0, 'linear');
+
+        if (liftedMonitor) {
+            liftedMonitor.hidePopover();
+            liftedMonitor.removeAttribute('popover');
+            liftedMonitor = null;
+        }
+
         room.classList.remove('flat');
         monitors.forEach(monitor => {
             if (monitor.dataset.css) {
@@ -308,8 +358,8 @@ function startRoom() {
             enterFlat(index);
             state = 'focused';
             room.classList.add('focused');
-            back.hidden = false;
-            caption.hidden = false;
+            setOverlay(back, true);
+            setOverlay(caption, true);
             const frame = monitors[index].querySelector('iframe');
 
             frame.focus();

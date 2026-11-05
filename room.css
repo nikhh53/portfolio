@@ -447,3 +447,28 @@ body.embedded *::after {
     -webkit-backdrop-filter: none !important;
     backdrop-filter: none !important;
 }
+
+/* Aus der Top Layer: Position bleibt wie gesetzt, die Standardstile des Browsers weichen */
+.room-back:popover-open,
+.room-caption:popover-open {
+    right: auto;
+    margin: 0;
+    border: 0;
+    overflow: visible;
+}
+
+.room-back:popover-open {
+    bottom: auto;
+    color: #eef4f3;
+}
+
+.room-caption:popover-open {
+    top: auto;
+    right: auto;
+    color: #b5c6cc;
+    transform: translateX(-50%);
+}
+
+.room-monitor[popover] {
+    transform-style: flat;
+}
