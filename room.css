@@ -15,8 +15,7 @@ body.room-active > *:not(.room) {
     z-index: 7000;
     overflow: hidden;
 
-    background:
-        radial-gradient(ellipse at 50% 38%, #0d1620 0%, #05090d 55%, #020406 100%);
+    background: linear-gradient(#2b5f95, #5a98cf 28%, #a9cfe8 42%, #e9d8bf 47%, #1d3a50 48%, #0b141c 70%);
     color: #e6eef0;
     font-family: var(--font-text);
 }
@@ -40,24 +39,26 @@ body.room-active > *:not(.room) {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 3200px;
+    width: 2400px;
     height: 1120px;
-    margin: -560px 0 0 -1600px;
+    margin: -560px 0 0 -1200px;
 
     transform: translate3d(0, 300px, 140px) rotateX(90deg);
 
     background:
-        radial-gradient(ellipse 520px 300px at 920px 420px, rgba(170, 215, 255, 0.2), transparent 70%),
-        radial-gradient(ellipse 620px 360px at 1600px 400px, rgba(190, 225, 255, 0.26), transparent 70%),
-        radial-gradient(ellipse 520px 300px at 2290px 420px, rgba(170, 215, 255, 0.2), transparent 70%),
-        linear-gradient(#17222b, #20303b 55%, #2b3d4a);
-    box-shadow: inset 0 -6px 0 #0d151b, 0 0 0 2px #0a1015;
+        radial-gradient(ellipse 520px 300px at 520px 420px, rgba(170, 215, 255, 0.2), transparent 70%),
+        radial-gradient(ellipse 620px 360px at 1200px 400px, rgba(190, 225, 255, 0.26), transparent 70%),
+        radial-gradient(ellipse 520px 300px at 1890px 420px, rgba(170, 215, 255, 0.2), transparent 70%),
+        repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.07) 0 3px, transparent 3px 22px),
+        linear-gradient(#3a2b22, #2c2019 60%, #3d2d23);
+    border-radius: 24px;
+    box-shadow: inset 0 -8px 0 #1a120d, inset 0 3px 0 rgba(255, 220, 170, 0.18), 0 0 0 2px #120c08;
 }
 
 .room-mat {
     position: absolute;
     top: 520px;
-    left: 1180px;
+    left: 780px;
     width: 840px;
     height: 380px;
 
@@ -69,7 +70,7 @@ body.room-active > *:not(.room) {
 .room-keyboard {
     position: absolute;
     top: 580px;
-    left: 1360px;
+    left: 960px;
     width: 480px;
     height: 170px;
 
@@ -84,7 +85,7 @@ body.room-active > *:not(.room) {
 .room-mouse {
     position: absolute;
     top: 610px;
-    left: 1860px;
+    left: 1460px;
     width: 64px;
     height: 104px;
 
@@ -307,8 +308,8 @@ body.embedded .welcome {
 .room-pane {
     position: absolute;
     top: -1000px;
-    left: -152px;
-    width: 304px;
+    left: -62px;
+    width: 124px;
     height: 2100px;
 
     background: url('assets/elbe.svg') 0 0 / 100% 100% no-repeat, #27486e;
@@ -320,8 +321,8 @@ body.embedded .welcome {
     position: absolute;
     inset: 0;
     background:
-        linear-gradient(115deg, rgba(255, 255, 255, 0.1), transparent 45%),
-        linear-gradient(rgba(4, 8, 12, 0.05), rgba(4, 8, 12, 0.3) 70%);
+        linear-gradient(105deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0) 45%, rgba(220, 240, 255, 0.05) 80%),
+        linear-gradient(rgba(10, 30, 50, 0.04), rgba(4, 12, 20, 0.12) 80%);
 }
 
 .room-pane.mullion::before {
@@ -331,27 +332,45 @@ body.embedded .welcome {
     bottom: 0;
     left: 0;
     z-index: 1;
-    width: 14px;
-    background: linear-gradient(90deg, #0d151c, #2a3a47 50%, #0d151c);
+    width: 16px;
+    background: linear-gradient(90deg, #1a232b, #4a5d6b 50%, #1a232b);
 }
 
 .room-floor {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 9000px;
-    height: 3400px;
-    margin: -1700px 0 0 -4500px;
+    width: 16000px;
+    height: 6000px;
+    margin: -3000px 0 0 -8000px;
 
-    transform: translate3d(0, 1100px, 1180px) rotateX(90deg);
-    background: radial-gradient(ellipse at 50% 30%, #1a2a37, #070d12 70%);
+    transform: translate3d(0, 1100px, 2480px) rotateX(90deg);
+
+    /* Dunkler Naturstein mit Spiegelung der Glasfront am hinteren Rand */
+    background:
+        linear-gradient(rgba(150, 195, 230, 0.35), rgba(150, 195, 230, 0) 22%),
+        repeating-linear-gradient(90deg, transparent 0 700px, rgba(255, 255, 255, 0.04) 700px 703px),
+        radial-gradient(ellipse at 50% 18%, #25384a, #0b141c 75%);
+}
+
+.room-plant {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 600px;
+    height: 1500px;
+    margin: -400px 0 0 -300px;
+
+    transform: translate3d(var(--x), 0, -150px);
+    background: url('assets/plant.svg') center / 100% 100% no-repeat;
+    filter: drop-shadow(0 30px 40px rgba(0, 0, 0, 0.4));
 }
 
 /* Kleinigkeiten auf dem Tisch */
 .room-notebook {
     position: absolute;
     top: 570px;
-    left: 1010px;
+    left: 610px;
     width: 190px;
     height: 150px;
 
@@ -367,7 +386,7 @@ body.embedded .welcome {
 .room-mug {
     position: absolute;
     top: 600px;
-    left: 2090px;
+    left: 1690px;
     width: 76px;
     height: 76px;
 
