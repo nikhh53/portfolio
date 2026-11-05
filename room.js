@@ -181,9 +181,22 @@ function startRoom() {
         rig.style.transitionTimingFunction = easing;
     }
 
+    // Während der Fahrt ruht der Lichtstreifen, damit die Bildschirme ruckelfrei bleiben
+    let movingTimer = 0;
+
+    function markMoving(on) {
+        window.clearTimeout(movingTimer);
+        room.classList.toggle('moving', on);
+
+        if (on) {
+            movingTimer = window.setTimeout(() => room.classList.remove('moving'), ROOM_FOCUS_MS + 200);
+        }
+    }
+
     function showOverview(animate = true) {
         window.clearTimeout(focusTimer);
         leaveFlat();
+        markMoving(animate);
         state = 'overview';
         room.classList.remove('focused');
         back.hidden = true;
@@ -256,6 +269,7 @@ function startRoom() {
         const config = ROOM_MONITORS[index];
 
         state = 'zooming';
+        markMoving(true);
         hint.hidden = true;
         monitors[index].classList.add('active');
         caption.textContent = `${config.title}: ${config.hint}`;
