@@ -226,7 +226,10 @@ function startRoom() {
             transform: scale(${scale});
             transform-origin: 0 0;
         `;
+        // Ohne Übergang umschalten, sonst gleitet die Szene noch einmal zur Seite
+        setTransition(0, 'linear');
         room.classList.add('flat');
+        rig.offsetWidth;
     }
 
     function leaveFlat() {
@@ -234,6 +237,7 @@ function startRoom() {
             return;
         }
 
+        setTransition(0, 'linear');
         room.classList.remove('flat');
         monitors.forEach(monitor => {
             if (monitor.dataset.css) {
@@ -241,6 +245,7 @@ function startRoom() {
                 delete monitor.dataset.css;
             }
         });
+        rig.offsetWidth;
     }
 
     function focusMonitor(index) {
@@ -272,7 +277,7 @@ function startRoom() {
                 osWelcomed = true;
                 frame.contentWindow.postMessage({ type: 'room-first-focus' }, window.location.origin);
             }
-        }, ROOM_FOCUS_MS);
+        }, ROOM_FOCUS_MS + 120);
     }
 
     // Kamerafahrt von weit weg: erst Startposition setzen, dann zum Tisch fahren
