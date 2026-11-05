@@ -733,6 +733,18 @@ body.os-active {
     }
 }
 
+/* Erstes Fenster fliegt nach dem Heranzoomen von rechts herein */
+.os-window.flying-in {
+    animation: os-fly-in 1s cubic-bezier(0.16, 0.84, 0.3, 1) both;
+}
+
+@keyframes os-fly-in {
+    from {
+        opacity: 0;
+        transform: translateX(70vw);
+    }
+}
+
 @keyframes os-slide {
     from {
         opacity: 0;

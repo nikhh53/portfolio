@@ -372,3 +372,43 @@ body.embedded .welcome {
 .room.flat .room-monitor.active {
     transform-style: flat;
 }
+
+/* Bildschirme wirken wie Live-Übertragungen: ein sanfter Lichtstreifen läuft darüber */
+.room-screen::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(105deg, transparent 35%, rgba(190, 225, 255, 0.07) 50%, transparent 65%);
+    background-size: 260% 100%;
+    animation: roomShine 9s linear infinite;
+}
+
+.room.focused .room-screen::after {
+    display: none;
+}
+
+@keyframes roomShine {
+    from {
+        background-position: 130% 0;
+    }
+
+    to {
+        background-position: -130% 0;
+    }
+}
+
+.room-back,
+.room-caption {
+    animation: roomHint 0.7s ease both;
+}
+
+.room-caption {
+    animation-name: roomCaption;
+}
+
+@keyframes roomCaption {
+    from {
+        opacity: 0;
+    }
+}

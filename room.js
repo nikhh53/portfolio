@@ -13,7 +13,8 @@ const ROOM_DESK_Y = 300;
 const ROOM_FRAME_PAD = 10;
 const ROOM_FRAME_CHIN = 30;
 const ROOM_INTRO_MS = 5600;
-const ROOM_FOCUS_MS = 1700;
+const ROOM_FOCUS_MS = 2400;
+const ROOM_FOCUS_EASING = 'cubic-bezier(0.5, 0, 0.15, 1)';
 const ROOM_FRAME_LOGICAL = { width: 1440, height: 900 };
 
 const ROOM_MONITORS = [
@@ -144,6 +145,7 @@ function startRoom() {
     document.body.append(room);
 
     let state = 'intro';
+    let osWelcomed = false;
     let focusTimer = 0;
 
     function rigTransform(z, rotateX, rotateY, offset) {
@@ -188,7 +190,7 @@ function startRoom() {
         caption.hidden = true;
         hint.hidden = false;
 
-        setTransition(animate ? ROOM_FOCUS_MS : 0, 'cubic-bezier(0.65, 0, 0.35, 1)');
+        setTransition(animate ? ROOM_FOCUS_MS : 0, ROOM_FOCUS_EASING);
         look.x = 0;
         look.y = 0;
         look.targetX = 0;
@@ -253,7 +255,7 @@ function startRoom() {
         monitors[index].classList.add('active');
         caption.textContent = `${config.title}: ${config.hint}`;
 
-        setTransition(ROOM_FOCUS_MS, 'cubic-bezier(0.65, 0, 0.35, 1)');
+        setTransition(ROOM_FOCUS_MS, ROOM_FOCUS_EASING);
         rig.style.transform = focusTransform(config);
 
         focusTimer = window.setTimeout(() => {
@@ -262,7 +264,14 @@ function startRoom() {
             room.classList.add('focused');
             back.hidden = false;
             caption.hidden = false;
-            monitors[index].querySelector('iframe').focus();
+            const frame = monitors[index].querySelector('iframe');
+
+            frame.focus();
+
+            if (config.embed === 'os' && !osWelcomed) {
+                osWelcomed = true;
+                frame.contentWindow.postMessage({ type: 'room-first-focus' }, window.location.origin);
+            }
         }, ROOM_FOCUS_MS);
     }
 
