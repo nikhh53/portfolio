@@ -1,0 +1,358 @@
+/*
+ * Der Schreibtisch: Startseite als Tisch mit Brief, Foto und Gegenständen,
+ * jeder Bereich öffnet sich als Blatt Papier darauf.
+ * Alles ist auf body.desk begrenzt, damit hard_mode und NIK OS unverändert bleiben.
+ */
+
+/* Standardmäßig unsichtbar, nur auf dem Schreibtisch sichtbar */
+.desk-items,
+.sheet-close,
+.nav-desk {
+    display: none;
+}
+
+body.desk:not(.hard-mode):not(.hm-ide-active):not(.os-active) {
+    --desk: #16202a;
+    --desk-light: #243543;
+
+    background-color: var(--desk);
+    background-image:
+        radial-gradient(ellipse at 25% 15%, var(--desk-light) 0%, transparent 60%),
+        radial-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+    background-size: auto, 24px 24px;
+    background-attachment: fixed;
+}
+
+body.desk:not(.hard-mode):not(.hm-ide-active):not(.os-active) .nav-desk {
+    display: inline;
+}
+
+/* Kopfzeile: dunkle Leiste über dem Tisch */
+body.desk:not(.hard-mode):not(.hm-ide-active):not(.os-active) .navbar {
+    background: #0e161d;
+    border-bottom: 1px solid #2b3b48;
+}
+
+body.desk:not(.hard-mode):not(.hm-ide-active):not(.os-active) .navbar::after {
+    display: none;
+}
+
+body.desk:not(.hard-mode):not(.hm-ide-active):not(.os-active) .logo,
+body.desk:not(.hard-mode):not(.hm-ide-active):not(.os-active) .nav-links a {
+    color: #eef4f3;
+}
+
+body.desk:not(.hard-mode):not(.hm-ide-active):not(.os-active) .nav-links a:not(.nav-cv)::after {
+    background: var(--accent);
+}
+
+body.desk:not(.hard-mode):not(.hm-ide-active):not(.os-active) .nav-links a.nav-cv {
+    border-color: #eef4f3;
+}
+
+body.desk:not(.hard-mode):not(.hm-ide-active):not(.os-active) .nav-links a.nav-cv:hover {
+    background: #eef4f3;
+    color: #0e161d;
+}
+
+body.desk:not(.hard-mode):not(.hm-ide-active):not(.os-active) footer {
+    background: transparent;
+    color: rgba(238, 244, 243, 0.4);
+    pointer-events: none;
+}
+
+/* Startseite */
+body.desk:not(.hard-mode):not(.hm-ide-active):not(.os-active) .hero {
+    min-height: 100vh;
+    padding: 2rem 2.5rem 3rem;
+}
+
+body.desk:not(.hard-mode):not(.hm-ide-active):not(.os-active) .hero-content {
+    width: 100%;
+    max-width: 96rem;
+    padding: 0;
+
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+    gap: 3.5rem;
+}
+
+/* Der Brief */
+body.desk:not(.hard-mode):not(.hm-ide-active):not(.os-active) .hero-text {
+    position: relative;
+    padding: 2.4rem 2.8rem 2.6rem;
+
+    background: var(--paper-light);
+    box-shadow:
+        0 30px 60px rgba(0, 0, 0, 0.5),
+        10px 10px 0 var(--accent);
+
+    transform: rotate(-0.8deg);
+}
+
+body.desk:not(.hard-mode):not(.hm-ide-active):not(.os-active) .hero-text h1 {
+    font-size: 3.5rem;
+}
+
+body.desk:not(.hard-mode):not(.hm-ide-active):not(.os-active) .hero-text h2 {
+    margin-bottom: 1.1rem;
+    font-size: 1.35rem;
+}
+
+body.desk:not(.hard-mode):not(.hm-ide-active):not(.os-active) .hero-description {
+    margin-bottom: 1.2rem;
+    font-size: 1rem;
+}
+
+body.desk:not(.hard-mode):not(.hm-ide-active):not(.os-active) .hero-meta {
+    margin-bottom: 1rem;
+}
+
+body.desk:not(.hard-mode):not(.hm-ide-active):not(.os-active) .tech-tags {
+    margin: 0 0 1.4rem;
+}
+
+/* Rechte Seite: Foto und Gegenstände */
+body.desk:not(.hard-mode):not(.hm-ide-active):not(.os-active) .hero-side {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.6rem;
+}
+
+body.desk:not(.hard-mode):not(.hm-ide-active):not(.os-active) .hero-image {
+    width: 13rem;
+    padding: 0.8rem 0 1rem;
+    align-self: flex-start;
+    margin-left: 1rem;
+}
+
+body.desk:not(.hard-mode):not(.hm-ide-active):not(.os-active) .desk-items {
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem 1.4rem;
+}
+
+.desk-item {
+    position: relative;
+    min-height: 7.2rem;
+    padding: 0.9rem 1.1rem;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 0.15rem;
+
+    border: 0;
+    color: var(--ink);
+    text-align: left;
+    cursor: pointer;
+
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.45);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.desk-item:hover,
+.desk-item:focus-visible {
+    box-shadow: 0 22px 36px rgba(0, 0, 0, 0.55);
+    outline: none;
+    transform: translateY(-6px) rotate(0deg);
+}
+
+.desk-item:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+.item-kicker {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.7;
+}
+
+.desk-item strong {
+    font-family: var(--font-display);
+    font-size: 1.45rem;
+    font-weight: 700;
+    line-height: 1.15;
+}
+
+.desk-item small {
+    font-size: 0.78rem;
+    line-height: 1.35;
+    opacity: 0.8;
+}
+
+/* Notizbuch: liniertes Papier mit Rücken */
+.item-notebook {
+    background-color: var(--paper-light);
+    background-image: repeating-linear-gradient(
+        transparent 0,
+        transparent 1.15rem,
+        rgba(18, 165, 138, 0.28) 1.15rem,
+        rgba(18, 165, 138, 0.28) calc(1.15rem + 1px)
+    );
+    border-left: 0.7rem solid var(--accent);
+    transform: rotate(-2deg);
+}
+
+/* Post-it in Handschrift */
+.item-postit {
+    background: #cdeee5;
+    transform: rotate(2.2deg);
+}
+
+.item-postit strong,
+.item-postit small {
+    font-family: 'Caveat', var(--font-text);
+}
+
+.item-postit strong {
+    font-size: 1.9rem;
+}
+
+.item-postit small {
+    font-size: 1.05rem;
+    opacity: 0.9;
+}
+
+/* Laptop: Bildschirm mit Huddl */
+.item-laptop {
+    background:
+        linear-gradient(rgba(8, 14, 19, 0.35) 0%, rgba(8, 14, 19, 0.96) 70%),
+        url('assets/huddl-start.webp') center top / cover,
+        #0b1218;
+    border: 2px solid #3a4c5a;
+    border-bottom-width: 0.6rem;
+    border-radius: 0.5rem 0.5rem 0.2rem 0.2rem;
+    color: #eef4f3;
+    transform: rotate(1.4deg);
+}
+
+/* Visitenkarte */
+.item-card {
+    background: var(--paper-light);
+    border-top: 0.4rem solid var(--accent);
+    transform: rotate(-1.2deg);
+}
+
+.item-card small {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+}
+
+/* Bereiche als Blatt auf dem Tisch */
+body.desk:not(.hard-mode):not(.hm-ide-active):not(.os-active) main:has(.portfolio-panel.active-panel) {
+    min-height: 100vh;
+    padding: calc(var(--navbar-height) + 1.4rem) 1.5rem 3rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body.desk:not(.hard-mode):not(.hm-ide-active):not(.os-active) .portfolio-panel.active-panel {
+    position: relative;
+    width: 100%;
+    max-width: 80rem;
+    min-height: 0;
+    max-height: calc(100vh - var(--navbar-height) - 4.8rem);
+    margin: 0;
+    padding: 2.6rem 3rem 2.4rem;
+
+    overflow-y: auto;
+    align-content: start;
+    zoom: 1;
+
+    background: var(--paper-light);
+    box-shadow:
+        inset 0 0.45rem 0 var(--accent),
+        0 30px 70px rgba(0, 0, 0, 0.55);
+}
+
+body.desk:not(.hard-mode):not(.hm-ide-active):not(.os-active) .sheet-close {
+    position: absolute;
+    top: 1.1rem;
+    right: 1.4rem;
+    z-index: 3;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.3rem 0.8rem;
+
+    background: transparent;
+    border: 1.5px solid var(--ink);
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    cursor: pointer;
+}
+
+body.desk:not(.hard-mode):not(.hm-ide-active):not(.os-active) .sheet-close:hover {
+    background: var(--ink);
+    color: var(--paper-light);
+}
+
+/* Rechtes Blattende freihalten für den Schließen-Knopf */
+body.desk:not(.hard-mode):not(.hm-ide-active):not(.os-active) .portfolio-panel .section-head,
+body.desk:not(.hard-mode):not(.hm-ide-active):not(.os-active) .portfolio-panel .section-body {
+    margin-top: 0.6rem;
+}
+
+/* Handy und Tablet: normal scrollen, Gegenstände untereinander */
+@media (max-width: 960px) {
+    body.desk:not(.hard-mode):not(.hm-ide-active):not(.os-active) {
+        background-attachment: scroll;
+    }
+
+    body.desk:not(.hard-mode):not(.hm-ide-active):not(.os-active) .hero {
+        padding: 5rem 1.25rem 4rem;
+    }
+
+    body.desk:not(.hard-mode):not(.hm-ide-active):not(.os-active) .hero-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    body.desk:not(.hard-mode):not(.hm-ide-active):not(.os-active) .hero-text {
+        padding: 1.6rem 1.4rem;
+        transform: none;
+    }
+
+    body.desk:not(.hard-mode):not(.hm-ide-active):not(.os-active) .hero-text h1 {
+        font-size: 2.6rem;
+    }
+
+    body.desk:not(.hard-mode):not(.hm-ide-active):not(.os-active) .hero-image {
+        align-self: center;
+        margin-left: 0;
+    }
+
+    body.desk:not(.hard-mode):not(.hm-ide-active):not(.os-active) main:has(.portfolio-panel.active-panel) {
+        padding: calc(var(--navbar-height) + 1rem) 0.9rem 3.5rem;
+    }
+
+    body.desk:not(.hard-mode):not(.hm-ide-active):not(.os-active) .portfolio-panel.active-panel {
+        max-height: none;
+        overflow: visible;
+        padding: 3.2rem 1.3rem 1.6rem;
+    }
+
+    body.desk:not(.hard-mode):not(.hm-ide-active):not(.os-active) .sheet-close {
+        top: 0.9rem;
+        right: 1rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .desk-item {
+        transition: none;
+    }
+}
