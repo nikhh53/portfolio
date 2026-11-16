@@ -320,7 +320,6 @@ nav a {
 }
 
 .project .shot {
-    justify-self: start;
     padding: 0;
     border: 0;
     background: none;
@@ -494,6 +493,13 @@ nav a {
 }
 
 @media(max-width:800px) {
+    .project-wide {
+        width: 82vw;
+        grid-template-columns: 1fr;
+    }
+    .shots img {
+        max-height: 22vh;
+    }
     .hero .surname {
         font-size: 16.5vw;
         top: 24%;
@@ -1011,4 +1017,31 @@ body:before {
     bottom: 18px;
     font-size: 13px;
     color: var(--m);
+}
+
+.project-wide {
+    width: min(100vw,1180px);
+    grid-template-columns: 1fr 1.5fr;
+}
+
+.shots {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+}
+
+.shots .shot:nth-child(2) {
+    transform: rotate(-2deg) translateY(4vh);
+}
+
+.shots .shot:nth-child(3) {
+    transform: rotate(2deg);
+}
+
+.shots .shot:hover {
+    transform: rotate(0) scale(1.04);
+}
+
+.shots img {
+    max-height: 46vh;
 }
