@@ -41,18 +41,13 @@ nav {
     left: 0;
     right: 0;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
     padding: 20px 5vw;
     z-index: 10;
     mix-blend-mode: difference;
     color: #fff;
     font-size: 14px;
-}
-
-nav b {
-    font-size: 18px;
-    letter-spacing: .04em;
 }
 
 nav a {
@@ -226,7 +221,7 @@ nav a {
 
 .nums b {
     display: block;
-    font-size: min(16vw,230px);
+    font-size: min(9vw,120px);
     line-height: .9;
     font-weight: 900;
     color: var(--amber);
@@ -284,14 +279,14 @@ nav a {
 }
 
 .project .project-index {
-    font-size: min(22vw,330px);
+    font-size: min(13vw,180px);
     font-weight: 900;
     line-height: .8;
     color: transparent;
     -webkit-text-stroke: 2px var(--ink);
     opacity: .5;
     grid-column: 1/-1;
-    margin-bottom: -4vh;
+    margin-bottom: 1vh;
 }
 
 .project h3 {
@@ -323,12 +318,27 @@ nav a {
     font-size: 13px;
 }
 
+.project .shot {
+    justify-self: start;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: zoom-in;
+    transform: rotate(3deg);
+    transition: transform .3s;
+}
+
+.project .shot:hover {
+    transform: rotate(0) scale(1.03);
+}
+
 .project img {
-    width: 100%;
-    max-width: 340px;
+    display: block;
+    width: auto;
+    max-width: 100%;
+    max-height: 50vh;
     border-radius: 26px;
     box-shadow: 0 30px 60px #00000066;
-    transform: rotate(3deg);
 }
 
 .term {
@@ -350,7 +360,7 @@ nav a {
 .skills .row {
     color: var(--amber);
     white-space: nowrap;
-    font-size: min(14vw,210px);
+    font-size: min(7vw,100px);
     font-weight: 900;
     letter-spacing: -.04em;
     line-height: 1.05;
@@ -923,4 +933,81 @@ body:before {
     height: 1px;
     overflow: hidden;
     clip-path: inset(50%);
+}
+
+.skills .skill-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(240px,1fr));
+    gap: 1px;
+    margin: 8vh 5vw 0;
+    background: #ffffff22;
+    border: 1px solid #ffffff22;
+}
+
+.skill-list div {
+    padding: 22px;
+    background: #232b45;
+}
+
+.skill-list dt {
+    font-weight: 700;
+    color: var(--amber);
+    margin-bottom: 6px;
+}
+
+.skill-list dd {
+    color: var(--ink);
+    font-size: 15px;
+    opacity: .85;
+}
+
+.lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2vw;
+    background: #0b0e17ee;
+    backdrop-filter: blur(6px);
+}
+
+.lightbox[hidden] {
+    display: none;
+}
+
+.lightbox img {
+    max-width: min(80vw,520px);
+    max-height: 86vh;
+    border-radius: 24px;
+    box-shadow: 0 30px 80px #000;
+}
+
+.lightbox button {
+    border: 0;
+    color: var(--ink);
+    background: #ffffff1a;
+    font-size: 30px;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.lightbox button:hover {
+    background: #ffffff33;
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.lightbox-note {
+    position: absolute;
+    bottom: 18px;
+    font-size: 13px;
+    color: var(--m);
 }

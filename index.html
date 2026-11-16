@@ -16,7 +16,6 @@
     <div class="orb orb-cool" id="orb-cool"></div>
 
     <nav>
-        <b>NB</b>
         <div>
             <a href="#about">Über mich</a>
             <a href="#projects">Projekte</a>
@@ -80,7 +79,7 @@
                             <p>Private Familien-App mit Kalender, Chat, Einkaufslisten, Aufgaben und Stammbaum. Rechte für Eltern, Kinder und Gäste prüft der Server, angemeldet wird mit Passkeys.</p>
                             <div class="tags"><i>TypeScript</i><i>React</i><i>PostgreSQL</i><i>Docker</i></div>
                         </div>
-                        <img src="assets/huddl-start.webp" alt="Startseite von Huddl mit Demo-Daten" loading="lazy">
+                        <button class="shot" type="button" data-gallery aria-label="Huddl-Screenshots vergrößern"><img src="assets/huddl-start.webp" alt="Startseite von Huddl mit Demo-Daten" loading="lazy"></button>
                     </article>
                     <article class="project" style="--c: #5b8fe244">
                         <div class="project-index">02</div>
@@ -121,7 +120,16 @@
             <small class="label" style="padding: 0 5vw">02 / KENNTNISSE</small>
             <div class="row" id="skills-a" aria-hidden="true">TypeScript <span class="sep">✦</span> React <span class="sep">✦</span> Node.js <span class="sep">✦</span> PostgreSQL <span class="sep">✦</span> Docker <span class="sep">✦</span></div>
             <div class="row outline" id="skills-b" aria-hidden="true">Linux <span class="sep">✦</span> Python <span class="sep">✦</span> SQL <span class="sep">✦</span> Git <span class="sep">✦</span> Pull Requests <span class="sep">✦</span></div>
-            <p class="visually-hidden">TypeScript, React, Node.js, PostgreSQL, Docker, Linux, Python, SQL, Git und Pull Requests.</p>
+            <dl class="skill-list">
+                <div><dt>TypeScript</dt><dd>Typsicherer Server- und Web-Code, Validierung mit Zod.</dd></div>
+                <div><dt>React</dt><dd>Oberflächen für eine installierbare Web-App (PWA) mit Vite.</dd></div>
+                <div><dt>Node.js</dt><dd>Server, APIs, Rechteprüfung und Anmeldung mit Passkeys.</dd></div>
+                <div><dt>SQL / PostgreSQL</dt><dd>Tabellenmodelle, Migrationen und Abfragen.</dd></div>
+                <div><dt>Docker / Linux</dt><dd>Betrieb auf eigenem Server mit Docker Compose, Backups und Updates.</dd></div>
+                <div><dt>Python</dt><dd>Objektorientierung, Datenverarbeitung und Desktop-GUIs.</dd></div>
+                <div><dt>JavaScript, HTML / CSS</dt><dd>Interaktionen und responsive Layouts.</dd></div>
+                <div><dt>Git / Pull Requests</dt><dd>Reviews, Tests und nachvollziehbare Änderungen.</dd></div>
+            </dl>
         </section>
 
         <section class="path" id="path">
@@ -140,9 +148,17 @@
             <a class="button" href="mailto:nikhh53@gmail.com">E-Mail schreiben</a>
             <a class="button ghost" href="lebenslauf.pdf">Lebenslauf (PDF)</a>
             <a class="button ghost" href="https://github.com/nikhh53" rel="noopener">GitHub</a>
-            <div class="footer">© 2026 Niklas Bakowsky · <a href="klassisch.html">Klassische Ansicht mit Schreibtisch, Terminal und NIK OS</a></div>
+            <div class="footer">© 2026 Niklas Bakowsky</div>
         </section>
     </main>
+
+    <div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="Huddl-Screenshots">
+        <button class="lightbox-close" type="button" aria-label="Schließen">×</button>
+        <button class="lightbox-nav" type="button" data-step="-1" aria-label="Vorheriger Screenshot">‹</button>
+        <img id="lightbox-img" alt="">
+        <button class="lightbox-nav" type="button" data-step="1" aria-label="Nächster Screenshot">›</button>
+        <p class="lightbox-note">Screenshots mit erfundenen Demo-Daten</p>
+    </div>
 
     <script src="neu.js?v=20261116"></script>
 </body>
