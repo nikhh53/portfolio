@@ -45,9 +45,9 @@ nav {
     align-items: center;
     padding: 20px 5vw;
     z-index: 10;
-    mix-blend-mode: difference;
-    color: #fff;
+    color: var(--ink);
     font-size: 14px;
+    background: linear-gradient(var(--sand),transparent);
 }
 
 nav a {
@@ -127,7 +127,7 @@ nav a {
     position: absolute;
     left: 5vw;
     bottom: 9vh;
-    max-width: 460px;
+    max-width: min(460px,34vw);
     z-index: 3;
     font-size: 19px;
 }
@@ -944,7 +944,7 @@ body:before {
 
 .skills .skill-list {
     display: grid;
-    grid-template-columns: repeat(auto-fit,minmax(240px,1fr));
+    grid-template-columns: repeat(4,1fr);
     gap: 1px;
     margin: 8vh 5vw 0;
     background: #ffffff22;
@@ -1044,4 +1044,30 @@ body:before {
 
 .shots img {
     max-height: 46vh;
+}
+
+@media(max-width:800px) {
+    .project-wide {
+        width: 82vw;
+        grid-template-columns: 1fr;
+    }
+    .shots {
+        gap: 10px;
+    }
+    .shots img {
+        max-height: 22vh;
+    }
+    .hero .intro {
+        max-width: 230px;
+    }
+    .path .step,.path .step:nth-child(even) {
+        width: calc(100% - 14vw);
+        margin-left: 14vw;
+    }
+    .path .path-line-track {
+        left: 3vw;
+    }
+    .path .step:nth-child(odd):before,.path .step:nth-child(even):before {
+        left: calc(-16vw - 8px);
+    }
 }
