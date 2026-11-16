@@ -126,9 +126,11 @@ function closeGallery() {
     lightbox.hidden = true;
 }
 
-document.querySelector('[data-gallery]').addEventListener('click', () => {
-    showGallery(0);
-    lightbox.hidden = false;
+document.querySelectorAll('[data-gallery]').forEach(shot => {
+    shot.addEventListener('click', () => {
+        showGallery(Number(shot.dataset.gallery));
+        lightbox.hidden = false;
+    });
 });
 lightbox.addEventListener('click', event => {
     if (event.target === lightbox || event.target.closest('.lightbox-close')) closeGallery();
