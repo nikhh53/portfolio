@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Portfolio von Niklas Bakowsky, Fachinformatiker-Umschulung (Anwendungsentwicklung). Eigene Web-App Huddl mit TypeScript, React und PostgreSQL. Suche Umschulungspraktikum in Hamburg."
+    >
+
+    <title>Niklas Bakowsky | Anwendungsentwickler</title>
+
+    <link rel="stylesheet" href="style.css?v=20261112">
+    <link rel="stylesheet" href="desk.css?v=20261112">
+    <link rel="stylesheet" href="room.css?v=20261127">
+    <link rel="stylesheet" href="welcome.css?v=20261112">
+    <link rel="stylesheet" href="boot.css?v=20261112">
+    <link rel="stylesheet" href="hardmode.css?v=20261112">
+    <link rel="stylesheet" href="hardmode-ide.css?v=20261112">
+    <link rel="stylesheet" href="hardmode-finale.css?v=20261112">
+    <link rel="stylesheet" href="os.css?v=20261112">
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    >
+
+    <style>
+        @import url(
+            'https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500..800;1,9..144,400..600&family=Instrument+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&family=Caveat:wght@600&display=swap'
+        );
+    </style>
+
+    <!--
+        Bis der Willkommensbildschirm steht, bleibt die Seite verdeckt,
+        damit das Portfolio nicht kurz aufblitzt. Regel und Klasse stehen
+        bewusst hier und nicht in welcome.css: So wirken sie auch dann
+        sofort, wenn der Browser noch eine alte Fassung der Stildatei im
+        Zwischenspeicher hat. Ohne JavaScript wird die Klasse nie gesetzt
+        und die Seite ist ganz normal sichtbar.
+    -->
+    <style>
+        html.pre-welcome {
+            background: #f3f6f6;
+        }
+
+        html.pre-welcome body {
+            visibility: hidden;
+        }
+
+        html.pre-welcome .welcome {
+            visibility: visible;
+        }
+    </style>
+
+    <script>
+        document.documentElement.classList.add('pre-welcome');
+
+        // Sollte welcome.js einmal nicht laden, wird die Seite trotzdem sichtbar
+        window.setTimeout(
+            () => document.documentElement.classList.remove('pre-welcome'),
+            4000
+        );
+    </script>
+</head>
+
+<body class="intro-active desk">
+
+    <!-- Hauptnavigation -->
+    <nav
+        class="navbar"
+        aria-label="Hauptnavigation"
+    >
+        <div class="nav-container">
+
+            <div class="logo">
+                Niklas <em>Bakowsky</em>
+            </div>
+
+            <div class="nav-links">
+                <a
+                    class="nav-desk"
+                    href="#hero"
+                    data-target="hero"
+                >
+                    Schreibtisch
+                </a>
+
+                <a
+                    href="#about"
+                    data-target="about"
+                >
+                    Über mich
+                </a>
+
+                <a
+                    href="#skills"
+                    data-target="skills"
+                >
+                    Skills
+                </a>
+
+                <a
+                    href="#projects"
+                    data-target="projects"
+                >
+                    Projekte
+                </a>
+
+                <a
+                    href="#contact"
+                    data-target="contact"
+                >
+                    Kontakt
+                </a>
+
+                <a
+                    class="nav-cv"
+                    href="lebenslauf.pdf"
+                    target="_blank"
+                    rel="noopener"
+                >
+                    <i class="fas fa-file-pdf"></i>
+                    Lebenslauf
+                </a>
+            </div>
+
+        </div>
+    </nav>
+
+    <!-- Startseite -->
+    <header
+        class="hero active-panel"
+        id="hero"
+        data-panel="hero"
+    >
+        <div class="hero-content">
+
+            <div class="hero-text">
+
+                <p class="eyebrow">
+                    Portfolio
+                    <span class="availability">
+                        Praktikum ab Juni 2027
+                    </span>
+                </p>
+
+                <h1>
+                    Hallo, ich bin
+                    <span class="highlight">
+                        Niklas Bakowsky
+                    </span>
+                </h1>
+
+                <h2 id="typing-subtitle">
+                    Anwendungsentwickler in der Umschulung
+                </h2>
+
+                <p class="hero-description">
+                    Ich entwickle neben meiner Umschulung eine echte Anwendung:
+                    Huddl, eine Familien-App mit Rechtemodell, Kalender, Chat
+                    und Passkey-Login, mit TypeScript, React und PostgreSQL.
+                    Für mein Praktikum in Hamburg suche ich ein
+                    Entwicklerteam, in dem ich daraus lernen und mitarbeiten kann.
+                </p>
+
+                <div class="hero-meta">
+
+                    <span>
+                        <i class="fas fa-location-dot"></i>
+                        Hamburg
+                    </span>
+
+                    <span>
+                        <i class="fas fa-briefcase"></i>
+                        Etwa 8 Monate
+                    </span>
+
+                    <span>
+                        <i class="fas fa-calendar"></i>
+                        07.06.2027 - 31.01.2028
+                    </span>
+
+                </div>
+
+                <ul class="tech-tags" aria-label="Technologien">
+                    <li>TypeScript</li>
+                    <li>React</li>
+                    <li>Node.js</li>
+                    <li>PostgreSQL</li>
+                    <li>Docker</li>
+                </ul>
+
+                <div class="hero-buttons">
+
+                    <button
+                        type="button"
+                        class="btn primary start-button"
+                        data-target="about"
+                    >
+                        Portfolio ansehen
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btn secondary"
+                        data-target="contact"
+                    >
+                        Kontakt
+                    </button>
+
+                    <a
+                        class="btn ghost"
+                        href="lebenslauf.pdf"
+                        target="_blank"
+                        rel="noopener"
+                    >
+                        <i class="fas fa-file-pdf"></i>
+                        Lebenslauf
+                    </a>
+
+                </div>
+
+            </div>
+
+            <div class="hero-side">
+
+            <div class="hero-image">
+                    <img
+                        src="büro.jpeg"
+                        alt="Niklas Bakowsky"
+                    >
+                </div>
+
+                <div class="desk-items" aria-label="Bereiche des Portfolios">
+
+                    <button type="button" class="desk-item item-notebook" data-target="about">
+                        <span class="item-kicker">Notizbuch</span>
+                        <strong>Über mich</strong>
+                        <small>Wer ich bin und was ich suche</small>
+                    </button>
+
+                    <button type="button" class="desk-item item-postit" data-target="skills">
+                        <span class="item-kicker">Post-it</span>
+                        <strong>Skills</strong>
+                        <small>TypeScript, React, SQL, Docker</small>
+                    </button>
+
+                    <button type="button" class="desk-item item-laptop" data-target="projects">
+                        <span class="item-kicker">Laptop</span>
+                        <strong>Projekte</strong>
+                        <small>Huddl und mehr</small>
+                    </button>
+
+                    <button type="button" class="desk-item item-card" data-target="contact">
+                        <span class="item-kicker">Visitenkarte</span>
+                        <strong>Kontakt</strong>
+                        <small>nikhh53@gmail.com</small>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+    </header>
+
+    <main id="portfolio-content">
+
+        <!-- Über mich -->
+        <section
+            id="about"
+            class="section portfolio-panel"
+            data-panel="about"
+        >
+            <button type="button" class="sheet-close" data-target="hero">
+                <i class="fas fa-arrow-left"></i> Schreibtisch
+            </button>
+            <div class="section-head">
+            <p class="section-kicker">
+                Über mich
+            </p>
+
+            <h2 id="about-title">
+                Entwicklung mit Praxisbezug
+            </h2>
+            </div>
+
+            <div class="section-body">
+<div class="about-content">
+
+                <p>
+                    Ich absolviere aktuell eine Umschulung zum
+                    Fachinformatiker für Anwendungsentwicklung.
+                    Besonders motiviert mich, aus einer Idee eine
+                    funktionierende und verständliche Anwendung
+                    zu entwickeln, die echte Menschen nutzen.
+                </p>
+
+                <p>
+                    Neben der Umschulung führe ich ein eigenes kleines
+                    Unternehmen für Discord-Bots und Web-Anwendungen
+                    und betreibe die Software selbst auf einem eigenen
+                    Server. Dadurch kenne ich nicht nur das Programmieren,
+                    sondern auch Tests, Releases, Backups und Betrieb.
+                </p>
+
+                <p>
+                    Größere Projekte entstehen mit KI-Unterstützung
+                    (Claude Code). Ziel, Aufbau und Prüfung liegen bei mir,
+                    und ich erkläre gern, wie alles funktioniert.
+                </p>
+
+            </div>
+
+            <div class="internship-card">
+
+                <div>
+                    <span>Gesucht</span>
+                    <strong>Umschulungspraktikum</strong>
+                </div>
+
+                <div>
+                    <span>Dauer</span>
+                    <strong>Etwa 8 Monate</strong>
+                </div>
+
+                <div>
+                    <span>Region</span>
+                    <strong>
+                        Hamburg - bevorzugt West
+                    </strong>
+                </div>
+
+                <div>
+                    <span>Zeitraum</span>
+                    <strong>
+                        07.06.2027 - 31.01.2028
+                    </strong>
+                </div>
+
+            </div>
+            </div>
+        </section>
+
+        <!-- Skills -->
+        <section
+            id="skills"
+            class="section portfolio-panel"
+            data-panel="skills"
+        >
+            <button type="button" class="sheet-close" data-target="hero">
+                <i class="fas fa-arrow-left"></i> Schreibtisch
+            </button>
+            <div class="section-head">
+            <p class="section-kicker">
+                Kenntnisse
+            </p>
+
+            <h2>
+                Technologien, mit denen ich arbeite
+            </h2>
+
+            <p class="section-intro">
+                Diese Übersicht basiert auf meinen Projekten, vor allem Huddl.
+            </p>
+            </div>
+
+            <div class="section-body">
+<div class="skills-container">
+
+                <div class="skill-card">
+                    <i class="fas fa-code"></i>
+
+                    <h3>TypeScript</h3>
+
+                    <p>
+                        Typsicherer Server- und Web-Code, Validierung mit Zod.
+                    </p>
+                </div>
+
+                <div class="skill-card">
+                    <i class="fab fa-react"></i>
+
+                    <h3>React</h3>
+
+                    <p>
+                        Oberflächen für eine installierbare Web-App (PWA) mit Vite.
+                    </p>
+                </div>
+
+                <div class="skill-card">
+                    <i class="fas fa-database"></i>
+
+                    <h3>SQL / PostgreSQL</h3>
+
+                    <p>
+                        Tabellenmodelle, Migrationen, Abfragen und strukturierte Datenhaltung.
+                    </p>
+                </div>
+
+                <div class="skill-card">
+                    <i class="fab fa-node-js"></i>
+
+                    <h3>Node.js</h3>
+
+                    <p>
+                        Server, APIs, Rechteprüfung und Anmeldung mit Passkeys.
+                    </p>
+                </div>
+
+                <div class="skill-card">
+                    <i class="fab fa-docker"></i>
+
+                    <h3>Docker / Linux</h3>
+
+                    <p>
+                        Betrieb auf eigenem Server mit Docker Compose, Backups und Updates.
+                    </p>
+                </div>
+
+                <div class="skill-card">
+                    <i class="fab fa-python"></i>
+
+                    <h3>Python</h3>
+
+                    <p>
+                        Objektorientierung, Datenverarbeitung und Desktop-GUIs.
+                    </p>
+                </div>
+
+                <div class="skill-card">
+                    <i class="fab fa-js"></i>
+
+                    <h3>JavaScript, HTML / CSS</h3>
+
+                    <p>
+                        Interaktionen, responsive Layouts und dynamische Oberflächen.
+                    </p>
+                </div>
+
+                <div class="skill-card">
+                    <i class="fas fa-code-branch"></i>
+
+                    <h3>Git / Pull Requests</h3>
+
+                    <p>
+                        Versionsverwaltung, Reviews, Tests und nachvollziehbare Änderungen.
+                    </p>
+                </div>
+
+            </div>
+            </div>
+        </section>
+
+            <!-- Projekte -->
+            <section
+                id="projects"
+                class="section portfolio-panel"
+                data-panel="projects"
+            >
+            <button type="button" class="sheet-close" data-target="hero">
+                <i class="fas fa-arrow-left"></i> Schreibtisch
+            </button>
+            <div class="section-head">
+                <p class="section-kicker">
+                    Projekte
+                </p>
+
+                <h2>
+                    Von der Idee zur echten Anwendung
+                </h2>
+
+                <p class="section-intro">
+                    Von lauffähigen Lernprojekten bis zu einer App,
+                    die Familien tatsächlich nutzen. Aufbau und
+                    Entscheidungen erkläre ich gern im Gespräch.
+                </p>
+            </div>
+
+            <div class="section-body">
+<div class="projects-grid">
+
+                    <!-- Huddl -->
+                    <article class="project-card featured project-wide">
+                        <div class="project-main">
+                        <div class="project-topline">
+                            <span class="status finished">
+                                Hauptprojekt · in Betrieb
+                            </span>
+                        </div>
+
+                        <h3>Huddl · Familien-App</h3>
+
+                        <p>
+                            Private Web-App (installierbar als PWA) für
+                            Familien mit Kalender, Chat, Einkaufslisten,
+                            Aufgaben, Stammbaum und Dokumenten-Scanner.
+                            Mehrere Familien nutzen sie, die Daten jeder
+                            Familie sind strikt voneinander getrennt.
+                        </p>
+
+                        <ul>
+                            <li>Rechtemodell für Eltern, Kinder und Gäste, geprüft auf dem Server</li>
+                            <li>Anmeldung ohne Passwort mit Passkeys (WebAuthn)</li>
+                            <li>Datenschutz: Kinderdaten besonders geschützt, Datenexport und Konto löschen</li>
+                            <li>Tests, Migrationen und Deployment mit Docker Compose</li>
+                        </ul>
+
+                        <div class="tech-list">
+                            <span>TypeScript</span>
+                            <span>React</span>
+                            <span>Node.js</span>
+                            <span>PostgreSQL</span>
+                            <span>Docker</span>
+                        </div>
+                        </div>
+
+                        <div class="project-shots">
+                        <div class="project-previews">
+                            <button type="button" class="preview-shot" data-zoom="assets/huddl-start.webp" aria-label="Startseite vergrößern">
+                                <img src="assets/huddl-start.webp" alt="Huddl Startseite mit Familienmitgliedern und Aufgaben" loading="lazy" width="390" height="844">
+                            </button>
+                            <button type="button" class="preview-shot" data-zoom="assets/huddl-chat.webp" aria-label="Familienchat vergrößern">
+                                <img src="assets/huddl-chat.webp" alt="Familienchat in Huddl" loading="lazy" width="390" height="844">
+                            </button>
+                            <button type="button" class="preview-shot" data-zoom="assets/huddl-kalender.webp" aria-label="Kalender vergrößern">
+                                <img src="assets/huddl-kalender.webp" alt="Terminliste in Huddl" loading="lazy" width="390" height="844">
+                            </button>
+                            <button type="button" class="preview-shot" data-zoom="assets/huddl-einkauf.webp" aria-label="Einkaufsliste vergrößern">
+                                <img src="assets/huddl-einkauf.webp" alt="Einkaufsliste in Huddl, nach Supermarkt-Bereichen sortiert" loading="lazy" width="390" height="844">
+                            </button>
+                        </div>
+
+                        <p class="preview-caption">
+                            Screenshots mit erfundenen Demo-Daten, Klick zum Vergrößern
+                        </p>
+                        </div>
+                    </article>
+
+                    <!-- Eigenes Unternehmen -->
+                    <article class="project-card">
+                        <div class="project-topline">
+                            <span class="status finished">
+                                Eigenes Unternehmen
+                            </span>
+                        </div>
+
+                        <h3>Bots &amp; Web-Plattform</h3>
+
+                        <p>
+                            Software für Discord-Communities, mit Shop,
+                            Kundenbereich und Abos, betrieben auf einem
+                            eigenen Linux-Server.
+                        </p>
+
+                        <ul>
+                            <li>Discord-Bots mit Dashboards zum Einstellen</li>
+                            <li>Backups, Monitoring und Absicherung</li>
+                            <li>Kundenanfragen bis zum Betrieb</li>
+                        </ul>
+
+                        <div class="tech-list">
+                            <span>TypeScript</span>
+                            <span>Docker</span>
+                            <span>Linux</span>
+                        </div>
+                    </article>
+
+                    <!-- FI Klassenbot -->
+                    <article class="project-card">
+                        <div class="project-topline">
+                            <span class="status finished">
+                                Für meine Klasse
+                            </span>
+                        </div>
+
+                        <h3>Klassenbot</h3>
+
+                        <p>
+                            Discord-Bot für meine Umschulungsklasse mit
+                            Berichtsheft, Terminen und einem Wissensbereich
+                            mit rund 100 Lernartikeln und Diagrammen.
+                        </p>
+
+                        <ul>
+                            <li>Bedienung über Buttons, Menüs und Formulare</li>
+                            <li>Artikel als Markdown, automatisch synchronisiert</li>
+                            <li>Eingebaute SQLite-Datenbank</li>
+                        </ul>
+
+                        <div class="tech-list">
+                            <span>TypeScript</span>
+                            <span>SQLite</span>
+                            <span>Discord</span>
+                        </div>
+                    </article>
+
+                    <!-- Python-Lernprojekte -->
+                    <article class="project-card">
+                        <div class="project-topline">
+                            <span class="status finished">
+                                Lernprojekte
+                            </span>
+                        </div>
+
+                        <h3>Python-Projekte</h3>
+
+                        <p>
+                            Meine ersten eigenen Anwendungen aus der
+                            Umschulung, objektorientiert aufgebaut und
+                            öffentlich auf GitHub.
+                        </p>
+
+                        <ul>
+                            <li>
+                                <a
+                                    href="https://github.com/nikhh53/python-ticket-system"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >Ticketsystem</a>
+                                mit Tkinter und JSON
+                            </li>
+                            <li>
+                                <a
+                                    href="https://github.com/nikhh53/pokemon-minigame"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >Pokémon Minigame</a>
+                                als Konsole und GUI
+                            </li>
+                        </ul>
+
+                        <div class="tech-list">
+                            <span>Python</span>
+                            <span>Tkinter</span>
+                            <span>OOP</span>
+                        </div>
+                    </article>
+
+                </div>
+            </div>
+        </section>
+        <!-- Kontakt -->
+        <section
+            id="contact"
+            class="section portfolio-panel"
+            data-panel="contact"
+        >
+            <button type="button" class="sheet-close" data-target="hero">
+                <i class="fas fa-arrow-left"></i> Schreibtisch
+            </button>
+            <div class="section-head">
+            <p class="section-kicker">
+                Kontakt
+            </p>
+
+            <h2>
+                Lassen Sie uns kennenlernen
+            </h2>
+            </div>
+
+            <div class="section-body">
+<p class="contact-copy">
+                Sie bieten ein Praktikum in der
+                Anwendungsentwicklung an oder möchten mehr
+                über meine Projekte erfahren? Ich freue mich
+                über Ihre Nachricht und antworte in der Regel
+                innerhalb eines Tages.
+            </p>
+
+            <div class="contact-options">
+
+                <a
+                    class="contact-option primary"
+                    href="mailto:nikhh53@gmail.com"
+                >
+                    <i class="fas fa-envelope"></i>
+
+                    <span>
+                        <small>E-Mail</small>
+                        NikHH53@gmail.com
+                    </span>
+                </a>
+
+                <a
+                    class="contact-option"
+                    href="https://github.com/nikhh53"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    <i class="fab fa-github"></i>
+
+                    <span>
+                        <small>GitHub</small>
+                        github.com/nikhh53
+                    </span>
+                </a>
+
+                <a
+                    class="contact-option"
+                    href="lebenslauf.pdf"
+                    target="_blank"
+                    rel="noopener"
+                >
+                    <i class="fas fa-file-pdf"></i>
+
+                    <span>
+                        <small>Unterlagen</small>
+                        Lebenslauf (PDF)
+                    </span>
+                </a>
+
+            </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Niklas Bakowsky</p>
+    </footer>
+
+    <dialog id="zoom-dialog" class="zoom-dialog" aria-label="Bildvorschau">
+        <button type="button" class="zoom-close" aria-label="Schließen">&times;</button>
+        <img src="" alt="">
+    </dialog>
+
+    <script src="script.js?v=20261127"></script>
+    <script src="shell.js?v=20261112"></script>
+    <script src="hardmode-puzzles.js?v=20261112"></script>
+    <script src="hardmode-effects.js?v=20261112"></script>
+    <script src="hardmode-ide.js?v=20261112"></script>
+    <script src="hardmode-finale.js?v=20261112"></script>
+    <script src="hardmode.js?v=20261112"></script>
+    <script src="os.js?v=20261112"></script>
+    <script src="boot.js?v=20261112"></script>
+    <script src="room.js?v=20261127"></script>
+    <script src="welcome.js?v=20261112"></script>
+
+</body>
+</html>
