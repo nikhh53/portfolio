@@ -104,3 +104,40 @@ function loop() {
     window.requestAnimationFrame(loop);
 }
 loop();
+
+// Huddl-Screenshots als Galerie in einem Overlay
+const GALLERY = [
+    { src: 'assets/huddl-start.webp', alt: 'Startseite von Huddl' },
+    { src: 'assets/huddl-kalender.webp', alt: 'Kalender in Huddl' },
+    { src: 'assets/huddl-chat.webp', alt: 'Familien-Chat in Huddl' },
+    { src: 'assets/huddl-einkauf.webp', alt: 'Einkaufsliste in Huddl' }
+];
+const lightbox = $('#lightbox');
+const lightboxImage = $('#lightbox-img');
+let galleryIndex = 0;
+
+function showGallery(index) {
+    galleryIndex = (index + GALLERY.length) % GALLERY.length;
+    lightboxImage.src = GALLERY[galleryIndex].src;
+    lightboxImage.alt = GALLERY[galleryIndex].alt;
+}
+
+function closeGallery() {
+    lightbox.hidden = true;
+}
+
+document.querySelector('[data-gallery]').addEventListener('click', () => {
+    showGallery(0);
+    lightbox.hidden = false;
+});
+lightbox.addEventListener('click', event => {
+    if (event.target === lightbox || event.target.closest('.lightbox-close')) closeGallery();
+    const step = event.target.closest('[data-step]');
+    if (step) showGallery(galleryIndex + Number(step.dataset.step));
+});
+window.addEventListener('keydown', event => {
+    if (lightbox.hidden) return;
+    if (event.key === 'Escape') closeGallery();
+    if (event.key === 'ArrowLeft') showGallery(galleryIndex - 1);
+    if (event.key === 'ArrowRight') showGallery(galleryIndex + 1);
+});
