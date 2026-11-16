@@ -116,6 +116,7 @@ nav a {
     position: absolute;
     right: 5vw;
     bottom: 0;
+    width: auto;
     height: 86vh;
     z-index: 2;
     will-change: transform;
@@ -850,7 +851,7 @@ body:before {
 .scroll-hint {
     position: absolute;
     left: 5vw;
-    bottom: 5vh;
+    bottom: 2vh;
     font-size: 12px;
     letter-spacing: .2em;
     color: var(--m);
