@@ -7,7 +7,8 @@ document.documentElement.classList.add('js');
 
 const COMPANY_MAX_LENGTH = 40;
 const CONTACT_EMAIL = 'nikhh53@gmail.com';
-const MARQUEE_SPEED = 0.25;
+const MARQUEE_SPEED = 0.08;
+const MARQUEE_MAX_SHIFT = 0.03; // Anteil der Fensterbreite
 
 const $ = selector => document.querySelector(selector);
 const clamp = (value, min = 0, max = 1) => Math.min(max, Math.max(min, value));
@@ -91,8 +92,10 @@ function update() {
     const current = Math.min(projectCount, 1 + Math.floor(projectProgress * (projectCount - 0.001)));
     $('#project-nr').textContent = `0${current} / 0${projectCount}`;
 
-    $('#skills-a').style.transform = `translateX(${-scrollY * MARQUEE_SPEED + 800}px)`;
-    $('#skills-b').style.transform = `translateX(${scrollY * MARQUEE_SPEED - 3200}px)`;
+    const maxShift = window.innerWidth * MARQUEE_MAX_SHIFT;
+    const skillsShift = Math.max(-maxShift, Math.min(maxShift, (scrollY - pageTop($('.skills')) + viewport / 2) * MARQUEE_SPEED));
+    $('#skills-a').style.transform = `translateX(${-skillsShift}px)`;
+    $('#skills-b').style.transform = `translateX(${skillsShift}px)`;
 
     const path = $('#path');
     const pathProgress = clamp((scrollY + viewport * 0.2 - pageTop(path)) / (path.offsetHeight - viewport * 0.3));

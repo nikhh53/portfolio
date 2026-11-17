@@ -351,8 +351,8 @@ nav a {
 
 .skills .row {
     color: var(--amber);
-    white-space: nowrap;
-    font-size: min(7vw,100px);
+    padding: 0 5vw;
+    font-size: min(6vw,84px);
     font-weight: 900;
     letter-spacing: -.04em;
     line-height: 1.05;
@@ -1061,5 +1061,17 @@ body:before {
     }
     .path .step:nth-child(odd):before,.path .step:nth-child(even):before {
         left: calc(-16vw - 8px);
+    }
+}
+
+@media(max-width:800px) {
+    .skills .skill-list {
+        grid-template-columns: repeat(2,1fr);
+    }
+}
+
+@media(max-width:480px) {
+    .skills .skill-list {
+        grid-template-columns: 1fr;
     }
 }
