@@ -604,7 +604,7 @@ body:before {
 }
 
 .skills {
-    background: rgba(43,53,82,.7)!important;
+    background: linear-gradient(transparent,rgba(43,53,82,.7) 20vh,rgba(43,53,82,.7) calc(100% - 20vh),transparent)!important;
 }
 
 .contact {
@@ -780,11 +780,6 @@ body:before {
     margin: 0 .15em;
     font-size: .5em;
     vertical-align: middle;
-}
-
-.skills {
-    border-top: 1px dashed #ffffff30;
-    border-bottom: 1px dashed #ffffff30;
 }
 
 .path .step:before {
