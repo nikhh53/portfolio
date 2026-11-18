@@ -77,7 +77,6 @@ function update() {
     const heroShift = clamp(scrollY / viewport);
     $('#surname').style.transform = `translateX(${-heroShift * 18}vw)`;
     $('#portrait').style.transform = `translateY(${heroShift * 14}vh) scale(${1 + heroShift * 0.08})`;
-    $('#blob').style.transform = `translateY(${-heroShift * 10}vh) rotate(${heroShift * 40}deg)`;
     $('#orb-warm').style.transform = `translateY(${scrollY * 0.12}px)`;
     $('#orb-cool').style.transform = `translateY(${-scrollY * 0.08}px)`;
 

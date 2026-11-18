@@ -102,18 +102,6 @@ nav a {
     z-index: 1;
 }
 
-.hero .blob {
-    position: absolute;
-    right: 9vw;
-    bottom: -12vh;
-    width: min(58vh,48vw);
-    aspect-ratio: 1;
-    border-radius: 46% 54% 50% 50%/55% 45% 55% 45%;
-    background: var(--amber);
-    z-index: 0;
-    will-change: transform;
-}
-
 .hero img {
     position: absolute;
     right: 5vw;
@@ -483,10 +471,6 @@ nav a {
     }
     .hero img {
         height: 40vh;
-        right: -10vw;
-    }
-    .hero .blob {
-        width: 70vw;
         right: -10vw;
     }
     .hero .intro {
