@@ -52,6 +52,7 @@ const words = [...aboutText.querySelectorAll('.word')];
 const projects = $('#projects');
 const track = $('#track');
 const projectCount = track.children.length;
+const projectIndexes = [...track.querySelectorAll('.project-index')];
 
 function sizeProjects() {
     projects.style.height = `${track.scrollWidth - window.innerWidth + window.innerHeight}px`;
@@ -91,6 +92,7 @@ function update() {
     $('#project-bar').style.width = `${projectProgress * 100}%`;
     const current = Math.min(projectCount, 1 + Math.floor(projectProgress * (projectCount - 0.001)));
     [...$('#project-nr').children].forEach((item, index) => item.classList.toggle('on', index + 1 === current));
+    projectIndexes.forEach((item, index) => item.classList.toggle('on', index + 1 === current));
 
     const maxShift = window.innerWidth * MARQUEE_MAX_SHIFT;
     const skillsShift = Math.max(-maxShift, Math.min(maxShift, (scrollY - pageTop($('.skills')) + viewport / 2) * MARQUEE_SPEED));
