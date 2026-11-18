@@ -252,8 +252,15 @@ nav a {
     color: transparent;
     -webkit-text-stroke: 2px var(--ink);
     opacity: .5;
+    transition: color .4s, opacity .4s, -webkit-text-stroke-color .4s;
     grid-column: 1/-1;
     margin-bottom: 1vh;
+}
+
+.project .project-index.on {
+    color: var(--amber);
+    -webkit-text-stroke-color: var(--amber);
+    opacity: 1;
 }
 
 .project h3 {
