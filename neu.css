@@ -759,6 +759,27 @@ body:before {
     z-index: 3;
 }
 
+#project-nr {
+    display: flex;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+#project-nr li {
+    padding: 4px 10px;
+    border: 1px solid #ffffff33;
+    border-radius: 99px;
+    transition: background .3s, color .3s, border-color .3s;
+}
+
+#project-nr li.on {
+    background: var(--amber);
+    border-color: var(--amber);
+    color: #1b2236;
+}
+
 .project-progress div {
     flex: 1;
     height: 2px;

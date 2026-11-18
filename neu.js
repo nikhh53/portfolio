@@ -90,7 +90,7 @@ function update() {
     track.style.transform = `translateX(${-projectProgress * (track.scrollWidth - window.innerWidth)}px)`;
     $('#project-bar').style.width = `${projectProgress * 100}%`;
     const current = Math.min(projectCount, 1 + Math.floor(projectProgress * (projectCount - 0.001)));
-    $('#project-nr').textContent = `0${current} / 0${projectCount}`;
+    [...$('#project-nr').children].forEach((item, index) => item.classList.toggle('on', index + 1 === current));
 
     const maxShift = window.innerWidth * MARQUEE_MAX_SHIFT;
     const skillsShift = Math.max(-maxShift, Math.min(maxShift, (scrollY - pageTop($('.skills')) + viewport / 2) * MARQUEE_SPEED));
