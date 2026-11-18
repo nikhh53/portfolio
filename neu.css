@@ -202,32 +202,6 @@ nav a {
     opacity: 1;
 }
 
-.nums {
-    margin-top: 14vh;
-    position: relative;
-    height: 60vh;
-}
-
-.nums div {
-    position: absolute;
-}
-
-.nums b {
-    display: block;
-    font-size: min(9vw,120px);
-    line-height: .9;
-    font-weight: 900;
-    color: var(--amber);
-    letter-spacing: -.05em;
-}
-
-.nums span {
-    font-size: 15px;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    opacity: .8;
-}
-
 /* Projekte */ .projects {
     position: relative;
     background: linear-gradient(var(--slate),var(--sand) 18vh);
@@ -553,9 +527,6 @@ nav a {
     }
     .contact h2 {
         font-size: 19vw;
-    }
-    .nums {
-        height: 70vh;
     }
 }
 
